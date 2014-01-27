@@ -189,7 +189,7 @@
   <filesToClean>*.obj;*.cmd;*.build;*.json;*.dep</filesToClean>
  </Config>
  <Folder name="dxi">
-  <File path="com.d" />
-  <File path="dxgi.d" />
+  <File path="../com.d" />
+  <File path="../dxgi.d" />
  </Folder>
 </DProject>
