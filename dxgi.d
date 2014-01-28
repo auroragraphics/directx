@@ -387,7 +387,7 @@ struct DXGI_SWAP_CHAIN_DESC {
 	uint Flags;
 }
 
-struct _DXGI_SWAP_CHAIN_DESC1 {
+struct DXGI_SWAP_CHAIN_DESC1 {
 	uint Width;
 	uint Height;
 	DXGI_FORMAT Format;
