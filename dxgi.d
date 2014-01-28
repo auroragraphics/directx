@@ -1,6 +1,7 @@
 module aurora.dxi.dxgi;
 
 import com;
+import std.c.windows.com;
 
 //DXGI_ENUM_MODES
 enum DXGI_ENUM_MODES_INTERLACED      = (1U);
@@ -407,7 +408,7 @@ struct DXGI_SWAP_CHAIN_FULLSCREEN_DESC {
 }
 
 struct DXGI_PRESENT_PARAMETERS {
-	UINT DirtyRectsCount;
+	uint DirtyRectsCount;
 	RECT *DirtyRects;
 	RECT *ScrollRect;
 	POINT *ScrollOffset;
