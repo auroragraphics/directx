@@ -2,6 +2,7 @@ module aurora.dxi.dxgi;
 
 import com;
 import std.c.windows.com;
+import std.c.windows.windows;
 
 //DXGI_ENUM_MODES
 enum DXGI_ENUM_MODES_INTERLACED      = (1U);
