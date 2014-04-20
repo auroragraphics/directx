@@ -1374,6 +1374,51 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		HRESULT SetUnderline(BOOL HasUnderline, DWRITE_TEXT_RANGE TextRange);
 	}
 
+	mixin(uuid!(IDWriteTextRenderer, "ef8a8135-5cc6-45fe-8825-c5a0724eb819"));
+	public interface IDWriteTextRenderer : IDWritePixelSnapping
+	{
+	extern(Windows):
+		HRESULT DrawGlyphRun(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY,DWRITE_MEASURING_MODE MeasuringMode, const DWRITE_GLYPH_RUN *GlyphRun, const DWRITE_GLYPH_RUN_DESCRIPTION *GlyphRunDescription, IUnknown ClientDrawingEffect);
+		HRESULT DrawInlineObject(void *ClientDrawingContext, float OriginX, float OriginY, IDWriteInlineObject *InlineObject, BOOL IsSideways, BOOL IsRightToLeft, IUnknown *ClientDrawingEffect);
+		HRESULT DrawStrikethrough(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY, const DWRITE_STRIKETHROUGH *Strikethrough, IUnknown *ClientDrawingEffect);
+		HRESULT DrawUnderline(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY, const DWRITE_UNDERLINE *Underline, IUnknown *ClientDrawingEffect);
+	}
+
+	mixin(uuid!(IDWriteTypography, "55f1112b-1dc2-4b3c-9541-f46894ed85b6"));
+	public interface IDWriteTypography : IUnknown
+	{
+	extern(Windows):
+		HRESULT AddFontFeature(DWRITE_FONT_FEATURE FontFeature);
+		HRESULT GetFontFeature(uint FontFeatureIndex, DWRITE_FONT_FEATURE *FontFeature);
+		uint GetFontFeatureCount();
+	}
+
+	mixin(uuid!(IDWriteFactory, "b859ee5a-d838-4b5b-a2e8-1adc7d93db48"));
+	public interface IDWriteFactory : IUnknown
+	{
+	extern(Windows):
+		HRESULT CreateCustomFontCollection(IDWriteFontCollectionLoader CollectionLoader, const void *CollectionKey, uint CollectionKeySize, IDWriteFontCollection *FontCollection);
+		HRESULT CreateCustomFontFileReference(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, IDWriteFontFileLoader *FontFileLoader, IDWriteFontFile *FontFile);
+		HRESULT CreateCustomRenderingParams(float Gamma, float EnhancedContrast, float ClearTypeLevel, DWRITE_PIXEL_GEOMETRY PixelGeometry, DWRITE_RENDERING_MODE RenderingMode, IDWriteRenderingParams *RenderingParams);
+		HRESULT CreateEllipsisTrimmingSign(IDWriteTextFormat *TextFormat, IDWriteInlineObject *TrimmingSign);
+		HRESULT CreateFontFace(DWRITE_FONT_FACE_TYPE FontFaceType, uint NumberOfFiles, const IDWriteFontFile FontFiles, uint FaceIndex, DWRITE_FONT_SIMULATIONS FontFaceSimulationFlags, IDWriteFontFace *FontFace);
+		HRESULT CreateFontFileReference(const wchar *FilePath, const FILETIME *LastWriteTime, IDWriteFontFile *FontFile);
+		HRESULT CreateGdiCompatibleTextLayout(const wchar *String, uint StringLength, IDWriteTextFormat *TextFormat, float LayoutWidth, float LayoutHeight, float PixelsPerDip, const DWRITE_MATRIX *Transform, BOOL UseGdiNatural, IDWriteTextLayout *TextLayout);
+		HRESULT CreateGlyphRunAnalysis(const DWRITE_GLYPH_RUN *GlyphRun, float PixelsPerDip, const DWRITE_MATRIX * Transform, DWRITE_RENDERING_MODE RenderingMode, DWRITE_MEASURING_MODE MeasuringMode, float BaselineOriginX, float BaselineOriginY, IDWriteGlyphRunAnalysis *GlyphRunAnalysis);
+		HRESULT CreateMonitorRenderingParams(long Monitor, IDWriteRenderingParams *RenderingParams);
+		HRESULT CreateNumberSubstitution(DWRITE_NUMBER_SUBSTITUTION_METHOD SubstitutionMethod, const wchar *LocaleName, BOOL IgnoreUserOverride, IDWriteNumberSubstitution *NumberSubstitution);
+		HRESULT CreateRenderingParams(IDWriteRenderingParams *RenderingParams);
+		HRESULT CreateTextAnalyzer(IDWriteTextAnalyzer *TextAnalyzer);
+		HRESULT CreateTextFormat(const wchar *FontFamilyName, IDWriteFontCollection FontCollection, DWRITE_FONT_WEIGHT FontWeight, DWRITE_FONT_STYLE FontStyle, DWRITE_FONT_STRETCH FontStretch, float FontSize, const wchar *LocaleName, IDWriteTextFormat *TextFormat);
+		HRESULT CreateTextLayout(const wchar *String, uint StringLength, IDWriteTextFormat TextFormat, float MaxWidth, float MaxHeight, IDWriteTextLayout *TextLayout);
+		HRESULT CreateTypography(IDWriteTypography *Typography);
+		HRESULT GetGdiInterop(IDWriteGdiInterop *GDIInterop);
+		HRESULT GetSystemFontCollection(IDWriteFontCollection *FontCollection, BOOL CheckForUpdates);
+		HRESULT RegisterFontCollectionLoader(IDWriteFontCollectionLoader FontCollectionLoader);
+		HRESULT RegisterFontFileLoader(IDWriteFontFileLoader FontFileLoader);
+		HRESULT UnregisterFontCollectionLoader(IDWriteFontCollectionLoader FontCollectionLoader);
+		HRESULT UnregisterFontFileLoader(IDWriteFontFileLoader FontFileLoader);
+	}
 
 }
 static if(DX11_1 || DX11_2)
@@ -1461,6 +1506,14 @@ static if(DX11_1 || DX11_2)
 		HRESULT SetPairKerning(BOOL IsPairKerningEnabled, DWRITE_TEXT_RANGE TextRange);
 	}
 
+	mixin(uuid!(IDWriteFactory1, "30572f99-dac6-41db-a16e-0486307e606a"));
+	public interface IDWriteFactory1 : IDWriteFactory
+	{
+	extern(Windows):
+		HRESULT CreateCustomRenderingParams(float Gamma, float EnhancedContrast, float EnhancedContrastGrayscale, float ClearTypeLevel, DWRITE_PIXEL_GEOMETRY PixelGeometry, DWRITE_RENDERING_MODE RenderingMode, IDWriteRenderingParams1 *RenderingParams);
+		HRESULT GetEudcFontCollection(IDWriteFontCollection *FontCollection, BOOL CheckForUpdates = FALSE);
+	}
+
 }
 static if(DX11_2)
 {
@@ -1541,26 +1594,20 @@ static if(DX11_2)
 		HRESULT SetVerticalGlyphOrientation(DWRITE_VERTICAL_GLYPH_ORIENTATION GlyphOrientation);
 	}
 
+	mixin(uuid!(IDWriteTextRenderer1, "D3E0E934-22A0-427E-AAE4-7D9574B59DB1"));
+	public interface IDWriteTextRenderer1 : IDWriteTextRenderer
+	{
+	extern(Windows):
+		HRESULT SetCurrentOrientation(void *ClientDrawingContext, DWRITE_GLYPH_ORIENTATION_ANGLE Orientation);	
+	}
 
-}
+	mixin(uuid!(IDWriteFactory2, "0439fc60-ca44-4994-8dee-3a9af7b732ec"));
+	public interface IDWriteFactory2 : IDWriteFactory1
+	{
+	extern(Windows):
+		HRESULT CreateFontFallbackBuilder(IDWriteFontFallbackBuilder *FontFallbackBuilder);
+		HRESULT GetSystemFontFallback(IDWriteFontFallback *FontFallback);
+		HRESULT TranslateColorGlyphRun(float BaselineOriginX, float BaselineOriginY, const DWRITE_GLYPH_RUN *GlyphRun, const DWRITE_GLYPH_RUN_DESCRIPTION *GlyphRunDescription, DWRITE_MEASURING_MODE MeasuringMode, const DWRITE_MATRIX *WorldToDeviceTransform, uint ColorPaletteIndex, IDWriteColorGlyphRunEnumerator *ColorLayers);
+	}
 
-mixin(uuid!(IDWriteFont, "acd16696-8c14-4f5d-877e-fe3fc1d32737"));
-public interface IDWriteFont : IUnknown
-{
-extern(Windows):
-	
-}
-
-mixin(uuid!(IDWriteFont, "acd16696-8c14-4f5d-877e-fe3fc1d32737"));
-public interface IDWriteFont : IUnknown
-{
-extern(Windows):
-	
-}
-
-mixin(uuid!(IDWriteFont, "acd16696-8c14-4f5d-877e-fe3fc1d32737"));
-public interface IDWriteFont : IUnknown
-{
-extern(Windows):
-	
 }
