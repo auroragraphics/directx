@@ -426,115 +426,115 @@ mixin(uuid!(IDXGIObject, "aec22fb8-76f3-4639-9be0-28eb43a67a2e"));
 interface IDXGIObject : IUnknown
 {
 	extern(Windows):
-	long GetParent(GUID* IID, void** Parent);
-	long GetPrivateData(GUID* IID, uint* DataSize, void* Data);
-	long SetPrivateData(GUID* IID, uint DataSize, const void* Data);
-	long SetPrivateDataInterface(GUID* IID, const(IUnknown) Unknown);
+	HRESULT GetParent(GUID* IID, void** Parent);
+	HRESULT GetPrivateData(GUID* IID, uint* DataSize, void* Data);
+	HRESULT SetPrivateData(GUID* IID, uint DataSize, const void* Data);
+	HRESULT SetPrivateDataInterface(GUID* IID, const(IUnknown) Unknown);
 }
 
 mixin(uuid!(IDXGIOutput, "ae02eedb-c735-4690-8d52-5a8dc20213aa"));
 interface IDXGIOutput : IDXGIObject
 {
 	extern(Windows):
-	long FindClosestMatchingMode(const DXGI_MODE_DESC* ModeToMatch, DXGI_MODE_DESC* ClosestMatch, const(IUnknown) ConcernedDevice);
-	long GetDisplayModeList(DXGI_FORMAT EnumFormats, uint Flags, uint* ModeCount, DXGI_MODE_DESC Modes);
-	long GetDisplaySurfaceData(IDXGISurface Destination);
-	long GetFrameStatistics(DXGI_FRAME_STATISTICS* Stats);
-	long GetGammaControl(DXGI_GAMMA_CONTROL* Array);
-	long GetGammaControlCapabilities(DXGI_GAMMA_CONTROL_CAPABILITIES* GammaCaps);
+	HRESULT FindClosestMatchingMode(const DXGI_MODE_DESC* ModeToMatch, DXGI_MODE_DESC* ClosestMatch, const(IUnknown) ConcernedDevice);
+	HRESULT GetDisplayModeList(DXGI_FORMAT EnumFormats, uint Flags, uint* ModeCount, DXGI_MODE_DESC Modes);
+	HRESULT GetDisplaySurfaceData(IDXGISurface Destination);
+	HRESULT GetFrameStatistics(DXGI_FRAME_STATISTICS* Stats);
+	HRESULT GetGammaControl(DXGI_GAMMA_CONTROL* Array);
+	HRESULT GetGammaControlCapabilities(DXGI_GAMMA_CONTROL_CAPABILITIES* GammaCaps);
 	void ReleaseOwnership();
-	long SetDisplaySurface(IDXGISurface* ScanoutSurface);
-	long SetGammaControl(const DXGI_GAMMA_CONTROL* Array);
-	long TakeOwnership(const(IUnknown) Device, BOOL Exclusive);
-	long WaitForVBlank();
+	HRESULT SetDisplaySurface(IDXGISurface* ScanoutSurface);
+	HRESULT SetGammaControl(const DXGI_GAMMA_CONTROL* Array);
+	HRESULT TakeOwnership(const(IUnknown) Device, BOOL Exclusive);
+	HRESULT WaitForVBlank();
 }
 
 mixin(uuid!(IDXGIOutput1, "ae02eedb-c735-4690-8d52-5a8dc20213aa"));
 interface IDXGIOutput1 : IDXGIOutput
 {
 	extern(Windows):
-	long FindClosestMatchingMode1(const DXGI_MODE_DESC1* ModeToMatch, DXGI_MODE_DESC1* ClosestMatch, const(IUnknown) ConcernedDevice);
-	long GetDisplayModeList1(DXGI_FORMAT EnumFormats, uint Flags, uint* ModeCount, DXGI_MODE_DESC1 Modes);
-	long GetDisplaySurfaceData1(IDXGIResource Destination);
+	HRESULT FindClosestMatchingMode1(const DXGI_MODE_DESC1* ModeToMatch, DXGI_MODE_DESC1* ClosestMatch, const(IUnknown) ConcernedDevice);
+	HRESULT GetDisplayModeList1(DXGI_FORMAT EnumFormats, uint Flags, uint* ModeCount, DXGI_MODE_DESC1 Modes);
+	HRESULT GetDisplaySurfaceData1(IDXGIResource Destination);
 }
 
 mixin(uuid!(IDXGIDeviceSubObject, "3d3e0379-f9de-4d58-bb6c-18d62992f1a6"));
 interface IDXGIDeviceSubObject : IDXGIObject
 {
-	extern(Windows) long GetDevice(GUID* IID, void** Device);
+	extern(Windows) HRESULT GetDevice(GUID* IID, void** Device);
 }
 
 mixin(uuid!(IDXGISurface, "cafcb56c-6ac3-4889-bf47-9e23bbd260ec"));
 interface IDXGISurface : IDXGIDeviceSubObject
 {
 	extern(Windows):
-	long GetDesc(DXGI_SURFACE_DESC* Desc);
-	long Map(DXGI_MAPPED_RECT* LockedRect, uint MapFlags);
-	long Unmap();
+	HRESULT GetDesc(DXGI_SURFACE_DESC* Desc);
+	HRESULT Map(DXGI_MAPPED_RECT* LockedRect, uint MapFlags);
+	HRESULT Unmap();
 }
 
 mixin(uuid!(IDXGISurface1, "4AE63092-6327-4c1b-80AE-BFE12EA32B86"));
 interface IDXGISurface1 : IDXGISurface
 {
 	extern(Windows):
-	long GetDC(BOOL Discard, void* HDC);
-	long ReleaseDC(RECT* DirtyRect);
+	HRESULT GetDC(BOOL Discard, void* HDC);
+	HRESULT ReleaseDC(RECT* DirtyRect);
 }
 
 mixin(uuid!(IDXGISurface2, "aba496dd-b617-4cb8-a866-bc44d7eb1fa2"));
 interface IDXGISurface2 : IDXGISurface1
 {
-	extern(Windows) long GetResource(GUID* IID, void** ParentResource, uint* SubresourceIndex);
+	extern(Windows) HRESULT GetResource(GUID* IID, void** ParentResource, uint* SubresourceIndex);
 }
 
 mixin(uuid!(IDXGIAdapter, "2411e7e1-12ac-4ccf-bd14-9798e8534dc0"));
 interface IDXGIAdapter : IDXGIObject
 {
 	extern(Windows):
-	long CheckInterfaceSupport(GUID* InterfaceName, LARGE_INTEGER* pUMDVersion);
-	long EnumOutputs(uint Output, IDXGIOutput* Output);
-	long GetDesc(DXGI_ADAPTER_DESC* Desc);
+	HRESULT CheckInterfaceSupport(GUID* InterfaceName, LARGE_INTEGER* pUMDVersion);
+	HRESULT EnumOutputs(uint Output, IDXGIOutput* Output);
+	HRESULT GetDesc(DXGI_ADAPTER_DESC* Desc);
 }
 
 mixin(uuid!(IDXGIAdapter1, "29038f61-3839-4626-91fd-086879011a05"));
 interface IDXGIAdapter1 : IDXGIAdapter
 {
-	extern(Windows) long GetDesc1(DXGI_ADAPTER_DESC1* Desc);
+	extern(Windows) HRESULT GetDesc1(DXGI_ADAPTER_DESC1* Desc);
 }
 
 mixin(uuid!(IDXGIAdapter2, "0AA1AE0A-FA0E-4B84-8644-E05FF8E5ACB5"));
 interface IDXGIAdapter2 : IDXGIAdapter
 {
-	extern(Windows) long GetDesc2(DXGI_ADAPTER_DESC2* Desc);
+	extern(Windows) HRESULT GetDesc2(DXGI_ADAPTER_DESC2* Desc);
 }
 
 mixin(uuid!(IDXGIResource, "035f3ab4-482e-4e50-b41f-8a7f8bd8960b"));
 interface IDXGIResource : IDXGIDeviceSubObject
 {
 	extern(Windows):
-	long GetEvictionPriority(uint* EvictionPriority);
-	long GetUsage(uint* Usage);
-	long GetSharedHandle(void** SharedHandle);
-	long SetEvictionPriority(uint EvictionPriority);
+	HRESULT GetEvictionPriority(uint* EvictionPriority);
+	HRESULT GetUsage(uint* Usage);
+	HRESULT GetSharedHandle(void** SharedHandle);
+	HRESULT SetEvictionPriority(uint EvictionPriority);
 }
 
 mixin(uuid!(IDXGIResource1, "30961379-4609-4a41-998e-54fe567ee0c1"));
 interface IDXGIResource1 : IDXGIResource
 {
 	extern(Windows):
-	long CreateSharedHandle(const SECURITY_ATTRIBUTES* Attributes, uint Access, const(wchar)* Name, void** Handle);
-	long CreateSubresourceSurface(uint index, IDXGISurface2* Surface);
+	HRESULT CreateSharedHandle(const SECURITY_ATTRIBUTES* Attributes, uint Access, const(wchar)* Name, void** Handle);
+	HRESULT CreateSubresourceSurface(uint index, IDXGISurface2* Surface);
 }
 
 mixin(uuid!(IDXGIDevice, "54ec77fa-1377-44e6-8c32-88fd5f44c84c"));
 interface IDXGIDevice : IDXGIObject
 {
 	extern(Windows):
-	long CreateSurface(const DXGI_SURFACE_DESC* Desc, uint NumSurfaces, uint Usage, const DXGI_SHARED_RESOURCE* SharedResource, IDXGISurface *Surface);
-	long GetAdapter(IDXGIAdapter* Adapter);
-	long GetGPUThreadPriority(int* Priority);
-	long QueryResourceResidency(const(IUnknown)* Resources, DXGI_RESIDENCY *ResidencyStatus, uint NumResources);
-	long SetGPUThreadPriority(int Priority);
+	HRESULT CreateSurface(const DXGI_SURFACE_DESC* Desc, uint NumSurfaces, uint Usage, const DXGI_SHARED_RESOURCE* SharedResource, IDXGISurface *Surface);
+	HRESULT GetAdapter(IDXGIAdapter* Adapter);
+	HRESULT GetGPUThreadPriority(int* Priority);
+	HRESULT QueryResourceResidency(const(IUnknown)* Resources, DXGI_RESIDENCY *ResidencyStatus, uint NumResources);
+	HRESULT SetGPUThreadPriority(int Priority);
 }
 
 mixin(uuid!(IDXGIDevice1, "77db970f-6276-48ba-ba28-070143b4392c"));
@@ -549,52 +549,52 @@ mixin(uuid!(IDXGIDevice2, "05008617-fbfd-4051-a790-144884b4f6a9"));
 interface IDXGIDevice2 : IDXGIDevice1
 {
 	extern(Windows):
-	long EnqueueSetEvent(void* Event);
-	long OfferResources(uint NumResources, const(IDXGIResource)* Resources, DXGI_OFFER_RESOURCE_PRIORITY Priority);
-	long OfferResources(uint NumResources, const(IDXGIResource)* Resources, BOOL* Discarded);
+	HRESULT EnqueueSetEvent(void* Event);
+	HRESULT OfferResources(uint NumResources, const(IDXGIResource)* Resources, DXGI_OFFER_RESOURCE_PRIORITY Priority);
+	HRESULT OfferResources(uint NumResources, const(IDXGIResource)* Resources, BOOL* Discarded);
 }
 
 mixin(uuid!(IDXGISwapChain, "310d36a0-d2e7-4c0a-aa04-6a9d23b8886a"));
 interface IDXGISwapChain : IDXGIDeviceSubObject
 {
 	extern(Windows):
-	long GetBuffer(uint Buffer,GUID* IID, void** Surface);
-	long GetContainingOutput(IDXGIOutput *Output);
-	long GetDesc(DXGI_SWAP_CHAIN_DESC* Desc);
-	long GetFrameStatistics(DXGI_FRAME_STATISTICS *Stats);
-	long GetFullscreenState(BOOL* Fullscreen, IDXGIOutput *Target);
-	long GetLastPresentCount(uint* LastPresentCount);
-	long Present(uint SyncInterval, uint Flags);
-	long ResizeBuffers(uint BufferCount, uint Width, uint Height, DXGI_FORMAT NewFormat, uint SwapChainFlags);
-	long ResizeTarget(const DXGI_MODE_DESC* NewTargetParameters);
-	long SetFullscreenState(BOOL Fullscreen, IDXGIOutput Target);
+	HRESULT GetBuffer(uint Buffer,GUID* IID, void** Surface);
+	HRESULT GetContainingOutput(IDXGIOutput *Output);
+	HRESULT GetDesc(DXGI_SWAP_CHAIN_DESC* Desc);
+	HRESULT GetFrameStatistics(DXGI_FRAME_STATISTICS *Stats);
+	HRESULT GetFullscreenState(BOOL* Fullscreen, IDXGIOutput *Target);
+	HRESULT GetLastPresentCount(uint* LastPresentCount);
+	HRESULT Present(uint SyncInterval, uint Flags);
+	HRESULT ResizeBuffers(uint BufferCount, uint Width, uint Height, DXGI_FORMAT NewFormat, uint SwapChainFlags);
+	HRESULT ResizeTarget(const DXGI_MODE_DESC* NewTargetParameters);
+	HRESULT SetFullscreenState(BOOL Fullscreen, IDXGIOutput Target);
 }
 
 mixin(uuid!(IDXGISwapChain1, "790a45f7-0d42-4876-983a-0a55cfe6f4aa"));
 interface IDXGISwapChain1 : IDXGISwapChain
 {
 	extern(Windows):
-	long GetBackgroundColor(DXGI_RGBA* Color);
-	long GetCoreWindow(GUID* IID, void **CoreWindow);
-	long GetFullscreenDesc(DXGI_SWAP_CHAIN_FULLSCREEN_DESC* Desc);
-	long GetHwnd(HWND* Hwnd);
-	long GetRestrictToOutput(IDXGIOutput* RestrictToOutput);
-	long GetRotation(DXGI_MODE_ROTATION* Rotation);
+	HRESULT GetBackgroundColor(DXGI_RGBA* Color);
+	HRESULT GetCoreWindow(GUID* IID, void **CoreWindow);
+	HRESULT GetFullscreenDesc(DXGI_SWAP_CHAIN_FULLSCREEN_DESC* Desc);
+	HRESULT GetHwnd(HWND* Hwnd);
+	HRESULT GetRestrictToOutput(IDXGIOutput* RestrictToOutput);
+	HRESULT GetRotation(DXGI_MODE_ROTATION* Rotation);
 	BOOL IsTemporaryMonoSupported();
-	long Present1(uint SyncInterval, uint Flags, const DXGI_PRESENT_PARAMETERS* PresentParameters);
-	long SetBackgroundColor(const DXGI_RGBA* Color);
-	long SetRotation(const DXGI_MODE_ROTATION Rotation);
+	HRESULT Present1(uint SyncInterval, uint Flags, const DXGI_PRESENT_PARAMETERS* PresentParameters);
+	HRESULT SetBackgroundColor(const DXGI_RGBA* Color);
+	HRESULT SetRotation(const DXGI_MODE_ROTATION Rotation);
 }
 
 mixin(uuid!(IDXGIFactory, "7b7166ec-21c7-44ae-b21a-c9ae321ae369"));
 interface IDXGIFactory : IDXGIObject
 {
 	extern(Windows):
-	long CreateSoftwareAdapter(void* Module, IDXGIAdapter* Adapter);
-	long CreateSwapChain(const(IUnknown) Device, DXGI_SWAP_CHAIN_DESC* Desc, IDXGISwapChain * SwapChain);
-	long EnumAdapters(uint Adapter, IDXGIAdapter *Adapter);
-	long GetWindowAssociation(HWND *WindowHandle);
-	long MakeWindowAssociation(HWND WindowHandle, uint Flags);
+	HRESULT CreateSoftwareAdapter(void* Module, IDXGIAdapter* Adapter);
+	HRESULT CreateSwapChain(const(IUnknown) Device, DXGI_SWAP_CHAIN_DESC* Desc, IDXGISwapChain * SwapChain);
+	HRESULT EnumAdapters(uint Adapter, IDXGIAdapter *Adapter);
+	HRESULT GetWindowAssociation(HWND *WindowHandle);
+	HRESULT MakeWindowAssociation(HWND WindowHandle, uint Flags);
 }
 
 mixin(uuid!(IDXGIFactory1, "770aae78-f26f-4dba-a829-253c83d1b387"));
@@ -605,22 +605,24 @@ interface IDXGIFactory1 : IDXGIFactory
 	BOOL IsCurrent();
 }
 
-mixin(uuid!(IDXGIFactory2, "50c83a1c-e072-4c48-87b0-3630fa36a6d0"));
-interface IDXGIFactory2 : IDXGIFactory1
-{
-	extern(Windows):
-	HRESULT CreateSwapChainForComposition(const(IUnknown) Device, const DXGI_SWAP_CHAIN_DESC1* Desc, const(IDXGIOutput) RestrictToOutput, IDXGISwapChain1 *SwapChain);
-	HRESULT CreateSwapChainForCoreWindow(const(IUnknown) Device, const(IUnknown) Window, const(DXGI_SWAP_CHAIN_DESC1)* Desc, const(IDXGIOutput) RestrictToOutput, IDXGISwapChain1 *SwapChain);
-	HRESULT CreateSwapChainForHwnd(const(IUnknown) Device, HWND hWnd, const(DXGI_SWAP_CHAIN_DESC1)* Desc, const(DXGI_SWAP_CHAIN_FULLSCREEN_DESC)* FullscreenDesc, const(IDXGIOutput) RestrictToOutput, IDXGISwapChain1* SwapChain);
-	HRESULT GetSharedResourceAdapterLuid(void* Resource, LUID* Luid);
-	BOOL IsWindowedStereoEnabled();
-	HRESULT RegisterOcclusionStatusEvent(void* Event, uint* Cookie);
-	HRESULT RegisterOcclusionStatusWindow(HWND WindowHandle, uint Msg, uint* Cookie);
-	HRESULT RegisterStereoStatusEvent(void* Event, uint* Cookie);
-	HRESULT RegisterStereoStatusWindow(HWND WindowHandle, uint Msg, uint* Cookie);
-	void UnregisterOcclusionStatus(uint Cookie);
-	void UnregisterStereoStatus(uint Cookie);
-}
+// Requires Windows 8.1
+
+//mixin(uuid!(IDXGIFactory2, "50c83a1c-e072-4c48-87b0-3630fa36a6d0"));
+//interface IDXGIFactory2 : IDXGIFactory1
+//{
+//	extern(Windows):
+//	HRESULT CreateSwapChainForComposition(const(IUnknown) Device, const DXGI_SWAP_CHAIN_DESC1* Desc, const(IDXGIOutput) RestrictToOutput, IDXGISwapChain1 *SwapChain);
+//	HRESULT CreateSwapChainForCoreWindow(const(IUnknown) Device, const(IUnknown) Window, const(DXGI_SWAP_CHAIN_DESC1)* Desc, const(IDXGIOutput) RestrictToOutput, IDXGISwapChain1 *SwapChain);
+//	HRESULT CreateSwapChainForHwnd(const(IUnknown) Device, HWND hWnd, const(DXGI_SWAP_CHAIN_DESC1)* Desc, const(DXGI_SWAP_CHAIN_FULLSCREEN_DESC)* FullscreenDesc, const(IDXGIOutput) RestrictToOutput, IDXGISwapChain1* SwapChain);
+//	HRESULT GetSharedResourceAdapterLuid(void* Resource, LUID* Luid);
+//	BOOL IsWindowedStereoEnabled();
+//	HRESULT RegisterOcclusionStatusEvent(void* Event, uint* Cookie);
+//	HRESULT RegisterOcclusionStatusWindow(HWND WindowHandle, uint Msg, uint* Cookie);
+//	HRESULT RegisterStereoStatusEvent(void* Event, uint* Cookie);
+//	HRESULT RegisterStereoStatusWindow(HWND WindowHandle, uint Msg, uint* Cookie);
+//	void UnregisterOcclusionStatus(uint Cookie);
+//	void UnregisterStereoStatus(uint Cookie);
+//}
 
 mixin(uuid!(IDXGIDisplayControl, "ea9dbf1a-c88e-4486-854a-98aa0138f30c"));
 interface IDXGIDisplayControl : IUnknown
