@@ -1329,6 +1329,51 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		HRESULT SetWordWrapping(DWRITE_WORD_WRAPPING WordWrapping);
 	}
 
+	mixin(uuid!(IDWriteTextLayout, "53737037-6d14-410b-9bfe-0b182bb70961"));
+	public interface IDWriteTextLayout : IUnknown
+	{
+	extern(Windows):
+		HRESULT DetermineMinWidth(float *MinWidth);
+		HRESULT Draw(void *ClientDrawingContext, IDWriteTextRenderer Renderer, float OriginX, float OriginY);
+		HRESULT GetClusterMetrics(DWRITE_CLUSTER_METRICS * ClusterMetrics, uint MaxClusterCount, uint *ActualClusterCount);
+		HRESULT GetDrawingEffect(uint CurrentPosition, IUnknown *DrawingEffect, DWRITE_TEXT_RANGE * TextRange);
+		HRESULT GetFontCollection(uint CurrentPosition, IDWriteFontCollection *FontCollection, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontFamilyName(uint CurrentPosition, wchar *FontFamilyName, uint NameSize, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontFamilyNameLength(uint CurrentPosition, uint *NameLength, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontSize(uint CurrentPosition, float *FontSize, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontStretch(uint CurrentPosition, DWRITE_FONT_STRETCH *FontStretch, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontStyle(uint CurrentPosition, DWRITE_FONT_STYLE *FontStyle, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontWeight(uint CurrentPosition, DWRITE_FONT_WEIGHT *FontWeight, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetInlineObject(uint CurrentPosition, IDWriteInlineObject *InlineObject, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetLineMetrics(DWRITE_LINE_METRICS *LineMetrics, uint MaxLineCount, uint *ActualLineCount);
+		HRESULT GetLocaleName(uint CurrentPosition, wchar *LocaleName, uint NameSize, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetLocaleNameLength(uint CurrentPosition,uint *NameLength, DWRITE_TEXT_RANGE *TextRange);
+		float GetMaxHeight();
+		float GetMaxWidth();
+		HRESULT GetMetrics(DWRITE_TEXT_METRICS *TextMetrics);
+		HRESULT GetOverhangMetrics(DWRITE_OVERHANG_METRICS *Overhangs);
+		HRESULT GetStrikethrough(uint CurrentPosition, BOOL *HasStrikethrough, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetTypography(uint CurrentPosition, IDWriteTypography *Typography, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetUnderline(uint CurrentPosition, BOOL *HasUnderline, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT HitTestPoint(float PointX, float PointY, BOOL *IsTrailingHit, BOOL *IsInside, DWRITE_HIT_TEST_METRICS *HitTestMetrics);
+		HRESULT HitTestTextPosition(uint TextPosition, BOOL IsTrailingHit, float *PointX, float *PointY, DWRITE_HIT_TEST_METRICS *HitTestMetrics);
+		HRESULT HitTestTextRange(uint TextPosition, uint TextLength, float OriginX, float OriginY, DWRITE_HIT_TEST_METRICS *HitTestMetrics, uint MaxHitTestMetricsCount, uint *ActualHitTestMetricsCount);
+		HRESULT SetDrawingEffect(IUnknown DrawingEffect, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontCollection(IDWriteFontCollection FontCollection, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontFamilyName(const wchar *FontFamilyName, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontSize(float FontSize, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontStretch(DWRITE_FONT_STRETCH FontStretch, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontStyle(DWRITE_FONT_STYLE FontStyle, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontWeight(DWRITE_FONT_WEIGHT FontWeight, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetInlineObject(IDWriteInlineObject InlineObject, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetLocaleName(const wchar *LocaleName, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetMaxHeight(float MaxHeight);
+		HRESULT SetMaxWidth(float MaxWidth);
+		HRESULT SetStrikethrough(BOOL HasStrikethrough, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetTypography(IDWriteTypography Typography, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetUnderline(BOOL HasUnderline, DWRITE_TEXT_RANGE TextRange);
+	}
+
 
 }
 static if(DX11_1 || DX11_2)
@@ -1406,6 +1451,16 @@ static if(DX11_1 || DX11_2)
 		HRESULT JustifyGlyphAdvances(float LineWidth, uint GlyphCount, const DWRITE_JUSTIFICATION_OPPORTUNITY *JustificationOpportunities, const float *GlyphAdvances, const DWRITE_GLYPH_OFFSET *GlyphOffsets, float *JustifiedGlyphAdvances, DWRITE_GLYPH_OFFSET *JustifiedGlyphOffsets);
 	}
 
+	mixin(uuid!(IDWriteTextLayout1, "9064D822-80A7-465C-A986-DF65F78B8FEB"));
+	public interface IDWriteTextLayout1 : IDWriteTextLayout
+	{
+	extern(Windows):
+		HRESULT GetCharacterSpacing(uint CurrentPosition, float *LeadingSpacing, float *TrailingSpacing, float *MinimumAdvanceWidth, DWRITE_TEXT_RANGE *TextRange = null);
+		HRESULT GetPairKerning(uint CurrentPosition, BOOL *IsPairKerningEnabled, DWRITE_TEXT_RANGE *TextRange = null);
+		HRESULT SetCharacterSpacing(float LeadingSpacing, float TrailingSpacing, float MinimumAdvanceWidth, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetPairKerning(BOOL IsPairKerningEnabled, DWRITE_TEXT_RANGE TextRange);
+	}
+
 }
 static if(DX11_2)
 {
@@ -1469,6 +1524,21 @@ static if(DX11_2)
 		HRESULT SetOpticalAlignment(DWRITE_OPTICAL_ALIGNMENT OpticalAlignment);
 		HRESULT SetVerticalGlyphOrientation(DWRITE_VERTICAL_GLYPH_ORIENTATION GlyphOrientation);
 		HRESULT SetWrapOnLastLine(BOOL IsLastLineWrappingEnabled);
+	}
+
+	mixin(uuid!(IDWriteTextLayout2, "1093C18F-8D5E-43F0-B064-0917311B525E"));
+	public interface IDWriteTextLayout2 : IDWriteTextLayout1
+	{
+	extern(Windows):
+		HRESULT GetFontFallback(IDWriteFontFallback *FontFallback);
+		BOOL GetLastLineWrapping();
+		HRESULT GetMetrics(DWRITE_TEXT_METRICS1 *TextMetrics);
+		DWRITE_OPTICAL_ALIGNMENT GetOpticalAlignment();
+		DWRITE_VERTICAL_GLYPH_ORIENTATION GetVerticalGlyphOrientation();
+		HRESULT SetFontFallback(IDWriteFontFallback FontFallback);
+		HRESULT SetLastLineWrapping(BOOL IsLastLineWrappingEnabled);
+		HRESULT SetOpticalAlignment(DWRITE_OPTICAL_ALIGNMENT OpticalAlignment);
+		HRESULT SetVerticalGlyphOrientation(DWRITE_VERTICAL_GLYPH_ORIENTATION GlyphOrientation);
 	}
 
 

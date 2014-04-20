@@ -4,7 +4,7 @@
     <Files>
       <File FileName="..\dxgi.d" Line="1" Column="1" />
       <File FileName="..\d2d1.d" Line="1" Column="1" />
-      <File FileName="..\dwrite.d" Line="1350" Column="77" />
+      <File FileName="..\dwrite.d" Line="1503" Column="2" />
       <File FileName="..\d3d.d" Line="1" Column="1" />
       <File FileName="..\com.d" Line="1" Column="1" />
     </Files>
