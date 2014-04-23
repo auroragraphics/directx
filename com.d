@@ -3,15 +3,17 @@ module aurora.dxi.com;
 public import std.c.windows.windows;
 public import std.c.windows.com;
 
+public:
+
 mixin(uuid!(IUnknown, "00000000-0000-0000-C000-000000000046"));
 mixin(uuid!(IClassFactory,"00000001-0000-0000-C000-000000000046"));
 
-struct LUID {
+public struct LUID {
 	uint LowPart;
 	int HighPart;
 }
 
-struct SIZE {
+public struct SIZE {
 	long X;
 	long Y;
 }
