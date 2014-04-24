@@ -1,13 +1,10 @@
-module aurora.dxi.dwrite;
+module aurora.dx11.dwrite;
 
-import com;
-import std.c.windows.com;
-import std.c.windows.windows;
 import std.bitmanip;
-
-import config;
-import d2d1;
-import d3d;
+import aurora.dx11.com;
+import aurora.dx11.config;
+import aurora.dx11.d2d1;
+import aurora.dx11.d3d;
 
 //
 //	Enumerations

@@ -1,17 +1,10 @@
-module aurora.dxi.dxgi;
+module aurora.dx11.dxgi;
 
-import com;
-import std.c.windows.com;
-import std.c.windows.windows;
-
-import config;
+import aurora.dx11.com;
+import aurora.dx11.config;
 
 public:
 
-public struct LUID {
-	uint LowPart;
-	int HighPart;
-}
 
 //
 //	Constants

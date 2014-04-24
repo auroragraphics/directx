@@ -1,8 +1,7 @@
-module aurora.dxi.d2d1;
+module aurora.dx11.d2d1;
 
-import com;
-import std.c.windows.com;
-import std.c.windows.windows;
+import aurora.dx11.com;
+import aurora.dx11.config;
 
 static if(DX11_0 || DX11_1 || DX11_2)
 {

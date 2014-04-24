@@ -2,12 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="..\dxgi.d">
     <Files>
-      <File FileName="..\dxgi.d" Line="441" Column="2" />
-      <File FileName="..\d2d1.d" Line="21" Column="1" />
-      <File FileName="..\dwrite.d" Line="69" Column="51" />
+      <File FileName="..\dxgi.d" Line="512" Column="28" />
+      <File FileName="..\d2d1.d" Line="1" Column="1" />
+      <File FileName="..\dwrite.d" Line="1" Column="1" />
       <File FileName="..\d3d.d" Line="1" Column="1" />
-      <File FileName="..\com.d" Line="15" Column="1" />
-      <File FileName="C:\D\dmd2\src\druntime\import\core\sys\windows\windows.d" Line="67" Column="14" />
+      <File FileName="..\com.d" Line="15" Column="9" />
+      <File FileName="C:\D\dmd2\src\druntime\import\core\sys\windows\windows.d" Line="1" Column="1" />
+      <File FileName="C:\D\dmd2\src\phobos\std\c\windows\com.d" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

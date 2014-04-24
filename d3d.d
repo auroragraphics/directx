@@ -1,9 +1,8 @@
-module aurora.dxi.d3d;
+module aurora.dx11.d3d;
 
-import com;
-import std.c.windows.com;
-import std.c.windows.windows;
 import std.bitmanip;
+import aurora.dx11.com;
+import aurora.dx11.config;
 
 import config;
 
