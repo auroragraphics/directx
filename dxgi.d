@@ -1037,15 +1037,15 @@ static if(DX11_2)
 
 static if(DX11_0 || DX11_1 || DX11_2)
 {
-	extern(C++) HRESULT CreateDXGIFactory(IID RIID, void **Factory);
+	extern(Windows) HRESULT CreateDXGIFactory(IID RIID, void **Factory);
 }
 static if(DX11_1 || DX11_2)
 {
-	extern(C++) HRESULT CreateDXGIFactory1(IID RIID, void **Factory);
+	extern(Windows) HRESULT CreateDXGIFactory1(IID RIID, void **Factory);
 	extern(Windows) HRESULT DXGIGetDebugInterface(IID RIID, void **Debug);
 }
 static if(DX11_2)
 {
-	extern(C++) HRESULT CreateDXGIFactory2(uint Flags, const ref IID RIID, void **Factory);
+	extern(Windows) HRESULT CreateDXGIFactory2(uint Flags, const ref IID RIID, void **Factory);
 	extern(Windows) HRESULT DXGIGetDebugInterface1(uint Flags, IID RIID, void **Debug);
 }

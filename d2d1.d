@@ -2,6 +2,8 @@ module aurora.dx11.d2d1;
 
 import aurora.dx11.com;
 import aurora.dx11.config;
+import aurora.dx11.d3d;
+import aurora.dx11.dxgi;
 
 //
 //	Constants
@@ -66,6 +68,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 }
 static if(DX11_1 || DX11_2)
 {
+	alias D2D1_APPEND_ALLIGNED_ELEMENT = -1;
 }
 static if(DX11_2)
 {
@@ -291,7 +294,8 @@ static if(DX11_1 || DX11_2)
 	public enum D2D1_COLOR_SPACE : int { 
 		CUSTOM  = 0,
 		SRGB    = 1,
-		SCRGB   = 2
+		SCRGB   = 2,
+		FORCE_DWORD  = 0xffffffff
 	} 
 
 	public enum D2D1_COLOR_INTERPOLATION_MODE : int { 
@@ -499,9 +503,450 @@ static if(DX11_2)
 
 static if(DX11_0 || DX11_1 || DX11_2)
 {
+	alias D3DCOLORVALUE D2D_COLOR_F;
+	alias D2D_COLOR_F D2D1_COLOR_F;
+
+	public struct D2D_MATRIX_3X2_F {
+		float _11;
+		float _12;
+		float _21;
+		float _22;
+		float _31;
+		float _32;
+	}
+	alias D2D_MATRIX_3X2_F D2D1_MATRIX_3X2_F;
+
+	public struct D2D_MATRIX_4X3_F {
+		union {
+			struct {
+				float _11, _12, _13;
+				float _21, _22, _23;
+				float _31, _32, _33;
+				float _41, _42, _43;
+			}
+			float m[4][3];
+		}
+	}
+	alias D2D_MATRIX_4X3_F D2D1_MATRIX_4X3_F;
+
+	public struct D2D_MATRIX_4X4_F {
+		union {
+			struct {
+				float _11, _12, _13, _14;
+				float _21, _22, _23, _24;
+				float _31, _32, _33, _34;
+				float _41, _42, _43, _44;
+			}
+			float m[4][4];
+		}
+	}
+	alias D2D_MATRIX_4X4_F D2D1_MATRIX_4X4_F;
+
+	public struct D2D_MATRIX_5X4_F {
+		union {
+			struct {
+				float _11, _12, _13, _14;
+				float _21, _22, _23, _24;
+				float _31, _32, _33, _34;
+				float _41, _42, _43, _44;
+				float _51, _52, _53, _54;
+			}
+			float m[5][4];
+		}
+	}
+	alias D2D_MATRIX_5X4_F D2D1_MATRIX_5X4_F;
+
+	public struct D2D_POINT_2F {
+		float x;
+		float y;
+	}
+	alias D2D_POINT_2F D2D1_POINT_2F;
+
+	public struct POINT {
+		long x;
+		long y;
+	} 
+	alias POINT D2D_POINT_2L;
+
+	public struct D2D_POINT_2U {
+		uint x;
+		uint y;
+	}
+	alias D2D_POINT_2U D2D1_POINT_2U;
+
+	public struct D2D_RECT_F {
+		float left;
+		float top;
+		float right;
+		float bottom;
+	}
+	alias D2D_RECT_F D2D1_RECT_F;
+
+	public struct RECT {
+		long left;
+		long top;
+		long right;
+		long bottom;
+	} 
+	alias RECT D2D_RECT_L;
+
+	public struct D2D_RECT_U {
+		uint left;
+		uint top;
+		uint right;
+		uint bottom;
+	}
+	alias D2D_RECT_U D2D1_RECT_U;
+
+	public struct D2D_SIZE_F {
+		float width;
+		float height;
+	}
+	alias D2D_SIZE_F D2D1_SIZE_F;
+
+	public struct D2D_SIZE_U {
+		uint width;
+		uint height;
+	}
+	alias D2D_SIZE_U D2D1_SIZE_U;
+
+	public struct D2D_VECTOR_2F {
+		float x;
+		float y;
+	}
+
+	public struct D2D_VECTOR_3F {
+		float x;
+		float y;
+		float z;
+	}
+
+	public struct D2D_VECTOR_4F {
+		float x;
+		float y;
+		float z;
+		float w;
+	}
+
+	public struct D2D1_ARC_SEGMENT {
+		D2D1_POINT_2F        point;
+		D2D1_SIZE_F          size;
+		float                rotationAngle;
+		D2D1_SWEEP_DIRECTION sweepDirection;
+		D2D1_ARC_SIZE        arcSize;
+	}
+
+	public struct D2D1_BEZIER_SEGMENT {
+		D2D1_POINT_2F point1;
+		D2D1_POINT_2F point2;
+		D2D1_POINT_2F point3;
+	}
+
+	public struct D2D1_BITMAP_BRUSH_PROPERTIES {
+		D2D1_EXTEND_MODE               extendModeX;
+		D2D1_EXTEND_MODE               extendModeY;
+		D2D1_BITMAP_INTERPOLATION_MODE interpolationMode;
+	}
+
+	public struct D2D1_BITMAP_PROPERTIES {
+		D2D1_PIXEL_FORMAT pixelFormat;
+		float             dpiX;
+		float             dpiY;
+	}
+
+	public struct D2D1_BRUSH_PROPERTIES {
+		float             opacity;
+		D2D1_MATRIX_3X2_F transform;
+	}
+
+	public struct D2D1_DRAWING_STATE_DESCRIPTION {
+		D2D1_ANTIALIAS_MODE      antialiasMode;
+		D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode;
+		D2D1_TAG                 tag1;
+		D2D1_TAG                 tag2;
+		D2D1_MATRIX_3X2_F        transform;
+	}
+
+	public struct D2D1_ELLIPSE {
+		D2D1_POINT_2F point;
+		float         radiusX;
+		float         radiusY;
+	}
+
+	public struct D2D1_FACTORY_OPTIONS {
+		D2D1_DEBUG_LEVEL debugLevel;
+	}
+
+	public struct D2D1_GRADIENT_STOP {
+		FLOAT        position;
+		D2D1_COLOR_F color;
+	}
+
+	public struct D2D1_HWND_RENDER_TARGET_PROPERTIES {
+		HWND                 hwnd;
+		D2D1_SIZE_U          pixelSize;
+		D2D1_PRESENT_OPTIONS presentOptions;
+	}
+
+	public struct D2D1_LAYER_PARAMETERS {
+		D2D1_RECT_F         contentBounds;
+		ID2D1Geometry       geometricMask;
+		D2D1_ANTIALIAS_MODE maskAntialiasMode;
+		D2D1_MATRIX_3X2_F   maskTransform;
+		FLOAT               opacity;
+		ID2D1Brush          opacityBrush;
+		D2D1_LAYER_OPTIONS  layerOptions;
+	}
+
+	public struct D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES {
+		D2D1_POINT_2F startPoint;
+		D2D1_POINT_2F endPoint;
+	}
+
+	public struct D2D1_PIXEL_FORMAT {
+		DXGI_FORMAT     format;
+		D2D1_ALPHA_MODE alphaMode;
+	}
+
+	public struct D2D1_QUADRATIC_BEZIER_SEGMENT {
+		D2D1_POINT_2F point1;
+		D2D1_POINT_2F point2;
+	}
+
+	public struct D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES {
+		D2D1_POINT_2F center;
+		D2D1_POINT_2F gradientOriginOffset;
+		float         radiusX;
+		float         radiusY;
+	}
+
+	public struct D2D1_RENDER_TARGET_PROPERTIES {
+		D2D1_RENDER_TARGET_TYPE  type;
+		D2D1_PIXEL_FORMAT        pixelFormat;
+		float                    dpiX;
+		float                    dpiY;
+		D2D1_RENDER_TARGET_USAGE usage;
+		D2D1_FEATURE_LEVEL       minLevel;
+	}
+
+	public struct D2D1_ROUNDED_RECT {
+		D2D1_RECT_F rect;
+		float       radiusX;
+		float       radiusY;
+	}
+
+	public struct D2D1_STROKE_STYLE_PROPERTIES {
+		D2D1_CAP_STYLE  startCap;
+		D2D1_CAP_STYLE  endCap;
+		D2D1_CAP_STYLE  dashCap;
+		D2D1_LINE_JOIN  lineJoin;
+		float           miterLimit;
+		D2D1_DASH_STYLE dashStyle;
+		float           dashOffset;
+	}
+
+	public struct D2D1_TRIANGLE {
+		D2D1_POINT_2F point1;
+		D2D1_POINT_2F point2;
+		D2D1_POINT_2F point3;
+	}
 }
 static if(DX11_1 || DX11_2)
 {
+	public struct D2D1_BITMAP_BRUSH_PROPERTIES1 {
+		D2D1_EXTEND_MODE        extendModeX;
+		D2D1_EXTEND_MODE        extendModeY;
+		D2D1_INTERPOLATION_MODE interpolationMode;
+	}
+
+	public struct D2D1_BITMAP_PROPERTIES1 {
+		D2D1_PIXEL_FORMAT   pixelFormat;
+		float               dpiX;
+		float               dpiY;
+		D2D1_BITMAP_OPTIONS bitmapOptions;
+		ID2D1ColorContext   colorContext;
+	}
+
+	public struct D2D1_BLEND_DESCRIPTION {
+		D2D1_BLEND           sourceBlend;
+		D2D1_BLEND           destinationBlend;
+		D2D1_BLEND_OPERATION blendOperation;
+		D2D1_BLEND           sourceBlendAlpha;
+		D2D1_BLEND           destinationBlendAlpha;
+		D2D1_BLEND_OPERATION blendOperationAlpha;
+		float                blendFactor[4];
+	}
+
+	public struct D2D1_CREATION_PROPERTIES {
+		D2D1_THREADING_MODE         threadingMode;
+		D2D1_DEBUG_LEVEL            debugLevel;
+		D2D1_DEVICE_CONTEXT_OPTIONS options;
+	}
+
+	public struct D2D1_CUSTOM_VERTEX_BUFFER_PROPERTIES {
+		GUID                          vertexShader;
+		const D2D1_INPUT_ELEMENT_DESC *inputElements;
+		uint                        elementCount;
+		uint                        stride;
+	}
+
+	public struct D2D1_DRAWING_STATE_DESCRIPTION1 {
+		D2D1_ANTIALIAS_MODE      antialiasMode;
+		D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode;
+		D2D1_TAG                 tag1;
+		D2D1_TAG                 tag2;
+		D2D1_MATRIX_3X2_F        transform;
+		D2D1_PRIMITIVE_BLEND     primitiveBlend;
+		D2D1_UNIT_MODE           unitMode;
+	}
+
+	public struct D2D1_EFFECT_INPUT_DESCRIPTION {
+		ID2D1Effect Effect;
+		uint      inputIndex;
+		D2D1_RECT_F inputRectangle;
+	}
+
+	public struct D2D1_FEATURE_DATA_DOUBLES {
+		BOOL doublePrecisionFloatShaderOps;
+	}
+
+	public struct D2D1_FEATURE_DATA_D3D10_X_HARDWARE_OPTIONS {
+		BOOL computeShaders_Plus_RawAndStructuredBuffers_Via_Shader_4_x;
+	}
+
+	public struct D2D1_IMAGE_BRUSH_PROPERTIES {
+		D2D1_RECT_F             sourceRectangle;
+		D2D1_EXTEND_MODE        extendModeX;
+		D2D1_EXTEND_MODE        extendModeY;
+		D2D1_INTERPOLATION_MODE interpolationMode;
+	}
+
+	public struct D2D1_INPUT_DESCRIPTION {
+		D2D1_FILTER filter;
+		uint      levelOfDetailCount;
+	}
+
+	public struct D2D1_INPUT_ELEMENT_DESC {
+		PCSTR       semanticName;
+		uint      semanticIndex;
+		DXGI_FORMAT format;
+		uint      inputSlot;
+		uint      alignedByteOffset;
+	}
+
+	public struct D2D1_LAYER_PARAMETERS1 {
+		D2D1_RECT_F         contentBounds;
+		ID2D1Geometry       geometricMask;
+		D2D1_ANTIALIAS_MODE maskAntialiasMode;
+		D2D1_MATRIX_3X2_F   maskTransform;
+		FLOAT               opacity;
+		ID2D1Brush          opacityBrush;
+		D2D1_LAYER_OPTIONS1 layerOptions;
+	}
+
+	public struct D2D1_MAPPED_RECT {
+		uint pitch;
+		ubyte *bits;
+	}
+
+	public struct D2D1_POINT2L {
+		long x;
+		long y;
+	}
+	alias D2D1_POINT2L D2D1_POINT_2L;
+
+	public struct D2D1_POINT_DESCRIPTION {
+		D2D1_POINT_2F point;
+		D2D1_POINT_2F unitTangentVector;
+		uint        endSegment;
+		uint        endFigure;
+		float         lengthToEndSegment;
+	}
+
+	public struct D2D1_PRINT_CONTROL_PROPERTIES {
+		D2D1_PRINT_FONT_SUBSET_MODE fontSubset;
+		float                       rasterDPI;
+		D2D1_COLOR_SPACE            colorSpace;
+	}
+
+	public struct D2D1_PROPERTY_BINDING {
+		PCWSTR                      propertyName;
+		PD2D1_PROPERTY_SET_FUNCTION setFunction;
+		PD2D1_PROPERTY_GET_FUNCTION getFunction;
+	}
+
+	public struct D2D1_RECTL {
+		long left;
+		long top;
+		long right;
+		long bottom;
+	}
+	alias D2D1_RECTL D2D1_RECT_L;
+
+	public struct D2D1_RESOURCE_TEXTURE_PROPERTIES {
+		const uint           *extents;
+		uint                 dimensions;
+		D2D1_BUFFER_PRECISION  bufferPrecision;
+		D2D1_CHANNEL_DEPTH     channelDepth;
+		D2D1_FILTER            filter;
+		const D2D1_EXTEND_MODE *extendModes;
+	}
+
+	public struct D2D1_RESOURCE_USAGE {
+		size_t workingTextureAreaMemory;
+		size_t cachingTextureAreaMemory;
+		size_t shaderCacheMemory;
+	}
+
+	public struct D2D1_RENDERING_CONTROLS {
+		D2D1_BUFFER_PRECISION bufferPrecision;
+		uint                tileSize;
+	}
+
+	public struct D2D1_STROKE_STYLE_PROPERTIES1 {
+		D2D1_CAP_STYLE             startCap;
+		D2D1_CAP_STYLE             endCap;
+		D2D1_CAP_STYLE             dashCap;
+		D2D1_LINE_JOIN             lineJoin;
+		float                      miterLimit;
+		D2D1_DASH_STYLE            dashStyle;
+		float                      dashOffset;
+		D2D1_STROKE_TRANSFORM_TYPE transformType;
+	}
+
+	public struct D2D1_VECTOR_2F {
+		float x;
+		float y;
+	}
+
+	public struct D2D1_VECTOR_3F {
+		float x;
+		float y;
+		float z;
+	}
+
+	public struct D2D1_VECTOR_4F {
+		float x;
+		float y;
+		float z;
+		float w;
+	}
+
+	public struct D2D1_VERTEX_BUFFER_PROPERTIES {
+		uint            inputCount;
+		D2D1_VERTEX_USAGE usage;
+		const ubyte        *data;
+		uint            byteWidth;
+	}
+
+	public struct D2D1_VERTEX_RANGE {
+		uint startVertex;
+		uint vertexCount;
+	}
+
+	public struct PD2D1_EFFECT_FACTORY {
+		IUnknown *effectImplementation;
+	}
 }
 static if(DX11_2)
 {
@@ -527,26 +972,37 @@ static if(DX11_2)
 
 static if(DX11_0 || DX11_1 || DX11_2)
 {
+	extern(Windows)
+	{
+		HRESULT D2D1CreateFactory(D2D1_FACTORY_TYPE factoryType, GUID* riid, void **ppIFactory);
+		HRESULT D2D1CreateFactory(D2D1_FACTORY_TYPE factoryType, GUID* riid, const D2D1_FACTORY_OPTIONS *pFactoryOptions, void **ppIFactory);
+		BOOL D2D1InvertMatrix(D2D1_MATRIX_3X2_F *matrix);
+		BOOL D2D1IsMatrixInvertible(const D2D1_MATRIX_3X2_F *matrix);
+		void D2D1MakeRotateMatrix(float angle, D2D1_POINT_2F center, D2D1_MATRIX_3X2_F *matrix);
+		void D2D1MakeSkewMatrix(float angleX, float angleY, D2D1_POINT_2F center, D2D1_MATRIX_3X2_F *matrix);
+	}
 }
 static if(DX11_1 || DX11_2)
 {
+	extern(Windows)
+	{
+		float D2D1ComputeMaximumScaleFactor(const D2D1_MATRIX_3X2_F *matrix);
+		HRESULT D2D1CreateDevice(IDXGIDevice dxgiDevice, const D2D1_CREATION_PROPERTIES *creationProperties, ID2D1Device *d2dDevice);
+		HRESULT D2D1CreateDeviceContext(IDXGISurface dxgiSurface, const D2D1_CREATION_PROPERTIES *creationProperties, ID2D1DeviceContext *d2dDeviceContext);
+		D2D1_PROPERTY_TYPE GetType(uint index);
+		HRESULT StringGetter(const IUnknown effect, ubyte *data, uint dataSize, uint *actualSize);
+		HRESULT StringSetter(IUnknown effect, ubyte *data, uint dataSize);
+		HRESULT ValueGetter(const IUnknown *effect, ubyte *data, uint dataSize, uint *actualSize);
+		HRESULT ValueSetter(IUnknown effect, const ubyte *data, uint dataSize);
+		D2D1_COLOR_F D2D1ConvertColorSpace(D2D1_COLOR_SPACE sourceColorSpace, D2D1_COLOR_SPACE destinationColorSpace, const D2D1_COLOR_F *color);
+		void D2D1SinCos(float angle, float *s, float *c);
+		float D2D1Tan(float angle);
+		float D2D1Vec3Length(float x, float y, float z);
+	}
 }
 static if(DX11_2)
 {
 }
-
-
-public struct D2D_POINT_2F {
-	float x;
-	float y;
-}
-alias D2D_POINT_2F D2D1_POINT_2F;
-
-public struct D2D1_BEZIER_SEGMENT {
-	D2D1_POINT_2F point1;
-	D2D1_POINT_2F point2;
-	D2D1_POINT_2F point3;
-};
 
 mixin(uuid!(ID2D1SimplifiedGeometrySink, "2cd9069e-12e2-11dc-9fed-001143a055f9"));
 public interface ID2D1SimplifiedGeometrySink : IUnknown
