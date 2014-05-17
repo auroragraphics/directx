@@ -1,10 +1,10 @@
-module aurora.dx11.dwrite;
+module aurora.directx.dwrite;
 
 import std.bitmanip;
-import aurora.dx11.com;
-import aurora.dx11.config;
-import aurora.dx11.d2d1;
-import aurora.dx11.d3d;
+import aurora.directx.com;
+import aurora.directx.config;
+import aurora.directx.d2d1;
+import aurora.directx.d3d;
 
 //
 //	Enumerations

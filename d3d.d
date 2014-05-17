@@ -1,8 +1,8 @@
-module aurora.dx11.d3d;
+module aurora.directx.d3d;
 
 import std.bitmanip;
-import aurora.dx11.com;
-import aurora.dx11.config;
+import aurora.directx.com;
+import aurora.directx.config;
 
 import config;
 

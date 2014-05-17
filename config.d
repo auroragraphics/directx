@@ -1,4 +1,4 @@
-module aurora.dx11.config;
+module aurora.directx.config;
 
 version(DX11_0)
 {

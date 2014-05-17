@@ -1,7 +1,7 @@
-module aurora.dx11.dxgi;
+module aurora.directx.dxgi;
 
-import aurora.dx11.com;
-import aurora.dx11.config;
+import aurora.directx.com;
+import aurora.directx.config;
 
 public:
 

@@ -1,9 +1,11 @@
-module aurora.dx11.d2d1;
+module aurora.directx.d2d1;
 
-import aurora.dx11.com;
-import aurora.dx11.config;
-import aurora.dx11.d3d;
-import aurora.dx11.dxgi;
+import aurora.directx.com;
+import aurora.directx.config;
+import aurora.directx.d3d;
+import aurora.directx.dwrite;
+import aurora.directx.dxgi;
+import aurora.directx.wic;
 
 //
 //	Constants
@@ -958,13 +960,875 @@ static if(DX11_2)
 
 static if(DX11_0 || DX11_1 || DX11_2)
 {
+	mixin(uuid!(ID2D1Bitmap, "a2296057-ea42-4099-983b-539fb6505426"));
+	public interface ID2D1Bitmap : ID2D1Image
+	{
+	extern(Windows):
+		HRESULT CopyFromBitmap(const D2D1_POINT_2U *destPoint, ID2D1Bitmap bitmap, const D2D1_RECT_U *srcRect);
+		HRESULT CopyFromMemory(const D2D1_RECT_U *dstRect, const void *srcData, uint pitch);
+		HRESULT CopyFromRenderTarget(const D2D1_POINT_2U *destPoint, ID2D1RenderTarget renderTarget, const D2D1_RECT_U *srcRect);
+		void GetDpi(float *dpiX, float *dpiY);
+		D2D1_PIXEL_FORMAT GetPixelFormat();
+		D2D1_SIZE_U GetPixelSize();
+		D2D1_SIZE_F GetSize();
+	}
+
+	mixin(uuid!(ID2D1BitmapBrush, "2cd906aa-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1BitmapBrush : ID2D1Brush
+	{
+	extern(Windows):
+		void GetBitmap(ID2D1Bitmap *bitmap);
+		D2D1_EXTEND_MODE GetExtendModeX();
+		D2D1_EXTEND_MODE GetExtendModeY();
+		D2D1_BITMAP_INTERPOLATION_MODE GetInterpolationMode();
+		void SetBitmap(ID2D1Bitmap bitmap);
+		void SetExtendModeX(D2D1_EXTEND_MODE extendModeX);
+		void SetExtendModeY(D2D1_EXTEND_MODE extendModeY);
+		void SetInterpolationMode(D2D1_BITMAP_INTERPOLATION_MODE interpolationMode);
+	}
+
+	mixin(uuid!(ID2D1BitmapRenderTarget, "2cd90695-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1BitmapRenderTarget : ID2D1RenderTarget
+	{
+	extern(Windows):
+		HRESULT GetBitmap(ID2D1Bitmap *bitmap);
+	}
+
+	mixin(uuid!(ID2D1Brush, "2cd906a8-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1Brush : ID2D1Resource
+	{
+	extern(Windows):
+		float GetOpacity();
+		void GetTransform(D2D1_MATRIX_3X2_F *transform);
+		void SetOpacity(float opacity);
+		void SetTransform(const D2D1_MATRIX_3X2_F *transform);
+	}
+
+	mixin(uuid!(ID2D1DCRenderTarget, "1c51bc64-de61-46fd-9899-63a5d8f03950"));
+	public interface ID2D1DCRenderTarget : ID2D1RenderTarget
+	{
+	extern(Windows):
+		HRESULT BindDC(const HDC hDC, const RECT *pSubRect);
+	}
+
+	mixin(uuid!(ID2D1DrawingStateBlock, "28506e39-ebf6-46a1-bb47-fd85565ab957"));
+	public interface ID2D1DrawingStateBlock : ID2D1Resource
+	{
+	extern(Windows):
+		void GetDescription(D2D1_DRAWING_STATE_DESCRIPTION *stateDescription);
+		void GetTextRenderingParams(IDWriteRenderingParams *textRenderingParams);
+		void SetDescription(D2D1_DRAWING_STATE_DESCRIPTION *stateDescription);
+		void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+	}
+
+	mixin(uuid!(ID2D1EllipseGeometry, "2cd906a4-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1EllipseGeometry : ID2D1Geometry
+	{
+	extern(Windows):
+		void GetEllipse(D2D1_ELLIPSE *ellipse);
+	}
+
+	mixin(uuid!(ID2D1Factory, "2cd906a4-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1Factory : IUnknown
+	{
+	extern(Windows):
+		HRESULT CreateDCRenderTarget(const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, ID2D1DCRenderTarget *dcRenderTarget);
+		HRESULT CreateDrawingStateBlock(const D2D1_DRAWING_STATE_DESCRIPTION *drawingStateDescription, IDWriteRenderingParams textRenderingParams, ID2D1DrawingStateBlock *drawingStateBlock);
+		HRESULT CreateDrawingStateBlock(ID2D1DrawingStateBlock *drawingStateBlock);
+		HRESULT CreateDrawingStateBlock(const D2D1_DRAWING_STATE_DESCRIPTION *drawingStateDescription, ID2D1DrawingStateBlock *drawingStateBlock);
+		HRESULT CreateDxgiSurfaceRenderTarget(IDXGISurface dxgiSurface, const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, ID2D1RenderTarget *renderTarget);
+		HRESULT CreateEllipseGeometry(const D2D1_ELLIPSE *ellipse, ID2D1EllipseGeometry *ellipseGeometry);
+		HRESULT CreateGeometryGroup(D2D1_FILL_MODE fillMode, ID2D1Geometry *geometries, uint geometriesCount, ID2D1GeometryGroup *geometryGroup);
+		HRESULT CreateHwndRenderTarget(D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, D2D1_HWND_RENDER_TARGET_PROPERTIES *hwndRenderTargetProperties, ID2D1HwndRenderTarget *hwndRenderTarget);
+		HRESULT CreatePathGeometry(ID2D1PathGeometry *pathGeometry);
+		HRESULT CreateRectangleGeometry(const D2D1_RECT_F *rectangle, ID2D1RectangleGeometry *rectangleGeometry);
+		HRESULT CreateRoundedRectangleGeometry(const D2D1_ROUNDED_RECT *roundedRectangle, ID2D1RoundedRectangleGeometry *roundedRectangleGeometry);
+		HRESULT CreateStrokeStyle(const D2D1_STROKE_STYLE_PROPERTIES *strokeStyleProperties, const(float) *dashes, uint dashesCount, ID2D1StrokeStyle *strokeStyle);
+		HRESULT CreateTransformedGeometry(ID2D1Geometry sourceGeometry, const D2D1_MATRIX_3X2_F *transform, ID2D1TransformedGeometry *transformedGeometry);
+		HRESULT CreateWicBitmapRenderTarget(IWICBitmap target, const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties, ID2D1RenderTarget *renderTarget);
+		void GetDesktopDpi(float *dpiX, float *dpiY);
+		HRESULT ReloadSystemMetrics();
+	}
+
+	mixin(uuid!(ID2D1GdiInteropRenderTarget, "e0db51c3-6f77-4bae-b3d5-e47509b35838"));
+	public interface ID2D1GdiInteropRenderTarget : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetDC(D2D1_DC_INITIALIZE_MODE mode, HDC *hdc);
+		HRESULT ReleaseDC(RECT *update);
+	}
+
+	mixin(uuid!(ID2D1Geometry, "2cd906a1-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1Geometry : ID2D1Resource
+	{
+	extern(Windows):
+		HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, D2D1_MATRIX_3X2_F *inputGeometryTransform, ID2D1SimplifiedGeometrySink geometrySink);
+		HRESULT CombineWithGeometry(ID2D1Geometry inputGeometry, D2D1_COMBINE_MODE combineMode, const D2D1_MATRIX_3X2_F *inputGeometryTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+		HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, const D2D1_MATRIX_3X2_F *inputGeometryTransform, D2D1_GEOMETRY_RELATION *relation);
+		HRESULT CompareWithGeometry(ID2D1Geometry inputGeometry, const D2D1_MATRIX_3X2_F *inputGeometryTransform, float flatteningTolerance, D2D1_GEOMETRY_RELATION *relation);
+		HRESULT ComputeArea(const D2D1_MATRIX_3X2_F *worldTransform, float *area);
+		HRESULT ComputeArea(const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, float *area);
+		HRESULT ComputeLength(const D2D1_MATRIX_3X2_F *worldTransform, float *length);
+		HRESULT ComputeLength(const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, float *length);
+		HRESULT ComputePointAtLength(float length, const D2D1_MATRIX_3X2_F *worldTransform, D2D1_POINT_2F *point, D2D1_POINT_2F *unitTangentVector);
+		HRESULT ComputePointAtLength(float length, const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, D2D1_POINT_2F *point, D2D1_POINT_2F *unitTangentVector);
+		HRESULT FillContainsPoint(D2D1_POINT_2F point, const D2D1_MATRIX_3X2_F *worldTransform, BOOL *contains);
+		HRESULT FillContainsPoint(D2D1_POINT_2F point, const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, BOOL *contains);
+		HRESULT GetBounds(const D2D1_MATRIX_3X2_F *worldTransform, D2D1_RECT_F *bounds);
+		HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, const D2D1_MATRIX_3X2_F *worldTransform, D2D1_RECT_F *bounds);
+		HRESULT GetWidenedBounds(float strokeWidth, ID2D1StrokeStyle strokeStyle, const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, D2D1_RECT_F *bounds);
+		HRESULT Outline(const D2D1_MATRIX_3X2_F *worldTransform, ID2D1SimplifiedGeometrySink geometrySink);
+		HRESULT Outline(const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+		HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, const D2D1_MATRIX_3X2_F *worldTransform, ID2D1SimplifiedGeometrySink geometrySink);
+		HRESULT Simplify(D2D1_GEOMETRY_SIMPLIFICATION_OPTION simplificationOption, const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+		HRESULT StrokeContainsPoint(D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, const D2D1_MATRIX_3X2_F *worldTransform, BOOL *contains);
+		HRESULT StrokeContainsPoint(D2D1_POINT_2F point, float strokeWidth, ID2D1StrokeStyle strokeStyle, const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, BOOL *contains);
+		HRESULT Tessellate(const D2D1_MATRIX_3X2_F *worldTransform, ID2D1TessellationSink tessellationSink);
+		HRESULT Tessellate(const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, ID2D1TessellationSink tessellationSink);
+		HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, const D2D1_MATRIX_3X2_F *worldTransform, ID2D1SimplifiedGeometrySink geometrySink);
+		HRESULT Widen(float strokeWidth, ID2D1StrokeStyle strokeStyle, const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, ID2D1SimplifiedGeometrySink geometrySink);
+	}
+
+	mixin(uuid!(ID2D1GeometryGroup, "2cd906a6-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1GeometryGroup : ID2D1Geometry
+	{
+	extern(Windows):
+		void GetSourceGeometries(const ID2D1Geometry *geometries, uint geometriesCount);
+		D2D1_FILL_MODE GetFillMode();
+		uint GetSourceGeometryCount();
+	}
+
+	mixin(uuid!(ID2D1GeometrySink, "2cd9069f-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1GeometrySink : ID2D1SimplifiedGeometrySink
+	{
+	extern(Windows):
+		void AddArc(D2D1_ARC_SEGMENT *arc);
+		void AddBezier(const D2D1_BEZIER_SEGMENT *bezier);
+		void AddLine(D2D1_POINT_2F point);
+		void AddQuadraticBezier(const D2D1_QUADRATIC_BEZIER_SEGMENT *bezier);
+		void AddQuadraticBeziers(const D2D1_QUADRATIC_BEZIER_SEGMENT *beziers, uint bezierCount);
+	}
+
+	mixin(uuid!(ID2D1GradientStopCollection, "2cd906a7-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1GradientStopCollection : ID2D1Resource
+	{
+	extern(Windows):
+		D2D1_GAMMA GetColorInterpolationGamma();
+		D2D1_EXTEND_MODE GetExtendMode();
+		uint GetGradientStopCount();
+		void GetGradientStops(D2D1_GRADIENT_STOP *gradientStops, uint gradientStopsCount);
+	}
+
+	mixin(uuid!(ID2D1HwndRenderTarget, "2cd90698-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1HwndRenderTarget : ID2D1RenderTarget
+	{
+	extern(Windows):
+		D2D1_WINDOW_STATE CheckWindowState();
+		HWND GetHwnd();
+		HRESULT Resize(D2D1_SIZE_U *pixelSize);
+	}
+
+	mixin(uuid!(ID2D1Layer, "2cd9069b-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1Layer : ID2D1Resource
+	{
+	extern(Windows):
+		D2D1_SIZE_F GetSize();
+	}
+
+	mixin(uuid!(ID2D1LinearGradientBrush, "2cd906ab-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1LinearGradientBrush : ID2D1Brush
+	{
+	extern(Windows):
+		D2D1_POINT_2F GetEndPoint();
+		void GetGradientStopCollection(ID2D1GradientStopCollection *gradientStopCollection);
+		D2D1_POINT_2F GetStartPoint();
+		void SetEndPoint(D2D1_POINT_2F endPoint);
+		void SetStartPoint(D2D1_POINT_2F startPoint);
+	}
+
+	mixin(uuid!(ID2D1Mesh, "2cd906c2-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1Mesh : ID2D1Resource
+	{
+	extern(Windows):
+		HRESULT Open(ID2D1TessellationSink *tessellationSink);
+	}
+
+	mixin(uuid!(ID2D1PathGeometry, "2cd906a5-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1PathGeometry : ID2D1Geometry
+	{
+	extern(Windows):
+		HRESULT GetFigureCount(uint *count);
+		HRESULT GetSegmentCount(uint *count);
+		HRESULT Open(ID2D1GeometrySink *geometrySink);
+		HRESULT Stream(ID2D1GeometrySink geometrySink);
+	}
+
+	mixin(uuid!(ID2D1RadialGradientBrush, "2cd906ac-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1RadialGradientBrush : ID2D1Brush
+	{
+	extern(Windows):
+		D2D1_POINT_2F GetCenter();
+		D2D1_POINT_2F GetGradientOriginOffset();
+		void GetGradientStopCollection(ID2D1GradientStopCollection *gradientStopCollection);
+		float GetRadiusX();
+		float GetRadiusY();
+		void SetCenter(D2D1_POINT_2F center);
+		void SetGradientOriginOffset(D2D1_POINT_2F gradientOriginOffset);
+		void SetRadiusX(float radiusX);
+		void SetRadiusY(float radiusY);
+	}
+
+	mixin(uuid!(ID2D1RectangleGeometry, "2cd906a2-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1RectangleGeometry : ID2D1Geometry
+	{
+	extern(Windows):
+		void GetRect(D2D1_RECT_F *rect);
+	}
+
+	mixin(uuid!(ID2D1RenderTarget, "2cd90694-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1RenderTarget : ID2D1Resource
+	{
+	extern(Windows):
+		void BeginDraw();
+		void Clear(const D2D1_COLOR_F *clearColor = null);
+		HRESULT CreateBitmap(D2D1_SIZE_U size, const D2D1_BITMAP_PROPERTIES *bitmapProperties, ID2D1Bitmap *bitmap);
+		HRESULT CreateBitmap(D2D1_SIZE_U size, void *srcData, uint pitch, const D2D1_BITMAP_PROPERTIES *bitmapProperties, ID2D1Bitmap *bitmap);
+		HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, D2D1_BITMAP_BRUSH_PROPERTIES *bitmapBrushProperties, D2D1_BRUSH_PROPERTIES *brushProperties, ID2D1BitmapBrush *bitmapBrush);
+		HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ID2D1BitmapBrush *bitmapBrush);
+		HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, const D2D1_BITMAP_BRUSH_PROPERTIES *bitmapBrushProperties, ID2D1BitmapBrush *bitmapBrush);
+		HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, ID2D1Bitmap *bitmap);
+		HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, const D2D1_BITMAP_PROPERTIES *bitmapProperties, ID2D1Bitmap *bitmap);
+		HRESULT CreateCompatibleRenderTarget(D2D1_SIZE_F desiredSize, D2D1_SIZE_U desiredPixelSize, D2D1_PIXEL_FORMAT desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, ID2D1BitmapRenderTarget *bitmapRenderTarget);
+		HRESULT CreateCompatibleRenderTarget(D2D1_SIZE_F *desiredSize, D2D1_SIZE_U *desiredPixelSize, D2D1_PIXEL_FORMAT *desiredFormat, D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS options, ID2D1BitmapRenderTarget *bitmapRenderTarget);
+		HRESULT CreateCompatibleRenderTarget(ID2D1BitmapRenderTarget *bitmapRenderTarget);
+		HRESULT CreateCompatibleRenderTarget(D2D1_SIZE_F desiredSize, ID2D1BitmapRenderTarget *bitmapRenderTarget);
+		HRESULT CreateCompatibleRenderTarget(D2D1_SIZE_F desiredSize, D2D1_SIZE_U desiredPixelSize, ID2D1BitmapRenderTarget *bitmapRenderTarget);
+		HRESULT CreateCompatibleRenderTarget(D2D1_SIZE_F desiredSize, D2D1_SIZE_U desiredPixelSize, D2D1_PIXEL_FORMAT desiredFormat, ID2D1BitmapRenderTarget *bitmapRenderTarget);
+		HRESULT CreateGradientStopCollection(const D2D1_GRADIENT_STOP *gradientStops, uint gradientStopsCount, D2D1_GAMMA colorInterpolationGamma, D2D1_EXTEND_MODE extendMode, ID2D1GradientStopCollection *gradientStopCollection);
+		HRESULT CreateGradientStopCollection(D2D1_GRADIENT_STOP *gradientStops, uint gradientStopsCount, ID2D1GradientStopCollection *gradientStopCollection);
+		HRESULT CreateLayer(ID2D1Layer *layer);
+		HRESULT CreateLayer(D2D1_SIZE_F size, ID2D1Layer *layer);
+		HRESULT CreateLayer(D2D1_SIZE_F *size, ID2D1Layer *layer);
+		HRESULT CreateLinearGradientBrush(const D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES *linearGradientBrushProperties, ID2D1GradientStopCollection gradientStopCollection, ID2D1LinearGradientBrush *linearGradientBrush);
+		HRESULT CreateLinearGradientBrush(const D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES *linearGradientBrushProperties, const D2D1_BRUSH_PROPERTIES *brushProperties, ID2D1GradientStopCollection gradientStopCollection, ID2D1LinearGradientBrush *linearGradientBrush);
+		HRESULT CreateMesh(ID2D1Mesh *mesh);
+		HRESULT CreateRadialGradientBrush(const D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES *radialGradientBrushProperties, const D2D1_BRUSH_PROPERTIES *brushProperties, ID2D1GradientStopCollection gradientStopCollection, ID2D1RadialGradientBrush *radialGradientBrush);
+		HRESULT CreateRadialGradientBrush(const D2D1_RADIAL_GRADIENT_BRUSH_PROPERTIES *radialGradientBrushProperties, ID2D1GradientStopCollection gradientStopCollection, ID2D1RadialGradientBrush *radialGradientBrush);
+		HRESULT CreateSharedBitmap(IID* riid, void *data, D2D1_BITMAP_PROPERTIES *bitmapProperties, ID2D1Bitmap *bitmap);
+		HRESULT CreateSolidColorBrush(const D2D1_COLOR_F *color, ID2D1SolidColorBrush *solidColorBrush);
+		HRESULT CreateSolidColorBrush(const D2D1_COLOR_F *color, const D2D1_BRUSH_PROPERTIES *brushProperties, ID2D1SolidColorBrush *solidColorBrush);
+		void DrawBitmap(ID2D1Bitmap bitmap, const D2D1_RECT_F *destinationRectangle = null, float opacity = 1.0f, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode = D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, const D2D1_RECT_F *sourceRectangle = null);
+		void DrawEllipse(const D2D1_ELLIPSE *ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+		void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+		void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, const DWRITE_GLYPH_RUN *glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE_NATURAL);
+		void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+		void DrawRectangle(const D2D1_RECT_F *rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+		void DrawRoundedRectangle(const D2D1_ROUNDED_RECT *roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
+		void DrawText(wchar *string, uint stringLength, IDWriteTextFormat textFormat, const D2D1_RECT_F *layoutRect, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS_NONE, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE_NATURAL);
+		void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS_NONE);
+		HRESULT EndDraw(D2D1_TAG *tag1 = null, D2D1_TAG *tag2 = null);
+		void FillEllipse(const D2D1_ELLIPSE *ellipse, ID2D1Brush brush);
+		void FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush = null);
+		void FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+		void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, D2D1_OPACITY_MASK_CONTENT content, const D2D1_RECT_F *destinationRectangle = null, const D2D1_RECT_F *sourceRectangle = null);
+		void FillRectangle(const D2D1_RECT_F *rect, ID2D1Brush brush);
+		void FillRoundedRectangle(const D2D1_ROUNDED_RECT *roundedRect, ID2D1Brush brush);
+		HRESULT Flush(D2D1_TAG *tag1 = null, D2D1_TAG *tag2 = null);
+		D2D1_ANTIALIAS_MODE GetAntialiasMode();
+		void GetDpi(float *dpiX, float *dpiY);
+		uint GetMaximumBitmapSize();
+		D2D1_PIXEL_FORMAT GetPixelFormat();
+		D2D1_SIZE_U GetPixelSize();
+		D2D1_SIZE_F GetSize();
+		void GetTags(D2D1_TAG *tag1 = null, D2D1_TAG *tag2 = null);
+		D2D1_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
+		void GetTextRenderingParams(IDWriteRenderingParams *textRenderingParams);
+		void GetTransform(D2D1_MATRIX_3X2_F *transform);
+		BOOL IsSupported(const D2D1_RENDER_TARGET_PROPERTIES *renderTargetProperties);
+		void PopAxisAlignedClip();
+		void PopLayer();
+		void PushAxisAlignedClip(const D2D1_RECT_F *clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+		void PushLayer(const D2D1_LAYER_PARAMETERS *layerParameters, ID2D1Layer layer);
+		void RestoreDrawingState(ID2D1DrawingStateBlock drawingStateBlock);
+		void SaveDrawingState(ID2D1DrawingStateBlock *drawingStateBlock);
+		void SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
+		void SetDpi(float dpiX, float dpiY);
+		void SetTags(D2D1_TAG tag1, D2D1_TAG tag2);
+		void SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+		void SetTextRenderingParams(IDWriteRenderingParams textRenderingParams = null);
+		void SetTransform(const D2D1_MATRIX_3X2_F *transform);
+	}
+
+	mixin(uuid!(ID2D1Resource, "2cd90691-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1Resource : IUnknown
+	{
+	extern(Windows):
+		void GetFactory(ID2D1Factory *factory);
+	}
+
+	mixin(uuid!(ID2D1RoundedRectangleGeometry, "2cd906a3-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1RoundedRectangleGeometry : ID2D1Geometry
+	{
+	extern(Windows):
+		void GetRoundedRect(D2D1_ROUNDED_RECT *roundedRect);
+	}
+
+	mixin(uuid!(ID2D1SimplifiedGeometrySink, "2cd9069e-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1SimplifiedGeometrySink : IUnknown
+	{
+	extern(Windows):
+		void AddBeziers(const D2D1_BEZIER_SEGMENT* Beziers, uint Count);
+		void AddLines(const D2D_POINT_2F* Points, uint Count);
+		void BeginFigure(D2D1_POINT_2F StartPoint, D2D1_FIGURE_BEGIN FigureBegin);
+		HRESULT Close();
+		void EndFigure(D2D1_FIGURE_END FigureEnd);
+		void SetFillMode(D2D1_FILL_MODE FillMode);
+		void SetSegmentFlags(D2D1_PATH_SEGMENT VertexFlags);
+	}
+
+	mixin(uuid!(ID2D1SolidColorBrush, "2cd906a9-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1SolidColorBrush : ID2D1Brush
+	{
+	extern(Windows):
+		D2D1_COLOR_F GetColor();
+		void SetColor(const D2D1_COLOR_F *color);
+	}
+
+	mixin(uuid!(ID2D1StrokeStyle, "2cd9069d-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1StrokeStyle : ID2D1Resource
+	{
+	extern(Windows):
+		D2D1_CAP_STYLE GetDashCap();
+		void GetDashes(float *dashes, uint dashesCount);
+		uint GetDashesCount();
+		float GetDashOffset();
+		D2D1_DASH_STYLE GetDashStyle();
+		D2D1_CAP_STYLE GetEndCap();
+		D2D1_LINE_JOIN GetLineJoin();
+		float GetMiterLimit();
+		D2D1_CAP_STYLE GetStartCap();
+	}
+
+	mixin(uuid!(ID2D1TessellationSink, "2cd906c1-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1TessellationSink : IUnknown
+	{
+	extern(Windows):
+		void AddTriangles(const D2D1_TRIANGLE *triangles, uint trianglesCount);
+		HRESULT Close();
+	}
+
+	mixin(uuid!(ID2D1TransformedGeometry, "2cd906bb-12e2-11dc-9fed-001143a055f9"));
+	public interface ID2D1TransformedGeometry : ID2D1Geometry
+	{
+	extern(Windows):
+		void GetSourceGeometry(ID2D1Geometry *sourceGeometry);
+		void GetTransform(D2D1_MATRIX_3X2_F *transform);
+	}
+
 }
 static if(DX11_1 || DX11_2)
 {
+	mixin(uuid!(ID2D1AnalysisTransform, "0359dc30-95e6-4568-9055-27720d130e93"));
+	public interface ID2D1AnalysisTransform : IUnknown
+	{
+	extern(Windows):
+		HRESULT ProcessAnalysisResults(const(ubyte) *analysisData, uint analysisDataCount);
+	}
+
+	mixin(uuid!(ID2D1Bitmap1, "a898a84c-3873-4588-b08b-ebbf978df041"));
+	public interface ID2D1Bitmap1 : ID2D1Bitmap
+	{
+	extern(Windows):
+		void GetColorContext(ID2D1ColorContext *colorContext);
+		D2D1_BITMAP_OPTIONS GetOptions();
+		void GetSourceStream(IStream *Stream);
+		HRESULT GetSurface(IDXGISurface *dxgiSurface);
+		HRESULT Map(D2D1_MAP_OPTIONS Options, D2D1_MAPPED_RECT *mappedRect);
+		HRESULT Unmap();
+	}
+
+	mixin(uuid!(ID2D1BitmapBrush1, "41343a53-e41a-49a2-91cd-21793bbb62e5"));
+	public interface ID2D1BitmapBrush1 : ID2D1BitmapBrush
+	{
+	extern(Windows):
+		D2D1_INTERPOLATION_MODE GetInterpolationMode1();
+		void SetInterpolationMode1(D2D1_INTERPOLATION_MODE interpolationMode);
+	}
+
+	mixin(uuid!(ID2D1BlendTransform, "63ac0b32-ba44-450f-8806-7f4ca1ff2f1b"));
+	public interface ID2D1BlendTransform : ID2D1ConcreteTransform
+	{
+	extern(Windows):
+		void GetDescription(D2D1_BLEND_DESCRIPTION *description);
+		void SetDescription(const D2D1_BLEND_DESCRIPTION *description);
+	}
+
+	mixin(uuid!(ID2D1BorderTransform, "63ac0b32-ba44-450f-8806-7f4ca1ff2f1b"));
+	public interface ID2D1BorderTransform : ID2D1ConcreteTransform
+	{
+	extern(Windows):
+		D2D1_EXTEND_MODE GetExtendModeX();
+		D2D1_EXTEND_MODE GetExtendModeY();
+		void SetExtendModeX(D2D1_EXTEND_MODE extendMode);
+		void SetExtendModeY(D2D1_EXTEND_MODE extendMode);
+	}
+
+	mixin(uuid!(ID2D1BoundsAdjustmentTransform, "90f732e2-5092-4606-a819-8651970baccd"));
+	public interface ID2D1BoundsAdjustmentTransform : ID2D1TransformNode
+	{
+	extern(Windows):
+		void GetOutputBounds(D2D1_RECT_L *outputBounds);
+		void SetOutputBounds(const D2D1_RECT_L *outputBounds);
+	}
+
+	mixin(uuid!(ID2D1ColorContext, "1c4820bb-5771-4518-a581-2fe4dd0ec657"));
+	public interface ID2D1ColorContext : ID2D1Resource
+	{
+	extern(Windows):
+		D2D1_COLOR_SPACE GetSpace();
+		uint GetProfileSize();
+		HRESULT GetProfile(ubyte *profile, uint profileSize);
+	}
+
+	mixin(uuid!(ID2D1CommandList, "b4f34a19-2383-4d76-94f6-ec343657c3dc"));
+	public interface ID2D1CommandList : ID2D1Image
+	{
+	extern(Windows):
+		HRESULT Close();
+		HRESULT Stream(ID2D1CommandSink Sink);
+	}
+
+	mixin(uuid!(ID2D1CommandSink, "54d7898a-a061-40a7-bec7-e465bcba2c4f"));
+	public interface ID2D1CommandSink : IUnknown
+	{
+	extern(Windows):
+		HRESULT BeginDraw();
+		HRESULT Clear(const D2D1_COLOR_F *clearColor);
+		void DrawBitmap(ID2D1Bitmap bitmap, D2D1_RECT_F destinationRectangle, float opacity, D2D1_INTERPOLATION_MODE interpolationMode, const D2D1_RECT_F sourceRectangle, const D2D1_MATRIX_4X4_F perspectiveTransform);
+		void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, const D2D1_POINT_2F *targetOffset);
+		HRESULT DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth, ID2D1StrokeStyle strokeStyle);
+		HRESULT DrawGlyphRun(D2D1_POINT_2F baselineOrigin, const DWRITE_GLYPH_RUN *glyphRun, const DWRITE_GLYPH_RUN_DESCRIPTION *glyphRunDescription, ID2D1Brush *foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+		HRESULT DrawImage(ID2D1Image image, const D2D1_POINT_2F *targetOffset, const D2D1_RECT_F *imageRectangle, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
+		HRESULT DrawLine(D2D1_POINT_2F Point0, D2D1_POINT_2F Point1, ID2D1Brush Brush, float strokeWidth, ID2D1StrokeStyle strokeStyle);
+		HRESULT DrawRectangle(const D2D1_RECT_F *Rect, ID2D1Brush Brush, float strokeWidth, ID2D1StrokeStyle strokeStyle);
+		HRESULT EndDraw();
+		HRESULT FillGeometry(ID2D1Geometry geometry, ID2D1Brush brush, ID2D1Brush opacityBrush);
+		HRESULT FillMesh(ID2D1Mesh mesh, ID2D1Brush brush);
+		HRESULT FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, const D2D1_RECT_F *destinationRectangle, const D2D1_RECT_F *sourceRectangle);
+		HRESULT FillRectangle(const D2D1_RECT_F *rect, ID2D1Brush brush);
+		HRESULT PopAxisAlignedClip();
+		HRESULT PopLayer();
+		HRESULT PushAxisAlignedClip(const D2D1_RECT_F *clipRect, D2D1_ANTIALIAS_MODE antialiasMode);
+		HRESULT PushLayer(const D2D1_LAYER_PARAMETERS1 *layerParameters, ID2D1Layer layer);
+		HRESULT SetAntialiasMode(D2D1_ANTIALIAS_MODE antialiasMode);
+		HRESULT SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
+		HRESULT SetTags(D2D1_TAG tag1, D2D1_TAG tag2);
+		HRESULT SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE textAntialiasMode);
+		HRESULT SetTextRenderingParams(IDWriteRenderingParams textRenderingParams);
+		HRESULT SetTransform(const D2D1_MATRIX_3X2_F *transform);
+		HRESULT SetUnitMode(D2D1_UNIT_MODE unitMode);
+	}
+
+	mixin(uuid!(ID2D1ComputeInfo, "5598b14b-9fd7-48b7-9bdb-8f0964eb38bc"));
+	public interface ID2D1ComputeInfo : ID2D1RenderInfo
+	{
+	extern(Windows):
+		HRESULT SetComputeShader(GUID* shaderId);
+		HRESULT SetComputeShaderConstantBuffer(const ubyte *buffer, uint bufferCount);
+		HRESULT SetResourceTexture(uint textureIndex, ID2D1ResourceTexture resourceTexture);
+	}
+
+	mixin(uuid!(ID2D1ComputeTransform, "0d85573c-01e3-4f7d-bfd9-0d60608bf3c3"));
+	public interface ID2D1ComputeTransform : ID2D1Transform
+	{
+	extern(Windows):
+		HRESULT CalculateThreadgroups(const D2D1_RECT_L *outputRect, uint *dimensionX, uint *dimensionY, uint *dimensionZ);
+		HRESULT SetComputeInfo(ID2D1ComputeInfo computeInfo);
+	}
+
+	mixin(uuid!(ID2D1ConcreteTransform, "1a799d8a-69f7-4e4c-9fed-437ccc6684cc"));
+	public interface ID2D1ConcreteTransform : ID2D1TransformNode
+	{
+	extern(Windows):
+		void SetCached(BOOL isCached);
+		HRESULT SetOutputBuffer(D2D1_BUFFER_PRECISION bufferPrecision, D2D1_CHANNEL_DEPTH channelDepth);
+	}
+
+	mixin(uuid!(ID2D1Device, "47dd575d-ac05-4cdd-8049-9b02cd16f44c"));
+	public interface ID2D1Device : ID2D1Resource
+	{
+	extern(Windows):
+		HRESULT ClearResources(uint millisecondsSinceUse = 0);
+		HRESULT CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS options, const ID2D1DeviceContext *deviceContext);
+		HRESULT CreatePrintControl(IWICImagingFactory wicFactory, IPrintDocumentPackageTarget documentTarget, const D2D1_PRINT_CONTROL_PROPERTIES *printControlProperties, ID2D1PrintControl *printControl);
+		ulong GetMaximumTextureMemory();
+		void SetMaximumTextureMemory(ulong maximumInBytes);
+	}
+
+	mixin(uuid!(ID2D1DeviceContext, "e8f7fe7a-191c-466d-ad95-975678bda998"));
+	public interface ID2D1DeviceContext : ID2D1RenderTarget
+	{
+	extern(Windows):
+		HRESULT CreateBitmap(D2D1_SIZE_U size, const void *srcData, uint pitch, const D2D1_BITMAP_PROPERTIES1 *bitmapProperties, ID2D1Bitmap1 *bitmap);
+		HRESULT CreateBitmap(D2D1_SIZE_U size, const void *srcData, uint pitch, const D2D1_BITMAP_PROPERTIES1 *bitmapProperties, ID2D1Bitmap1 *bitmap);
+		HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, D2D1_BITMAP_BRUSH_PROPERTIES1 bitmapBrushProperties, D2D1_BRUSH_PROPERTIES  brushProperties, ID2D1BitmapBrush1 *bitmapBrush);
+		HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, D2D1_BITMAP_BRUSH_PROPERTIES1 *bitmapBrushProperties, D2D1_BRUSH_PROPERTIES  *brushProperties, ID2D1BitmapBrush1 *bitmapBrush);
+		HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, ID2D1BitmapBrush1 *bitmapBrush);
+		HRESULT CreateBitmapBrush(ID2D1Bitmap bitmap, D2D1_BITMAP_BRUSH_PROPERTIES1 *bitmapBrushProperties, ID2D1BitmapBrush1 *bitmapBrush);
+		HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, const D2D1_BITMAP_PROPERTIES1 bitmapProperties, ID2D1Bitmap1 *bitmap);
+		HRESULT CreateBitmapFromDxgiSurface(IDXGISurface surface, const D2D1_BITMAP_PROPERTIES1 *bitmapProperties, ID2D1Bitmap1 *bitmap);
+		HRESULT CreateBitmapFromWicBitmap(IWICBitmapSource wicBitmapSource, const D2D1_BITMAP_PROPERTIES1 *bitmapProperties, ID2D1Bitmap1 *bitmap);
+		HRESULT CreateColorContext(D2D1_COLOR_SPACE space, const BYTE *Profile, uint profileSize, ID2D1ColorContext *colorContext);
+		HRESULT CreateColorContextFromFilename(PCWSTR Filename, ID2D1ColorContext *colorContext);
+		HRESULT CreateColorContextFromWicColorContext(IWICColorContext wicColorContext, ID2D1ColorContext *colorContext);
+		HRESULT CreateCommandList(ID2D1CommandList *commandList);
+		HRESULT CreateEffect(CLSID* effectId, ID2D1Effect *effect);
+		HRESULT CreateGradientStopCollection(const D2D1_GRADIENT_STOP *gradientStops, uint gradientStopsCount, D2D1_COLOR_SPACE preInterpolationSpace, D2D1_COLOR_SPACE postInterpolationSpace, D2D1_BUFFER_PRECISION bufferPrecision, D2D1_EXTEND_MODE extendMode, D2D1_COLOR_INTERPOLATION_MODE colorInterpolationMode, ID2D1GradientStopCollection1 *gradientStopCollection);
+		HRESULT CreateImageBrush(ID2D1Image image, const D2D1_IMAGE_BRUSH_PROPERTIES *imageBrushProperties, const D2D1_BRUSH_PROPERTIES *brushProperties, ID2D1ImageBrush *imageBrush);
+		HRESULT CreateImageBrush(ID2D1Image image, const D2D1_IMAGE_BRUSH_PROPERTIES *imageBrushProperties, ID2D1ImageBrush *imageBrush);
+		void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, const D2D1_POINT_2F targetOffset);
+		void DrawGdiMetafile(ID2D1GdiMetafile gdiMetafile, const D2D1_POINT_2F *targetOffset);
+		void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, const DWRITE_GLYPH_RUN *glyphRun, const DWRITE_GLYPH_RUN_DESCRIPTION *glyphRunDescription, ID2D1Brush *foregroundBrush, DWRITE_MEASURING_MODE measuringMode);
+		void DrawImage(ID2D1Image image, const D2D1_POINT_2F *targetOffset, const D2D1_RECT_F *imageRectangle, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
+		void DrawImage(ID2D1Effect effect, const D2D1_POINT_2F *targetOffset, const D2D1_RECT_F *imageRectangle, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
+		void DrawImage(ID2D1Image image, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
+		void DrawImage(ID2D1Effect effect, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
+		void DrawImage(ID2D1Image image, const D2D1_POINT_2F *targetOffset, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
+		void DrawImage(ID2D1Effect effect, const D2D1_POINT_2F *targetOffset, D2D1_INTERPOLATION_MODE interpolationMode, D2D1_COMPOSITE_MODE compositeMode);
+		void FillOpacityMask(ID2D1Bitmap opacityMask, ID2D1Brush brush, const D2D1_RECT_F *destinationRectangle, const D2D1_RECT_F *sourceRectangle);
+		void GetDevice(ID2D1Device *device);
+		HRESULT GetEffectInvalidRectangleCount(ID2D1Effect effect, uint *rectangleCount);
+		HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, D2D1_RECT_F *, uint rectanglesCount);
+		HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, const D2D1_RECT_F *renderImageRectangle, const D2D1_EFFECT_INPUT_DESCRIPTION *inputDescriptions, D2D1_RECT_F *requiredInputRects, uint inputCount);
+		HRESULT GetGlyphRunWorldBounds(D2D1_POINT_2F baselineOrigin, const DWRITE_GLYPH_RUN *glyphRun, DWRITE_MEASURING_MODE measuringMode, D2D1_RECT_F **bounds);
+		void GetImageLocalBounds(ID2D1Image image, D2D1_RECT_F localBounds[1]);
+		HRESULT GetImageWorldBounds(ID2D1Image image, D2D1_RECT_F worldBounds[1]);
+		D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
+		void GetRenderingControls(D2D1_RENDERING_CONTROLS *renderingControls);
+		void GetTarget(ID2D1Image *target);
+		D2D1_UNIT_MODE GetUnitMode();
+		HRESULT InvalidateEffectInputRectangle(ID2D1Effect effect, uint input, const D2D1_RECT_F *inputRectangle);
+		BOOL IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+		BOOL IsDxgiFormatSupported(DXGI_FORMAT format);
+		void PushLayer(const D2D1_LAYER_PARAMETERS1 *layerParameters, ID2D1Layer layer);
+		void SetPrimitiveBlend(D2D1_PRIMITIVE_BLEND primitiveBlend);
+		void SetRenderingControls(const D2D1_RENDERING_CONTROLS *renderingControls);
+		void SetTarget(ID2D1Image target);
+		void SetUnitMode(D2D1_UNIT_MODE unitMode);
+	}
+
+	mixin(uuid!(ID2D1DrawInfo, "693ce632-7f2f-45de-93fe-18d88b37aa21"));
+	public interface ID2D1DrawInfo : ID2D1RenderInfo
+	{
+	extern(Windows):
+		HRESULT SetPixelShader(GUID* shaderId, D2D1_PIXEL_OPTIONS pixelOptions = D2D1_PIXEL_OPTIONS.NONE);
+		HRESULT SetPixelShaderConstantBuffer(const(ubyte) *buffer, uint bufferCount);
+		HRESULT SetResourceTexture(uint textureIndex, ID2D1ResourceTexture resourceTexture);
+		HRESULT SetVertexProcessing(ID2D1VertexBuffer vertexBuffer, D2D1_VERTEX_OPTIONS vertexOptions, const D2D1_BLEND_DESCRIPTION *blendDescription = null, const D2D1_VERTEX_RANGE *vertexRange = null, GUID *vertexShader);
+		HRESULT SetVertexShaderConstantBuffer(const(BYTE) *buffer, uint bufferCount);
+	}
+
+	mixin(uuid!(ID2D1DrawingStateBlock1, "689f1f85-c72e-4e33-8f19-85754efd5ace"));
+	public interface ID2D1DrawingStateBlock1 : ID2D1DrawingStateBlock
+	{
+	extern(Windows):
+		void GetDescription1(D2D1_DRAWING_STATE_DESCRIPTION1 *stateDescription);
+		void SetDescription1(const D2D1_DRAWING_STATE_DESCRIPTION1 stateDescription1);
+	}
+
+	mixin(uuid!(ID2D1DrawTransform, "36bfdcb6-9739-435d-a30d-a653beff6a6f"));
+	public interface ID2D1DrawTransform : ID2D1Transform
+	{
+	extern(Windows):
+		HRESULT SetDrawInfo(ID2D1DrawInfo drawInfo);
+	}
+
+	mixin(uuid!(ID2D1Effect, "28211a43-7d89-476f-8181-2d6159b220ad"));
+	public interface ID2D1Effect : ID2D1Properties
+	{
+	extern(Windows):
+		void GetInput(uint Index, ID2D1Image *Input);
+		uint GetInputCount();
+		void GetOutput(ID2D1Image *outputImage);
+		void SetInput(uint index, ID2D1Image input, BOOL invalidate = TRUE);
+		HRESULT SetInputCount(uint inputCount);
+		void SetInputEffect(uint index, ID2D1Effect input, BOOL invalidate = TRUE);
+	}
+
+	mixin(uuid!(ID2D1EffectContext, "3d9f916b-27dc-4ad7-b4f1-64945340f563"));
+	public interface ID2D1EffectContext : IUnknown
+	{
+	extern(Windows):
+		HRESULT CheckFeatureSupport(D2D1_FEATURE feature, void *featureSupportData, uintfeatureSupportDataSize);
+		HRESULT CreateBlendTransform(uint numInputs, const D2D1_BLEND_DESCRIPTION  *blendDescription, ID2D1BlendTransform *blendTransform);
+		HRESULT CreateBorderTransform(D2D1_EXTEND_MODE extendModeX, D2D1_EXTEND_MODE extendModeY, ID2D1BorderTransform *transform);
+		HRESULT CreateBoundsAdjustmentTransform(const D2D1_RECT_L *outputRectangle, ID2D1BoundsAdjustmentTransform *transform);
+		HRESULT CreateColorContext(D2D1_COLOR_SPACE space, const(ubyte) *profile, uint profileSize, ID2D1ColorContext *colorContext);
+		HRESULT CreateColorContextFromFilename(PCWSTR filename, ID2D1ColorContext *colorContext);
+		HRESULT CreateColorContextFromWicColorContext(IWICColorContext *wicColorContext, ID2D1ColorContext *colorContext);
+		HRESULT CreateEffect(CLSID* effectId, ID2D1Effect *effect);
+		HRESULT CreateOffsetTransform(D2D1_POINT_2L offset, ID2D1OffsetTransform *transform);
+		HRESULT CreateResourceTexture(const (GUID*) resourceId, const D2D1_RESOURCE_TEXTURE_PROPERTIES *resourceTextureProperties, const (ubyte) *data, const (uint) *strides, uint dataSize, ID2D1ResourceTexture **resourceTexture);
+		HRESULT CreateTransformNodeFromEffect(ID2D1Effect effect, ID2D1TransformNode *transformNode);
+		HRESULT CreateVertexBuffer(const D2D1_VERTEX_BUFFER_PROPERTIES *vertexBufferProperties, const GUID *resourceId, const D2D1_CUSTOM_VERTEX_BUFFER_PROPERTIES *customVertexBufferProperties, ID2D1VertexBuffer *buffer);
+		HRESULT FindResourceTexture(const GUID *resourceId, ID2D1ResourceTexture *resourceTexture);
+		HRESULT FindVertexBuffer(const GUID *resourceId, ID2D1VertexBuffer *vertexBuffer);
+		void GetDpi(float *dpiX, float *dpiY);
+		HRESULT GetMaximumSupportedFeatureLevel(const D3D_FEATURE_LEVEL *featureLevels, uint featureLevelsCount, D3D_FEATURE_LEVEL *maximumSupportedFeatureLevel);
+		BOOL IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
+		BOOL IsShaderLoaded(GUID* shaderId);
+		HRESULT LoadComputeShader(GUID* resourceId, ubyte *shaderBuffer, uint shaderBufferCount);
+		HRESULT LoadPixelShader(GUID* shaderId, const(ubyte) *shaderBuffer, uint shaderBufferCount);
+		HRESULT LoadVertexShader(GUID* resourceId, ubyte *shaderBuffer, uint shaderBufferCount);
+	}
+
+	mixin(uuid!(ID2D1EffectImpl, "a248fd3f-3e6c-4e63-9f03-7f68ecc91db9"));
+	public interface ID2D1EffectImpl : IUnknown
+	{
+	extern(Windows):
+		HRESULT Initialize(ID2D1EffectContext effectContext, ID2D1TransformGraph transformGraph);
+		HRESULT PrepareForRender(D2D1_CHANGE_TYPE changeType);
+		HRESULT SetGraph(ID2D1TransformGraph transformGraph);
+	}
+
+	mixin(uuid!(ID2D1Factory1, "bb12d362-daee-4b9a-aa1d-14ba401cfa1f"));
+	public interface ID2D1Factory1 : ID2D1Factory
+	{
+	extern(Windows):
+		HRESULT CreateDevice(IDXGIDevice dxgiDevice, ID2D1Device *d2dDevice);
+		HRESULT CreateDrawingStateBlock(const D2D1_DRAWING_STATE_DESCRIPTION1 *drawingStateDescription, IDWriteRenderingParams textRenderingParams, ID2D1DrawingStateBlock1 *drawingStateBlock);
+		HRESULT CreateDrawingStateBlock(ID2D1DrawingStateBlock1 *drawingStateBlock);
+		HRESULT CreateDrawingStateBlock(const D2D1_DRAWING_STATE_DESCRIPTION1 *drawingStateDescription, ID2D1DrawingStateBlock1 *drawingStateBlock);
+		HRESULT CreateGdiMetafile(IStream *metafileStream, ID2D1GdiMetafile **metafile);
+		HRESULT CreatePathGeometry(const ID2D1PathGeometry1 **pathGeometry);
+		HRESULT CreateStrokeStyle(const D2D1_STROKE_STYLE_PROPERTIES1 *strokeStyleProperties, const float *dashes, uint dashesCount, const ID2D1StrokeStyle1 *strokeStyle);
+		HRESULT GetEffectProperties(CLSID* effectId, ID2D1Properties **properties);
+		HRESULT GetRegisteredEffects(CLSID *effects, uint effectCount, uint *effectsReturned, uint *effectsRegistered);
+		HRESULT RegisterEffectFromStream(CLSID* classId, IStream propertyXml, const D2D1_PROPERTY_BINDING *Bindings, uint bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+		HRESULT RegisterEffectFromString(CLSID* classId, PCWSTR propertyXml, const D2D1_PROPERTY_BINDING *Bindings, uint bindingsCount, PD2D1_EFFECT_FACTORY effectFactory);
+		HRESULT UnregisterEffect(CLSID* classId);
+	}
+
+	mixin(uuid!(ID2D1GdiMetafile, "2f543dc3-cfc1-4211-864f-cfd91c6f3395"));
+	public interface ID2D1GdiMetafile : ID2D1Resource
+	{
+	extern(Windows):
+		HRESULT GetBounds(D2D1_RECT_F *bounds);
+		HRESULT Stream(ID2D1GdiMetafileSink metafileSink);
+	}
+
+	mixin(uuid!(ID2D1GdiMetafileSink, "82237326-8111-4f7c-bcf4-b5c1175564fe"));
+	public interface ID2D1GdiMetafileSink : IUnknown
+	{
+	extern(Windows):
+		BOOL ProcessRecord(DWORD recordType, void *recordData, uint recordDataSize);
+	}
+
+	mixin(uuid!(ID2D1GradientStopCollection1, "ae1572f4-5dd0-4777-998b-9279472ae63b"));
+	public interface ID2D1GradientStopCollection1 : ID2D1GradientStopCollection
+	{
+	extern(Windows):
+		D2D1_BUFFER_PRECISION GetBufferPrecision();
+		D2D1_COLOR_INTERPOLATION_MODE GetColorInterpolationMode();
+		void GetGradientStops1(D2D1_GRADIENT_STOP *gradientStops, uint gradientStopsCount);
+		D2D1_COLOR_SPACE GetPostInterpolationSpace();
+		D2D1_COLOR_SPACE GetPreInterpolationSpace();
+	}
+
+	mixin(uuid!(ID2D1Image, "65019f75-8da2-497c-b32c-dfa34e48ede6"));
+	public interface ID2D1Image : ID2D1Resource
+	{
+	extern(Windows):
+	}
+
+	mixin(uuid!(ID2D1ImageBrush, "fe9e984d-3f95-407c-b5db-cb94d4e8f87c"));
+	public interface ID2D1ImageBrush : ID2D1Brush
+	{
+	extern(Windows):
+		D2D1_EXTEND_MODE GetExtendModeX();
+		D2D1_EXTEND_MODE GetExtendModeY();
+		void GetImage(ID2D1Image *Image);
+		D2D1_INTERPOLATION_MODE GetInterpolationMode();
+		void GetSourceRectangle(D2D1_RECT_F *sourceRectangle);
+		void SetExtendModeX(D2D1_EXTEND_MODE extendModeX);
+		void SetExtendModeY(D2D1_EXTEND_MODE extendModeY);
+		void SetImage(ID2D1Image Image);
+		void SetInterpolationMode(D2D1_INTERPOLATION_MODE interpolationMode);
+		void SetSourceRectangle(const(D2D1_RECT_F*) sourceRectangle);
+	}
+
+	mixin(uuid!(ID2D1Multithread, "31e6e7bc-e0ff-4d46-8c64-a0a8c41c15d3"));
+	public interface ID2D1Multithread : IUnknown
+	{
+	extern(Windows):
+		void Enter();
+		BOOL GetMultithreadProtected();
+		void Leave();
+	}
+
+	mixin(uuid!(ID2D1OffsetTransform, "3fe6adea-7643-4f53-bd14-a0ce63f24042"));
+	public interface ID2D1OffsetTransform : ID2D1TransformNode
+	{
+	extern(Windows):
+		D2D1_POINT_2L GetOffset();
+		void SetOffset(D2D1_POINT_2L offset);
+	}
+
+	mixin(uuid!(ID2D1PathGeometry1, "62baa2d2-ab54-41b7-b872-787e0106a421"));
+	public interface ID2D1PathGeometry1 : ID2D1PathGeometry
+	{
+	extern(Windows):
+		HRESULT ComputePointAndSegmentAtLength(float length, uint startSegment, const D2D1_MATRIX_3X2_F *worldTransform, float flatteningTolerance, D2D1_POINT_DESCRIPTION *pointDescription);
+	}
+
+	mixin(uuid!(ID2D1PrintControl, "2c1d867d-c290-41c8-ae7e-34a98702e9a5"));
+	public interface ID2D1PrintControl : IUnknown
+	{
+	extern(Windows):
+		HRESULT AddPage(ID2D1CommandList commandList, D2D_SIZE_F pageSize, IStream *pagePrintTicketStream, D2D1_TAG *tag1 = null, D2D1_TAG *tag2 = null);
+		HRESULT Close();
+	}
+
+	mixin(uuid!(ID2D1Properties, "483473d7-cd46-4f9d-9d3a-3112aa80159d"));
+	public interface ID2D1Properties : IUnknown
+	{
+	extern(Windows):
+		uint GetPropertyCount();
+		uint GetPropertyIndex(PCWSTR name);
+		HRESULT GetPropertyName(uint index, PWSTR name, uint nameCount);
+		uint GetPropertyNameLength(uint index);
+		HRESULT GetSubProperties(uint index, ID2D1Properties *subProperties);
+		D2D1_PROPERTY_TYPE GetType(UINT32 index);
+		HRESULT GetValue(uint index, ubyte *data, uint dataSize);
+		HRESULT GetValue(uint index, D2D1_PROPERTY_TYPE type, ubyte *data, uint dataSize);
+		HRESULT GetValueByName(PCWSTR name, ubyte *data, uint dataSize);
+		HRESULT GetValueByName(PCWSTR name, D2D1_PROPERTY_TYPE type, ubyte *data, uint dataSize);
+		uint GetValueSize(uint index);
+		HRESULT SetValue(uint index, const(ubyte) *data, uint dataSize);
+		HRESULT SetValue(uint index, D2D1_PROPERTY_TYPE type, const(ubyte) *data, uint dataSize);
+		HRESULT SetValueByName(PCWSTR name, const(ubyte) *data, uint dataSize);
+		HRESULT SetValueByName(PCWSTR name, D2D1_PROPERTY_TYPE  type, const(ubyte) *data, uint dataSize);
+	}
+
+	mixin(uuid!(ID2D1RenderInfo, "519ae1bd-d19a-420d-b849-364f594776b7"));
+	public interface ID2D1RenderInfo : IUnknown
+	{
+	extern(Windows):
+		void SetCached(BOOL isCached);
+		HRESULT SetInputDescription(uint index, D2D1_INPUT_DESCRIPTION inputDescription);
+		void SetInstructionCountHint(uint instructionCount);
+		HRESULT SetOutputBuffer(D2D1_BUFFER_PRECISION bufferPrecision, D2D1_CHANNEL_DEPTH channelDepth);
+	}
+
+	mixin(uuid!(ID2D1ResourceTexture, "688d15c3-02b0-438d-b13a-d1b44c32c39a"));
+	public interface ID2D1ResourceTexture : IUnknown
+	{
+	extern(Windows):
+		HRESULT Update(const(uint) *minimumExtents, const(uint) *maximumExtents, const(uint) *strides, uint dimensions, const(ubyte) *data, uint dataCount);
+	}
+
+	mixin(uuid!(ID2D1SourceTransform, "db1800dd-0c34-4cf9-be90-31cc0a5653e1"));
+	public interface ID2D1SourceTransform : ID2D1Transform
+	{
+	extern(Windows):
+		HRESULT Draw(ID2D1Bitmap1 target, const D2D1_RECT_L *drawRect, D2D1_POINT_2U targetOrigin);
+		HRESULT SetRenderInfo(ID2D1RenderInfo renderInfo);
+	}
+
+	mixin(uuid!(ID2D1StrokeStyle1, "10a72a66-e91c-43f4-993f-ddf4b82b0b4a"));
+	public interface ID2D1StrokeStyle1 : ID2D1StrokeStyle
+	{
+	extern(Windows):
+		D2D1_STROKE_TRANSFORM_TYPE GetStrokeTransformType();
+	}
+
+	mixin(uuid!(ID2D1Transform, "ef1a287d-342a-4f76-8fdb-da0d6ea9f92b"));
+	public interface ID2D1Transform : ID2D1TransformNode
+	{
+	extern(Windows):
+		HRESULT MapInputRectsToOutputRect(const D2D1_RECT_L *inputRects, const D2D1_RECT_L *inputOpaqueRects, uint inputRectCount, D2D1_RECT_L *outputRect, D2D1_RECT_L *outputOpaqueRect);
+		HRESULT MapInvalidRect(uint inputIndex, D2D1_RECT_L invalidInputRect, D2D1_RECT_L *invalidOutputRect);
+		HRESULT MapOutputRectToInputRects(const D2D1_RECT_L *outputRect, D2D1_RECT_L *inputRects, uint inputRectsCount);
+	}
+
+	mixin(uuid!(ID2D1TransformGraph, "13d29038-c3e6-4034-9081-13b53a417992"));
+	public interface ID2D1TransformGraph : IUnknown
+	{
+	extern(Windows):
+		HRESULT AddNode(ID2D1TransformNode node);
+		void Clear();
+		HRESULT ConnectNode(ID2D1TransformNode fromNode, ID2D1TransformNode toNode, uint toNodeInputIndex);
+		HRESULT ConnectToEffectInput(uint toEffectInputIndex, ID2D1TransformNode node, uint toNodeInputIndex);
+		UINT32 GetInputCount();
+		HRESULT RemoveNode(ID2D1TransformNode node);
+		HRESULT SetOutputNode(ID2D1TransformNode node);
+		HRESULT SetPassthroughGraph(uint effectInputIndex);
+		HRESULT SetSingleTransformNode(ID2D1TransformNode node);
+	}
+
+	mixin(uuid!(ID2D1TransformNode, "b2efe1e7-729f-4102-949f-505fa21bf666"));
+	public interface ID2D1TransformNode : IUnknown
+	{
+	extern(Windows):
+		uint GetInputCount();
+	}
+
+	mixin(uuid!(ID2D1VertexBuffer, "9b8b1336-00a5-4668-92b7-ced5d8bf9b7b"));
+	public interface ID2D1VertexBuffer : IUnknown
+	{
+	extern(Windows):
+		HRESULT Map(const(ubyte) **data, uint bufferSize);
+		HRESULT Unmap();
+	}
+
 }
 static if(DX11_2)
 {
+
+	mixin(uuid!(ID2D1CommandSink1, "9eb767fd-4269-4467-b8c2-eb30cb305743"));
+	public interface ID2D1CommandSink1 : ID2D1CommandSink
+	{
+	extern(Windows):
+		HRESULT SetPrimitiveBlend1(D2D1_PRIMITIVE_BLEND primitiveBlend);
+	}
+
+	mixin(uuid!(ID2D1Device1, "d21768e1-23a4-4823-a14b-7c3eba85d658"));
+	public interface ID2D1Device1 : ID2D1Device
+	{
+	extern(Windows):
+		D2D1_RENDERING_PRIORITY GetRenderingPriority();
+		HRESULT SetRenderingPriority(D2D1_RENDERING_PRIORITY renderingPriority);
+	}
+
+	mixin(uuid!(ID2D1DeviceContext1, "d37f57e4-6908-459f-a199-e72f24f79987"));
+	public interface ID2D1DeviceContext1 : ID2D1DeviceContext
+	{
+	extern(Windows):
+		HRESULT CreateFilledGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, ID2D1GeometryRealization *geometryRealization);
+		HRESULT CreateStrokedGeometryRealization(ID2D1Geometry geometry, float flatteningTolerance, float strokeWidth, ID2D1StrokeStyle strokeStyle, ID2D1GeometryRealization *geometryRealization);
+		HRESULT DrawGeometryRealization(ID2D1GeometryRealization geometryRealization, ID2D1Brush brush);
+	}
+
+	mixin(uuid!(ID2D1Factory2, "94f81a73-9212-4376-9c58-b16a3a0d3992"));
+	public interface ID2D1Factory2 : ID2D1Factory1
+	{
+	extern(Windows):
+		HRESULT CreateDevice(IDXGIDevice *dxgiDevice, ID2D1Device1 **d2dDevice1);
+	}
+
+	mixin(uuid!(ID2D1GeometryRealization, "a16907d7-bc02-4801-99e8-8cf7f485f774"));
+	public interface ID2D1GeometryRealization : ID2D1Resource
+	{
+	extern(Windows):
+	}
 }
+
+mixin(uuid!(ID2D1AnalysisTransform, "0359dc30-95e6-4568-9055-27720d130e93"));
+public interface ID2D1AnalysisTransform : IUnknown
+{
+extern(Windows):
+}
+
 
 //
 //	Functions
@@ -998,21 +1862,11 @@ static if(DX11_1 || DX11_2)
 		void D2D1SinCos(float angle, float *s, float *c);
 		float D2D1Tan(float angle);
 		float D2D1Vec3Length(float x, float y, float z);
+
+		alias long function (IUnknown effect, const (ubyte) *data, uint dataSize) PD2D1_PROPERTY_SET_FUNCTION; 
+		alias long function (IUnknown effect, ubyte *data, uint dataSize, uint *actualSize) PD2D1_PROPERTY_GET_FUNCTION; 
 	}
 }
 static if(DX11_2)
 {
-}
-
-mixin(uuid!(ID2D1SimplifiedGeometrySink, "2cd9069e-12e2-11dc-9fed-001143a055f9"));
-public interface ID2D1SimplifiedGeometrySink : IUnknown
-{
-extern(Windows):
-	void AddBeziers(const D2D1_BEZIER_SEGMENT* Beziers, uint Count);
-	void AddLines(const D2D_POINT_2F* Points, uint Count);
-	void BeginFigure(D2D1_POINT_2F StartPoint, D2D1_FIGURE_BEGIN FigureBegin);
-	HRESULT Close();
-	void EndFigure(D2D1_FIGURE_END FigureEnd);
-	void SetFillMode(D2D1_FILL_MODE FillMode);
-	void SetSegmentFlags(D2D1_PATH_SEGMENT VertexFlags);
 }

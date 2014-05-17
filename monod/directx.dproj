@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B60FC8A9-A4FF-46B4-917C-70A215787704}</ProjectGuid>
     <UseDefaultCompiler>true</UseDefaultCompiler>
@@ -13,7 +13,7 @@
     <BaseDirectory>..</BaseDirectory>
     <Includes>
       <Includes>
-        <Path>../..</Path>
+        <Path>..\..</Path>
       </Includes>
     </Includes>
   </PropertyGroup>
@@ -68,5 +68,7 @@
     <Compile Include="..\d3d.d">
       <Link>d3d.d</Link>
     </Compile>
+    <Compile Include="..\package.d" />
+    <Compile Include="..\wic.d" />
   </ItemGroup>
 </Project>

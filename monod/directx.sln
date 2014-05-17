@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{3947E667-4C90-4C3A-BEB9-7148D6FE0D7C}") = "dx11", "dx11.dproj", "{B60FC8A9-A4FF-46B4-917C-70A215787704}"
+Project("{3947E667-4C90-4C3A-BEB9-7148D6FE0D7C}") = "directx", "directx.dproj", "{B60FC8A9-A4FF-46B4-917C-70A215787704}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +18,6 @@ Global
 		{B60FC8A9-A4FF-46B4-917C-70A215787704}.Unittest|Any CPU.Build.0 = Unittest|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = dx11.dproj
+		StartupItem = directx.dproj
 	EndGlobalSection
 EndGlobal
