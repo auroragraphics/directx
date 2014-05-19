@@ -11,7 +11,7 @@ import aurora.directx.wic;
 //	Constants
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	alias ulong D2D1_TAG;
 	enum D2D1_DEFAULT_FLATTENING_TOLERANCE = 0.25f;
@@ -68,11 +68,10 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	enum D2DERR_WRONG_STATE = 0x88990001;
 	enum D2DERR_ZERO_VECTOR = 0x88990007;
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
-	alias D2D1_APPEND_ALLIGNED_ELEMENT = -1;
 }
-static if(DX11_2)
+static if(DX112)
 {
 }
 
@@ -80,7 +79,7 @@ static if(DX11_2)
 //	Enumerations
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	public enum D2D1_ALPHA_MODE : int { 
 		UNKNOWN        = 0,
@@ -236,7 +235,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		OCCLUDED  = 0x0000001
 	} 
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 	public enum D2D1_BITMAP_OPTIONS : int { 
 		NONE            = 0,
@@ -491,7 +490,7 @@ static if(DX11_1 || DX11_2)
 		DYNAMIC  = 1
 	}
 }
-static if(DX11_2)
+static if(DX112)
 {
 	public enum D2D1_RENDERING_PRIORITY : int { 
 		NORMAL  = 0,
@@ -503,7 +502,7 @@ static if(DX11_2)
 //	Structures
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	alias D3DCOLORVALUE D2D_COLOR_F;
 	alias D2D_COLOR_F D2D1_COLOR_F;
@@ -584,12 +583,6 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	}
 	alias D2D_RECT_F D2D1_RECT_F;
 
-	public struct RECT {
-		long left;
-		long top;
-		long right;
-		long bottom;
-	} 
 	alias RECT D2D_RECT_L;
 
 	public struct D2D_RECT_U {
@@ -753,7 +746,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		D2D1_POINT_2F point3;
 	}
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 	public struct D2D1_BITMAP_BRUSH_PROPERTIES1 {
 		D2D1_EXTEND_MODE        extendModeX;
@@ -950,7 +943,7 @@ static if(DX11_1 || DX11_2)
 		IUnknown *effectImplementation;
 	}
 }
-static if(DX11_2)
+static if(DX112)
 {
 }
 
@@ -958,7 +951,7 @@ static if(DX11_2)
 //	Interfaces
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	mixin(uuid!(ID2D1Bitmap, "a2296057-ea42-4099-983b-539fb6505426"));
 	public interface ID2D1Bitmap : ID2D1Image
@@ -1128,6 +1121,12 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		HRESULT Resize(D2D1_SIZE_U *pixelSize);
 	}
 
+	mixin(uuid!(ID2D1Image, "65019f75-8da2-497c-b32c-dfa34e48ede6"));
+	public interface ID2D1Image : ID2D1Resource
+	{
+	extern(Windows):
+	}
+
 	mixin(uuid!(ID2D1Layer, "2cd9069b-12e2-11dc-9fed-001143a055f9"));
 	public interface ID2D1Layer : ID2D1Resource
 	{
@@ -1217,14 +1216,14 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		HRESULT CreateSharedBitmap(IID* riid, void *data, D2D1_BITMAP_PROPERTIES *bitmapProperties, ID2D1Bitmap *bitmap);
 		HRESULT CreateSolidColorBrush(const D2D1_COLOR_F *color, ID2D1SolidColorBrush *solidColorBrush);
 		HRESULT CreateSolidColorBrush(const D2D1_COLOR_F *color, const D2D1_BRUSH_PROPERTIES *brushProperties, ID2D1SolidColorBrush *solidColorBrush);
-		void DrawBitmap(ID2D1Bitmap bitmap, const D2D1_RECT_F *destinationRectangle = null, float opacity = 1.0f, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode = D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, const D2D1_RECT_F *sourceRectangle = null);
+		void DrawBitmap(ID2D1Bitmap bitmap, const D2D1_RECT_F *destinationRectangle = null, float opacity = 1.0f, D2D1_BITMAP_INTERPOLATION_MODE interpolationMode = D2D1_BITMAP_INTERPOLATION_MODE.LINEAR, const D2D1_RECT_F *sourceRectangle = null);
 		void DrawEllipse(const D2D1_ELLIPSE *ellipse, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
 		void DrawGeometry(ID2D1Geometry geometry, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
-		void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, const DWRITE_GLYPH_RUN *glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE_NATURAL);
+		void DrawGlyphRun(D2D1_POINT_2F baselineOrigin, const DWRITE_GLYPH_RUN *glyphRun, ID2D1Brush foregroundBrush, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.NATURAL);
 		void DrawLine(D2D1_POINT_2F point0, D2D1_POINT_2F point1, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
 		void DrawRectangle(const D2D1_RECT_F *rect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
 		void DrawRoundedRectangle(const D2D1_ROUNDED_RECT *roundedRect, ID2D1Brush brush, float strokeWidth = 1.0f, ID2D1StrokeStyle strokeStyle = null);
-		void DrawText(wchar *string, uint stringLength, IDWriteTextFormat textFormat, const D2D1_RECT_F *layoutRect, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS_NONE, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE_NATURAL);
+		void DrawText(wchar *string, uint stringLength, IDWriteTextFormat textFormat, const D2D1_RECT_F *layoutRect, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS_NONE, DWRITE_MEASURING_MODE measuringMode = DWRITE_MEASURING_MODE.NATURAL);
 		void DrawTextLayout(D2D1_POINT_2F origin, IDWriteTextLayout textLayout, ID2D1Brush defaultForegroundBrush, D2D1_DRAW_TEXT_OPTIONS options = D2D1_DRAW_TEXT_OPTIONS_NONE);
 		HRESULT EndDraw(D2D1_TAG *tag1 = null, D2D1_TAG *tag2 = null);
 		void FillEllipse(const D2D1_ELLIPSE *ellipse, ID2D1Brush brush);
@@ -1326,7 +1325,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 	mixin(uuid!(ID2D1AnalysisTransform, "0359dc30-95e6-4568-9055-27720d130e93"));
 	public interface ID2D1AnalysisTransform : IUnknown
@@ -1524,7 +1523,7 @@ static if(DX11_1 || DX11_2)
 		HRESULT SetPixelShader(GUID* shaderId, D2D1_PIXEL_OPTIONS pixelOptions = D2D1_PIXEL_OPTIONS.NONE);
 		HRESULT SetPixelShaderConstantBuffer(const(ubyte) *buffer, uint bufferCount);
 		HRESULT SetResourceTexture(uint textureIndex, ID2D1ResourceTexture resourceTexture);
-		HRESULT SetVertexProcessing(ID2D1VertexBuffer vertexBuffer, D2D1_VERTEX_OPTIONS vertexOptions, const D2D1_BLEND_DESCRIPTION *blendDescription = null, const D2D1_VERTEX_RANGE *vertexRange = null, GUID *vertexShader);
+		HRESULT SetVertexProcessing(ID2D1VertexBuffer vertexBuffer, D2D1_VERTEX_OPTIONS vertexOptions, const D2D1_BLEND_DESCRIPTION *blendDescription = null, const D2D1_VERTEX_RANGE *vertexRange = null, GUID *vertexShader = null);
 		HRESULT SetVertexShaderConstantBuffer(const(BYTE) *buffer, uint bufferCount);
 	}
 
@@ -1559,7 +1558,7 @@ static if(DX11_1 || DX11_2)
 	public interface ID2D1EffectContext : IUnknown
 	{
 	extern(Windows):
-		HRESULT CheckFeatureSupport(D2D1_FEATURE feature, void *featureSupportData, uintfeatureSupportDataSize);
+		HRESULT CheckFeatureSupport(D2D1_FEATURE feature, void *featureSupportData, uint featureSupportDataSize);
 		HRESULT CreateBlendTransform(uint numInputs, const D2D1_BLEND_DESCRIPTION  *blendDescription, ID2D1BlendTransform *blendTransform);
 		HRESULT CreateBorderTransform(D2D1_EXTEND_MODE extendModeX, D2D1_EXTEND_MODE extendModeY, ID2D1BorderTransform *transform);
 		HRESULT CreateBoundsAdjustmentTransform(const D2D1_RECT_L *outputRectangle, ID2D1BoundsAdjustmentTransform *transform);
@@ -1635,12 +1634,6 @@ static if(DX11_1 || DX11_2)
 		D2D1_COLOR_SPACE GetPreInterpolationSpace();
 	}
 
-	mixin(uuid!(ID2D1Image, "65019f75-8da2-497c-b32c-dfa34e48ede6"));
-	public interface ID2D1Image : ID2D1Resource
-	{
-	extern(Windows):
-	}
-
 	mixin(uuid!(ID2D1ImageBrush, "fe9e984d-3f95-407c-b5db-cb94d4e8f87c"));
 	public interface ID2D1ImageBrush : ID2D1Brush
 	{
@@ -1698,7 +1691,7 @@ static if(DX11_1 || DX11_2)
 		HRESULT GetPropertyName(uint index, PWSTR name, uint nameCount);
 		uint GetPropertyNameLength(uint index);
 		HRESULT GetSubProperties(uint index, ID2D1Properties *subProperties);
-		D2D1_PROPERTY_TYPE GetType(UINT32 index);
+		D2D1_PROPERTY_TYPE GetType(uint index);
 		HRESULT GetValue(uint index, ubyte *data, uint dataSize);
 		HRESULT GetValue(uint index, D2D1_PROPERTY_TYPE type, ubyte *data, uint dataSize);
 		HRESULT GetValueByName(PCWSTR name, ubyte *data, uint dataSize);
@@ -1759,7 +1752,7 @@ static if(DX11_1 || DX11_2)
 		void Clear();
 		HRESULT ConnectNode(ID2D1TransformNode fromNode, ID2D1TransformNode toNode, uint toNodeInputIndex);
 		HRESULT ConnectToEffectInput(uint toEffectInputIndex, ID2D1TransformNode node, uint toNodeInputIndex);
-		UINT32 GetInputCount();
+		uint GetInputCount();
 		HRESULT RemoveNode(ID2D1TransformNode node);
 		HRESULT SetOutputNode(ID2D1TransformNode node);
 		HRESULT SetPassthroughGraph(uint effectInputIndex);
@@ -1782,7 +1775,7 @@ static if(DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_2)
+static if(DX112)
 {
 
 	mixin(uuid!(ID2D1CommandSink1, "9eb767fd-4269-4467-b8c2-eb30cb305743"));
@@ -1823,18 +1816,11 @@ static if(DX11_2)
 	}
 }
 
-mixin(uuid!(ID2D1AnalysisTransform, "0359dc30-95e6-4568-9055-27720d130e93"));
-public interface ID2D1AnalysisTransform : IUnknown
-{
-extern(Windows):
-}
-
-
 //
 //	Functions
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	extern(Windows)
 	{
@@ -1846,7 +1832,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		void D2D1MakeSkewMatrix(float angleX, float angleY, D2D1_POINT_2F center, D2D1_MATRIX_3X2_F *matrix);
 	}
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 	extern(Windows)
 	{
@@ -1867,6 +1853,6 @@ static if(DX11_1 || DX11_2)
 		alias long function (IUnknown effect, ubyte *data, uint dataSize, uint *actualSize) PD2D1_PROPERTY_GET_FUNCTION; 
 	}
 }
-static if(DX11_2)
+static if(DX112)
 {
 }

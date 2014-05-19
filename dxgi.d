@@ -10,7 +10,7 @@ public:
 //	Constants
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	//DXGI_ERROR
 	enum DXGI_ERROR_DEVICE_HUNG = 0x887A0006;
@@ -58,6 +58,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	enum DXGI_USAGE_READ_ONLY            = (1L << (4 + 4));
 	enum DXGI_USAGE_DISCARD_ON_PRESENT   = (1L << (5 + 4));
 	enum DXGI_USAGE_UNORDERED_ACCESS     = (1L << (6 + 4));
+	alias uint DXGI_USAGE;
 
 	//DXGI_MAP
 	enum DXGI_MAP_READ    = (1U);
@@ -95,14 +96,14 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	enum DXGI_MWA_VALID             = (0x7);
 
 	//DXGI_DEBUG
-	const IID DXGI_DEBUG_ALL = { 0xe48ae283, 0xda80, 0x490b, 0x87, 0xe6, 0x43, 0xe9, 0xa9, 0xcf, 0xda, 0x8 };
-	const IID DXGI_DEBUG_DX = { 0x35cdd7fc, 0x13b2, 0x421d, 0xa5, 0xd7, 0x7e, 0x44, 0x51, 0x28, 0x7d, 0x64 };
-	const IID DXGI_DEBUG_DXGI = { 0x25cddaa4, 0xb1c6, 0x47e1, 0xac, 0x3e, 0x98, 0x87, 0x5b, 0x5a, 0x2e, 0x2a };
-	const IID DXGI_DEBUG_APP = { 0x6cd6e01, 0x4219, 0x4ebd, 0x87, 0x9, 0x27, 0xed, 0x23, 0x36, 0xc, 0x62 };
-	const IID DXGI_DEBUG_D3D11 = { 0x4b99317b, 0xac39, 0x4aa6, 0xbb, 0xb, 0xba, 0xa0, 0x47, 0x84, 0x79, 0x8f };
+	//const IID DXGI_DEBUG_ALL = { 0xe48ae283, 0xda80, 0x490b, 0x87, 0xe6, 0x43, 0xe9, 0xa9, 0xcf, 0xda, 0x8 };
+	//const IID DXGI_DEBUG_DX = { 0x35cdd7fc, 0x13b2, 0x421d, 0xa5, 0xd7, 0x7e, 0x44, 0x51, 0x28, 0x7d, 0x64 };
+	//const IID DXGI_DEBUG_DXGI = { 0x25cddaa4, 0xb1c6, 0x47e1, 0xac, 0x3e, 0x98, 0x87, 0x5b, 0x5a, 0x2e, 0x2a };
+	//const IID DXGI_DEBUG_APP = { 0x6cd6e01, 0x4219, 0x4ebd, 0x87, 0x9, 0x27, 0xed, 0x23, 0x36, 0xc, 0x62 };
+	//const IID DXGI_DEBUG_D3D11 = { 0x4b99317b, 0xac39, 0x4aa6, 0xbb, 0xb, 0xba, 0xa0, 0x47, 0x84, 0x79, 0x8f };
 
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 	//DXGI_ENUM_MODES
 	enum DXGI_ENUM_MODES_STEREO          = (4U);
@@ -115,7 +116,7 @@ static if(DX11_1 || DX11_2)
 	enum DXGI_PRESENT_RESTRICT_TO_OUTPUT    = (0x00000040U);
 
 }
-static if(DX11_2)
+static if(DX112)
 {
 	//DXGI_CREATE_FACTORY
 	enum DXGI_CREATE_FACTORY_NORMAL = (0U);
@@ -131,7 +132,7 @@ static if(DX11_2)
 //	Enumerations
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	public enum DXGI_ADAPTER_FLAG : int { 
 		NONE         = 0,
@@ -317,7 +318,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 	public enum DXGI_ALPHA_MODE : int { 
 		UNSPECIFIED    = 0,
@@ -390,7 +391,7 @@ static if(DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_2)
+static if(DX112)
 {
 }
 
@@ -399,7 +400,7 @@ static if(DX11_2)
 //	Structures
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	public struct DXGI_ADAPTER_DESC {
 		wchar Description[128];
@@ -411,6 +412,19 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		size_t DedicatedSystemMemory;
 		size_t SharedSystemMemory;
 		LUID AdapterLuid;
+	}
+
+	public struct DXGI_ADAPTER_DESC1 {
+		wchar Description[128];
+		uint VendorId;
+		uint DeviceId;
+		uint SubSysId;
+		uint Revision;
+		size_t DedicatedVideoMemory;
+		size_t DedicatedSystemMemory;
+		size_t SharedSystemMemory;
+		LUID AdapterLuid;
+		uint Flags;
 	}
 
 	public struct DXGI_FRAME_STATISTICS {
@@ -508,9 +522,9 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		uint             Flags;
 	}
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
-	public struct DXGI_ADAPTER_DESC1 {
+	public struct DXGI_ADAPTER_DESC2 {
 		wchar Description[128];
 		uint VendorId;
 		uint DeviceId;
@@ -521,7 +535,10 @@ static if(DX11_1 || DX11_2)
 		size_t SharedSystemMemory;
 		LUID AdapterLuid;
 		uint Flags;
+		DXGI_GRAPHICS_PREEMPTION_GRANULARITY GraphicsPreemptionGranularity;
+		DXGI_COMPUTE_PREEMPTION_GRANULARITY  ComputePreemptionGranularity;
 	}
+	
 
 	public struct DXGI_INFO_QUEUE_FILTER {
 		DXGI_INFO_QUEUE_FILTER_DESC AllowList;
@@ -614,23 +631,8 @@ static if(DX11_1 || DX11_2)
 		BOOL                     Windowed;
 	}
 }
-static if(DX11_2)
+static if(DX112)
 {
-	public struct DXGI_ADAPTER_DESC2 {
-		wchar Description[128];
-		uint VendorId;
-		uint DeviceId;
-		uint SubSysId;
-		uint Revision;
-		size_t DedicatedVideoMemory;
-		size_t DedicatedSystemMemory;
-		size_t SharedSystemMemory;
-		LUID AdapterLuid;
-		uint Flags;
-		DXGI_GRAPHICS_PREEMPTION_GRANULARITY GraphicsPreemptionGranularity;
-		DXGI_COMPUTE_PREEMPTION_GRANULARITY  ComputePreemptionGranularity;
-	}
-
 	public struct DXGI_DECODE_SWAP_CHAIN_DESC {
 		uint Flags;
 	}
@@ -658,7 +660,7 @@ static if(DX11_2)
 //	Interfaces
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	mixin(uuid!(IDXGIObject, "aec22fb8-76f3-4639-9be0-28eb43a67a2e"));
 	interface IDXGIObject : IUnknown
@@ -801,7 +803,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 	mixin(uuid!(IDXGIAdapter2, "0AA1AE0A-FA0E-4B84-8644-E05FF8E5ACB5"));
 	interface IDXGIAdapter2 : IDXGIAdapter1
@@ -951,10 +953,10 @@ static if(DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_2)
+static if(DX112)
 {
 	mixin(uuid!(IDXGIDebug1, "c5a05f0c-16f2-4adf-9f4d-a8c4d58ac550"));
-	interface IDXGIDebug1 : IDXGIDebug
+	public interface IDXGIDebug1 : IDXGIDebug
 	{
 	extern(Windows):
 		void DisableLeakTrackingForThread();
@@ -963,7 +965,7 @@ static if(DX11_2)
 	}
 
 	mixin(uuid!(IDXGIDecodeSwapChain, "2633066b-4514-4c7a-8fd8-12ea98059d18"));
-	interface IDXGIDecodeSwapChain : IUnknown
+	public interface IDXGIDecodeSwapChain : IUnknown
 	{
 	extern(Windows):
 		DXGI_MULTIPLANE_OVERLAY_YCbCr_FLAGS GetColorSpace();
@@ -978,7 +980,7 @@ static if(DX11_2)
 	}
 
 	mixin(uuid!(IDXGIDevice3, "6007896c-3244-4afd-bf18-a6d3beda5023"));
-	interface IDXGIDevice3 : IDXGIDevice2
+	public interface IDXGIDevice3 : IDXGIDevice2
 	{
 	extern(Windows):
 		void Trim();
@@ -992,7 +994,7 @@ static if(DX11_2)
 	}
 
 	mixin(uuid!(IDXGIFactoryMedia, "41e7d1f2-a591-4f7b-a2e5-fa9c843e1c12"));
-	interface IDXGIFactoryMedia : IDXGIObject
+	public interface IDXGIFactoryMedia : IDXGIObject
 	{
 	extern(Windows):
 		HRESULT CreateDecodeSwapChainForCompositionSurfaceHandle(IUnknown Device, HANDLE Surface, const DXGI_DECODE_SWAP_CHAIN_DESC *Desc, IDXGIResource YuvDecodeBuffers, IDXGIOutput RestrictToOutput, IDXGIDecodeSwapChain *SwapChain);	
@@ -1000,14 +1002,14 @@ static if(DX11_2)
 	}
 
 	mixin(uuid!(IDXGIOutput2, "595e39d1-2724-4663-99b1-da969de28364"));
-	interface IDXGIOutput2 : IDXGIOutput1
+	public interface IDXGIOutput2 : IDXGIOutput1
 	{
 	extern(Windows):
 		BOOL SupportsOverlays();
 	}
 
 	mixin(uuid!(IDXGISwapChain2, "a8be2ac4-199f-4946-b331-79599fb98de7"));
-	interface IDXGISwapChain2 : IDXGISwapChain1
+	public interface IDXGISwapChain2 : IDXGISwapChain1
 	{
 	extern(Windows):
 		HANDLE GetFrameLatencyWaitableObject();
@@ -1020,7 +1022,7 @@ static if(DX11_2)
 	}
 
 	mixin(uuid!(IDXGISwapChainMedia,"dd95b90b-f05f-4f6a-bd65-25bfb264bd84"));
-	interface IDXGISwapChainMedia : IUnknown
+	public interface IDXGISwapChainMedia : IUnknown
 	{
 	extern(Windows):
 		HRESULT CheckPresentDurationSupport(uint DesiredPresentDuration, uint *ClosestSmallerPresentDuration, uint *ClosestLargerPresentDuration);
@@ -1035,17 +1037,17 @@ static if(DX11_2)
 //	Functions
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
-	extern(Windows) HRESULT CreateDXGIFactory(IID RIID, void **Factory);
+	extern(Windows) public HRESULT CreateDXGIFactory(IID RIID, void **Factory);
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
-	extern(Windows) HRESULT CreateDXGIFactory1(IID RIID, void **Factory);
-	extern(Windows) HRESULT DXGIGetDebugInterface(IID RIID, void **Debug);
+	extern(Windows) public HRESULT CreateDXGIFactory1(IID RIID, void **Factory);
+	extern(Windows) public HRESULT DXGIGetDebugInterface(IID RIID, void **Debug);
 }
-static if(DX11_2)
+static if(DX112)
 {
-	extern(Windows) HRESULT CreateDXGIFactory2(uint Flags, const ref IID RIID, void **Factory);
-	extern(Windows) HRESULT DXGIGetDebugInterface1(uint Flags, IID RIID, void **Debug);
+	extern(Windows) public HRESULT CreateDXGIFactory2(uint Flags, const ref IID RIID, void **Factory);
+	extern(Windows) public HRESULT DXGIGetDebugInterface1(uint Flags, IID RIID, void **Debug);
 }

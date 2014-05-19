@@ -43,7 +43,7 @@ public interface ISequentialStream : IUnknown
 {
 extern(Windows):
 	HRESULT Read(void *pv, ULONG cb, ULONG *pcbRead);
-	HRESULT Write(void const *pv, ULONG cb, ULONG *pcbWritten);
+	HRESULT Write(const void *pv, ULONG cb, ULONG *pcbWritten);
 }
 
 mixin(uuid!(IStream, "0C733A30-2A1C-11CE-ADE5-00AA0044773D"));
@@ -59,4 +59,33 @@ extern(Windows):
 	HRESULT SetSize(ULARGE_INTEGER libNewSize);
 	HRESULT Stat(STATSTG *pstatstg, uint grfStatFlag);
 	HRESULT UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, uint dwLockType);
+}
+
+mixin(uuid!(IPrintDocumentPackageTarget, "1b8efec4-3019-4c27-964e-367202156906"));
+public interface IPrintDocumentPackageTarget : IUnknown
+{
+extern(Windows):
+	HRESULT Cancel();
+	HRESULT GetPackageTarget(GUID* guidTargetType, IID* riid, void **ppvTarget);
+	HRESULT GetPackageTargetTypes(uint *targetCount, GUID **targetTypes);
+}
+
+mixin(uuid!(IEnumUnknown, "00000100-0000-0000-C000-000000000046"));
+public interface IEnumUnknown : IUnknown
+{
+extern(Windows):
+	HRESULT Clone(IEnumUnknown **ppenum);
+	HRESULT Next(ulong celt, IUnknown **rgelt, ulong *pceltFetched);
+	HRESULT Reset();
+	HRESULT Skip(ulong celt);
+}
+
+mixin(uuid!(IEnumString, "00000101-0000-0000-C000-000000000046"));
+public interface IEnumString : IUnknown
+{
+extern(Windows):
+	HRESULT Clone(IEnumString **ppenum);
+	HRESULT Next(ulong celt, LPOLESTR *rgelt, ulong *pceltFetched);
+	HRESULT Reset();
+	HRESULT Skip(ulong celt);
 }

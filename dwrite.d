@@ -10,7 +10,7 @@ import aurora.directx.d3d;
 //	Enumerations
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 	public enum DWRITE_BREAK_CONDITION : int {  
 		NEUTRAL        = 0, 
@@ -276,7 +276,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 
 	public enum DWRITE_BASELINE : int {  
@@ -463,8 +463,8 @@ static if(DX11_1 || DX11_2)
 		DUCKING_SMALL      = 5, 
 		DUCKING_STANDARD   = 6, 
 		DUCKING_LARGE      = 7, 
-		CONSTANT_STD       = DWRITE_PANOSE_XHEIGHT_CONSTANT_STANDARD, 
-		DUCKING_STD        = DWRITE_PANOSE_XHEIGHT_DUCKING_STANDARD,	
+		CONSTANT_STD       = CONSTANT_STANDARD, 
+		DUCKING_STD        = DUCKING_STANDARD,	
 	}
 	
 	enum DWRITE_PANOSE_TOOL_KIND : ubyte {  
@@ -665,6 +665,10 @@ static if(DX11_1 || DX11_2)
 		GDI_NATURAL, 
 		NATURAL, 
 		NATURAL_SYMMETRIC, 
+		CLEARTYPE_GDI_CLASSIC = GDI_CLASSIC, 
+		CLEARTYPE_GDI_NATURAL = GDI_NATURAL, 
+		CLEARTYPE_NATURAL = NATURAL, 
+		CLEARTYPE_NATURAL_SYMMETRIC = NATURAL_SYMMETRIC, 
 		OUTLINE,	
 	}
 
@@ -684,7 +688,7 @@ static if(DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_2)
+static if(DX112)
 {
 
 	public enum DWRITE_OPTICAL_ALIGNMENT : int { 
@@ -693,26 +697,13 @@ static if(DX11_2)
 	}
 
 }
-static if(DX11_0)
-{
 
-	public enum DWRITE_RENDERING_MODE : int {  
-		DEFAULT, 
-		ALIASED, 
-		CLEARTYPE_GDI_CLASSIC, 
-		CLEARTYPE_GDI_NATURAL, 
-		CLEARTYPE_NATURAL, 
-		CLEARTYPE_NATURAL_SYMMETRIC, 
-		OUTLINE,	
-	}
-
-}
 
 //
 //	Structures
 //
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 
 	public struct LOGFONTW {
@@ -729,7 +720,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		ubyte lfClipPrecision;
 		ubyte lfQuality;
 		ubyte lfPitchAndFamily;
-		wchar lfFaceName[LF_FACESIZE];
+		wchar lfFaceName[32];
 	}
 
 	public struct DWRITE_CLUSTER_METRICS {
@@ -778,7 +769,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	}
 
 	public struct DWRITE_GLYPH_RUN {
-		IDWriteFontFace* fontFace;
+		IDWriteFontFace fontFace;
 		float fontEmSize;
 		uint glyphCount;
 		const ushort *glyphIndices;
@@ -788,7 +779,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 		uint bidiLevel;
 	}
 
-	struct DWRITE_GLYPH_RUN_DESCRIPTION {
+	public struct DWRITE_GLYPH_RUN_DESCRIPTION {
 		const wchar  *localeName;
 		const wchar  *string;
 		uint       stringLength;
@@ -919,7 +910,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 
 	public struct DWRITE_CARET_METRICS {
@@ -1035,7 +1026,7 @@ static if(DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_2)
+static if(DX112)
 {
 
 	alias D3DCOLORVALUE DWRITE_COLOR_F;
@@ -1059,7 +1050,7 @@ static if(DX11_2)
 
 public extern(C) HRESULT DWriteCreateFactory(DWRITE_FACTORY_TYPE FactoryType, GUID IID, IUnknown* Factory);
 
-static if(DX11_0 || DX11_1 || DX11_2)
+static if(DX110)
 {
 
 	alias ID2D1SimplifiedGeometrySink IDWriteGeometrySink;
@@ -1418,7 +1409,7 @@ static if(DX11_0 || DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_1 || DX11_2)
+static if(DX111)
 {
 
 	mixin(uuid!(IDWriteBitmapRenderTarget1, "791e8298-3ef3-4230-9880-c9bdecc42064"));
@@ -1512,7 +1503,7 @@ static if(DX11_1 || DX11_2)
 	}
 
 }
-static if(DX11_2)
+static if(DX112)
 {
 
 	mixin(uuid!(IDWriteFont2, "29748ed6-8c9c-4a6a-be0b-d912e8538944"));

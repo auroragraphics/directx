@@ -27,6 +27,12 @@
     <Externalconsole>true</Externalconsole>
     <Target>StaticLibrary</Target>
     <OutputName>libdxi</OutputName>
+    <VersionIds>
+      <VersionIds>
+        <String>DX11_1</String>
+      </VersionIds>
+    </VersionIds>
+    <ExtraLinkerArguments>-v</ExtraLinkerArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release</OutputPath>
@@ -37,6 +43,11 @@
     <Externalconsole>true</Externalconsole>
     <Target>StaticLibrary</Target>
     <OutputName>libdxi</OutputName>
+    <VersionIds>
+      <VersionIds>
+        <String>DX11_1</String>
+      </VersionIds>
+    </VersionIds>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Unittest|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
