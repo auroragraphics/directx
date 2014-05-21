@@ -6,12 +6,18 @@ import aurora.directx.config;
 import aurora.directx.d2d1;
 import aurora.directx.d3d;
 
+alias ID2D1SimplifiedGeometrySink IDWriteGeometrySink;
+
 //
 //	Enumerations
 //
 
-static if(DX110)
-{
+//
+//	Structures
+//
+
+//static if(DX110)
+//{
 	public enum DWRITE_BREAK_CONDITION : int {  
 		NEUTRAL        = 0, 
 		CAN_BREAK      = 1, 
@@ -244,6 +250,20 @@ static if(DX110)
 		BOTTOM_TO_TOP,		
 	}
 
+	public enum DWRITE_RENDERING_MODE : int {  
+		DEFAULT, 
+		ALIASED, 
+		GDI_CLASSIC, 
+		GDI_NATURAL, 
+		NATURAL, 
+		NATURAL_SYMMETRIC, 
+		CLEARTYPE_GDI_CLASSIC = GDI_CLASSIC, 
+		CLEARTYPE_GDI_NATURAL = GDI_NATURAL, 
+		CLEARTYPE_NATURAL = NATURAL, 
+		CLEARTYPE_NATURAL_SYMMETRIC = NATURAL_SYMMETRIC, 
+		OUTLINE,	
+	}
+
 	public enum DWRITE_SCRIPT_SHAPES : int {  
 		DEFAULT    = 0, 
 		NO_VISUAL  = 1,	
@@ -275,9 +295,567 @@ static if(DX110)
 		CHARACTER,	
 	}
 
-}
-static if(DX111)
-{
+	public struct LOGFONTW {
+		long lfHeight;
+		long lfWidth;
+		long lfEscapement;
+		long lfOrientation;
+		long lfWeight;
+		ubyte lfItalic;
+		ubyte lfUnderline;
+		ubyte lfStrikeOut;
+		ubyte lfCharSet;
+		ubyte lfOutPrecision;
+		ubyte lfClipPrecision;
+		ubyte lfQuality;
+		ubyte lfPitchAndFamily;
+		wchar lfFaceName[32];
+	}
+	
+	public struct DWRITE_CLUSTER_METRICS {
+		float  width;
+		ushort length;
+		mixin(bitfields!(
+			ushort, "canWrapLineAfter", 1,
+			ushort, "isWhitespace", 1,
+			ushort, "isNewline", 1,
+			ushort, "isSoftHyphen", 1,
+			ushort, "isRightToLeft", 1,
+			ushort, "padding", 11));
+	}
+	
+	public struct DWRITE_FONT_FEATURE {
+		DWRITE_FONT_FEATURE_TAG nameTag;
+		uint                  parameter;
+	}
+	
+	public struct DWRITE_FONT_METRICS {
+		ushort designUnitsPerEm;
+		ushort ascent;
+		ushort descent;
+		short  lineGap;
+		ushort capHeight;
+		ushort xHeight;
+		short  underlinePosition;
+		ushort underlineThickness;
+		short  strikethroughPosition;
+		ushort strikethroughThickness;
+	}
+	
+	public struct DWRITE_GLYPH_METRICS {
+		int  leftSideBearing;
+		uint advanceWidth;
+		int  rightSideBearing;
+		int  topSideBearing;
+		uint advanceHeight;
+		int  bottomSideBearing;
+		int  verticalOriginY;
+	}
+	
+	public struct DWRITE_GLYPH_OFFSET {
+		float advanceOffset;
+		float ascenderOffset;
+	}
+	
+	public struct DWRITE_GLYPH_RUN {
+		IDWriteFontFace fontFace;
+		float fontEmSize;
+		uint glyphCount;
+		const ushort *glyphIndices;
+		const float *glyphAdvances;
+		const DWRITE_GLYPH_OFFSET *glyphOffsets;
+		BOOL isSideways;
+		uint bidiLevel;
+	}
+	
+	public struct DWRITE_GLYPH_RUN_DESCRIPTION {
+		const wchar  *localeName;
+		const wchar  *string;
+		uint       stringLength;
+		const short *clusterMap;
+		uint       textPosition;
+	}
+	
+	public struct DWRITE_HIT_TEST_METRICS {
+		uint textPosition;
+		uint length;
+		float  left;
+		float  top;
+		float  width;
+		float  height;
+		uint bidiLevel;
+		BOOL   isText;
+		BOOL   isTrimmed;
+	}
+	
+	public struct DWRITE_INLINE_OBJECT_METRICS {
+		float width;
+		float height;
+		float baseline;
+		BOOL  supportsSideways;
+	}
+	
+	public struct DWRITE_LINE_BREAKPOINT {
+		mixin(bitfields!(
+			ubyte, "breakConditionBefore", 2,
+			ubyte, "breakConditionAfter", 2,
+			ubyte, "isWhitespace", 1,
+			ubyte, "isSoftHyphen", 1,
+			ubyte, "padding", 2));
+	}
+	
+	public struct DWRITE_LINE_METRICS {
+		uint length;
+		uint trailingWhitespaceLength;
+		uint newlineLength;
+		float height;
+		float baseline;
+		BOOL   isTrimmed;
+	}
+	
+	public struct DWRITE_MATRIX {
+		float m11;
+		float m12;
+		float m21;
+		float m22;
+		float dx;
+		float dy;
+	}
+	
+	public struct DWRITE_OVERHANG_METRICS {
+		float left;
+		float top;
+		float right;
+		float bottom;
+	}
+	
+	public struct DWRITE_SCRIPT_ANALYSIS {
+		ushort               script;
+		DWRITE_SCRIPT_SHAPES shapes;
+	}
+	
+	public struct DWRITE_SHAPING_GLYPH_PROPERTIES {
+		mixin(bitfields!(
+			ushort, "justification", 4,
+			ushort, "isClusterStart", 1,
+			ushort, "isDiacritic", 1,
+			ushort, "isZeroWidthSpace", 1,
+			ushort, "reserved", 9));
+	}
+	
+	public struct DWRITE_SHAPING_TEXT_PROPERTIES {
+		mixin(bitfields!(
+			ushort, "isShapedAlone", 1,
+			ushort, "reserved", 15));
+	}
+	
+	public struct DWRITE_STRIKETHROUGH {
+		float                    width;
+		float                    thickness;
+		float                    offset;
+		DWRITE_READING_DIRECTION readingDirection;
+		DWRITE_FLOW_DIRECTION    flowDirection;
+		const wchar              *localeName;
+		DWRITE_MEASURING_MODE    measuringMode;
+	}
+	
+	public struct DWRITE_TEXT_METRICS {
+		float left;
+		float top;
+		float width;
+		float widthIncludingTrailingWhitespace;
+		float height;
+		float layoutWidth;
+		float layoutHeight;
+		uint maxBidiReorderingDepth;
+		uint lineCount;
+	}
+	
+	public struct DWRITE_TEXT_RANGE {
+		uint startPosition;
+		uint length;
+	}
+	
+	public struct DWRITE_TRIMMING {
+		DWRITE_TRIMMING_GRANULARITY granularity;
+		uint                      delimiter;
+		uint                      delimiterCount;
+	}
+	
+	public struct DWRITE_TYPOGRAPHIC_FEATURES {
+		DWRITE_FONT_FEATURE *features;
+		uint              featureCount;
+	}
+	
+	public struct DWRITE_UNDERLINE {
+		float                    width;
+		float                    thickness;
+		float                    offset;
+		float                    runHeight;
+		DWRITE_READING_DIRECTION readingDirection;
+		DWRITE_FLOW_DIRECTION    flowDirection;
+		const wchar              *localeName;
+		DWRITE_MEASURING_MODE    measuringMode;
+	}
+	
+	mixin(uuid!(IDWriteBitmapRenderTarget, "5e5a32a3-8dff-4773-9ff6-0696eab77267"));
+	public interface IDWriteBitmapRenderTarget : IUnknown
+	{
+	extern(Windows):
+		HRESULT DrawGlyphRun(float BaselineOriginX, float BaselineOriginY, DWRITE_MEASURING_MODE MeasuringMode, const DWRITE_GLYPH_RUN* GlyphRun, IDWriteRenderingParams RenderingParams, COLORREF TextColor, RECT* BlackBoxRect);
+		HRESULT GetCurrentTransform(DWRITE_MATRIX* Transform);
+		HDC GetMemoryDC();
+		float GetPixelsPerDIP();
+		HRESULT GetSize(SIZE* Size);
+		HRESULT Resize(uint Width, uint Height);
+		HRESULT SetCurrentTransform(const DWRITE_MATRIX* Transform);
+		HRESULT SetPixelsPerDIP(float PixelsPerDIP);
+	}
+	
+	mixin(uuid!(IDWriteFont, "acd16696-8c14-4f5d-877e-fe3fc1d32737"));
+	public interface IDWriteFont : IUnknown
+	{
+	extern(Windows):
+		HRESULT CreateFontFace(IDWriteFontFace* FontFace);
+		HRESULT GetFaceNames(IDWriteLocalizedStrings* Names);
+		HRESULT GetFontFamily(IDWriteFontFamily* FontFamily);
+		HRESULT GetInformationalStrings(DWRITE_INFORMATIONAL_STRING_ID InformationalStringID, IDWriteLocalizedStrings* InformationalStrings, BOOL* Exists);
+		HRESULT GetMetrics(DWRITE_FONT_METRICS* FontMetrics);
+		DWRITE_FONT_SIMULATIONS GetSimulations();
+		DWRITE_FONT_STRETCH GetStretch();
+		DWRITE_FONT_STYLE GetStyle();
+		DWRITE_FONT_WEIGHT GetWeight();
+		HRESULT HasCharacter(uint UnicodeValue, BOOL* Exists);
+		BOOL IsSymbolFont();
+	}
+	
+	mixin(uuid!(IDWriteFontCollection, "a84cee02-3eea-4eee-a827-87c1a02a0fcc"));
+	public interface IDWriteFontCollection : IUnknown
+	{
+	extern(Windows):
+		HRESULT FindFamilyName(const wchar* FamilyName, uint* Index, BOOL* Exists);
+		HRESULT GetFontFamily(uint Index, IDWriteFontFamily* FontFamily);
+		uint GetFontFamilyCount();
+		HRESULT GetFontFromFontFace(IDWriteFontFace* FontFace, IDWriteFont* Font);
+	}
+	
+	mixin(uuid!(IDWriteFontCollectionLoader, "cca920e4-52f0-492b-bfa8-29c72ee0a468"));
+	public interface IDWriteFontCollectionLoader : IUnknown
+	{
+	extern(Windows):
+		HRESULT CreateEnumeratorFromKey(IDWriteFactory Factory, const void* CollectionKey, uint CollectionKeySize, IDWriteFontFileEnumerator* FontFileEnumerator);
+	}
+	
+	mixin(uuid!(IDWriteFontFace, "5f49804d-7024-4d43-bfa9-d25984f53849"));
+	public interface IDWriteFontFace : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetDesignGlyphMetrics(const(uint*) Indices, uint Count, DWRITE_GLYPH_METRICS* Metrics, BOOL IsSideways);
+		HRESULT GetFiles(uint* NumberOfFiles, IDWriteFontFile* Files = null);
+		HRESULT GetGdiCompatibleGlyphMetrics(float EMSize, float PixelsPerDIP, const(DWRITE_MATRIX*) Transform, BOOL UseGDINatural, const(ushort*) Indices, uint Count, DWRITE_GLYPH_METRICS* Metrics, BOOL IsSideways);	
+		HRESULT GetGdiCompatibleMetrics(float EMSize, float PixelsPerDIP, const(DWRITE_MATRIX*) Transform, DWRITE_FONT_METRICS* FontFaceMetrics);
+		ushort GetGlyphCount();
+		// Bug with static if prevents this from working
+		HRESULT GetGlyphRunOutline(float EMSize, ushort* Indices, float* Advances, DWRITE_GLYPH_OFFSET* Offsets, uint Count, BOOL IsSideways, BOOL RightToLeft, IDWriteGeometrySink GeometrySink);
+		uint GetIndex();
+		void GetMetrics(DWRITE_FONT_METRICS* FontFaceMetrics);
+		HRESULT GetRecommendedRenderingMode(float EMSize, float PixelsPerDIP, DWRITE_MEASURING_MODE MeasuringMode, IDWriteRenderingParams RenderingParams, DWRITE_RENDERING_MODE* RenderingMode);
+		DWRITE_FONT_SIMULATIONS GetSimulations();
+		DWRITE_FONT_FACE_TYPE GetType();
+		BOOL IsSymbolFont();
+		void ReleaseFontTable(void* TableContext);
+	}
+	
+	mixin(uuid!(IDWriteFontFamily, "da20d8ef-812a-4c43-9802-62ec4abd7add"));
+	public interface IDWriteFontFamily : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetFamilyNames(IDWriteLocalizedStrings* Names);
+		HRESULT GetFirstMatchingFont(DWRITE_FONT_WEIGHT Weight, DWRITE_FONT_STRETCH Stretch, DWRITE_FONT_STYLE Style, IDWriteFont* MatchingFont);
+		HRESULT GetMatchingFonts(DWRITE_FONT_WEIGHT Weight, DWRITE_FONT_STRETCH Stretch, DWRITE_FONT_STYLE Style, IDWriteFontList* MatchingFont);
+	}
+	
+	mixin(uuid!(IDWriteFontFile, "739d886a-cef5-47dc-8769-1a8b41bebbb0"));
+	public interface IDWriteFontFile : IUnknown
+	{
+	extern(Windows):
+		HRESULT Analyse(BOOL* IsSupportedFontType, DWRITE_FONT_FILE_TYPE FileType, DWRITE_FONT_FACE_TYPE FaceType, uint NumberOfFaces);
+		HRESULT GetLoader(IDWriteFontFileLoader* Loader);
+		HRESULT GetReferenceKey(const(void**) Key, uint KeySize);
+	}
+	
+	mixin(uuid!(IDWriteFontFileEnumerator, "72755049-5ff7-435d-8348-4be97cfa6c7c"));
+	public interface IDWriteFontFileEnumerator : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetCurrentFontFile(IDWriteFontFile* FontFile);
+		HRESULT MoveNext(BOOL* HasCurrentFile);
+	}
+	
+	mixin(uuid!(IDWriteFontFileLoader, "727cad4e-d6af-4c9e-8a08-d695b11caa49"));
+	public interface IDWriteFontFileLoader : IUnknown
+	{
+	extern(Windows):
+		HRESULT CreateStreamFromKey(const(void*) Key, uint KeySize, IDWriteFontFileStream* Stream);
+	}
+	
+	mixin(uuid!(IDWriteFontFileStream, "6d4865fe-0ab8-4d91-8f62-5dd6be34a3e0"));
+	public interface IDWriteFontFileStream : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetFileSize(ulong* Size);
+		HRESULT GetLastWriteTime(ulong* WriteTime);
+		HRESULT ReadFileFragment(const(void**) Start, ulong Offset, ulong Size, void** Context);
+		HRESULT ReleaseFileFragment(void* Context);
+	}
+	
+	mixin(uuid!(IDWriteFontList, "1a0d8438-1d97-4ec1-aef9-a2fb86ed6acb"));
+	public interface IDWriteFontList : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetFont(uint Index, IDWriteFont* Font);
+		HRESULT GetFontCollection(IDWriteFontCollection* FontCollection);
+		uint GetFontCount();
+	}
+	
+	mixin(uuid!(IDWriteGdiInterop, "1edd9491-9853-4299-898f-6432983b6f3a"));
+	public interface IDWriteGdiInterop : IUnknown
+	{
+	extern(Windows):
+		HRESULT ConvertFontToLOGFONT(IDWriteFont Font, LOGFONTW* LogFont, BOOL* IsSystemFont);
+		HRESULT ConvertFontFaceToLOGFONT(IDWriteFontFace Font, LOGFONTW* LogFont);
+		HRESULT CreateBitmapRenderTarget(HDC HDC, uint Width, uint Height, IDWriteBitmapRenderTarget* RenderTarget);
+		HRESULT CreateFontFaceFromHdc(HDC HDC, IDWriteFontFace * FontFace);
+		HRESULT CreateFontFromLOGFONT(const LOGFONTW* LogFont, IDWriteFont* Font);
+	}
+	
+	mixin(uuid!(IDWriteGlyphRunAnalysis, "7d97dbf7-e085-42d4-81e3-6a883bded118"));
+	public interface IDWriteGlyphRunAnalysis : IUnknown
+	{
+	extern(Windows):
+		HRESULT CreateAlphaTexture(DWRITE_TEXTURE_TYPE TextureType, const RECT * TextureBounds, ubyte* AlphaValues, uint BufferSize);
+		HRESULT GetAlphaBlendParams(IDWriteRenderingParams RenderingParams, float* BlendGamma, float* BlendEnhancedContrast, float* BlendClearTypeLevel);
+		HRESULT GetAlphaTextureBounds(DWRITE_TEXTURE_TYPE TextureType, RECT* TextureBounds);
+	}
+	
+	mixin(uuid!(IDWriteInlineObject, "8339FDE3-106F-47ab-8373-1C6295EB10B3"));
+	public interface IDWriteInlineObject : IUnknown
+	{
+	extern(Windows):
+		HRESULT Draw(void* ClientDrawingContext, IDWriteTextRenderer* Renderer, float OriginX, float OriginY, BOOL IsSideways, BOOL IsRightToLeft, IUnknown ClientDrawingEffect);
+		HRESULT GetBreakConditions(DWRITE_BREAK_CONDITION* BreakConditionBefore, DWRITE_BREAK_CONDITION* BreakConditionAfter);
+		HRESULT GetMetrics(DWRITE_INLINE_OBJECT_METRICS* Metrics);
+		HRESULT GetOverhangMetrics(DWRITE_OVERHANG_METRICS* Overhangs);
+	}
+	
+	mixin(uuid!(IDWriteLocalFontFileLoader, "b2d9f3ec-c9fe-4a11-a2ec-d86208f7c0a2"));
+	public interface IDWriteLocalFontFileLoader : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetFilePathFromKey(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, wchar *FilePath,uint FilePathSize);
+		HRESULT GetFilePathLengthFromKey(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, uint *FilePathLength);
+		HRESULT GetLastWriteTimeFromKey(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, FILETIME *LastWriteTime);
+	}
+	
+	mixin(uuid!(IDWriteLocalizedStrings, "08256209-099a-4b34-b86d-c22b110e7771"));
+	public interface IDWriteLocalizedStrings : IUnknown
+	{
+	extern(Windows):
+		HRESULT FindLocaleName(const wchar* LocaleName, uint* Index, BOOL* Exists);
+		uint GetCount();
+		HRESULT GetLocaleName(uint Index, wchar* LocaleName, uint Size);
+		HRESULT GetLocaleNameSize(uint Index, uint* Length);
+		HRESULT GetString(uint Index, wchar* StringBuffer, uint Size);
+		HRESULT GetStringLength(uint Index, uint* Length);
+	}
+	
+	mixin(uuid!(IDWriteNumberSubstitution, "14885CC9-BAB0-4f90-B6ED-5C366A2CD03D"));
+	public interface IDWriteNumberSubstitution : IUnknown
+	{
+	extern(Windows):
+		
+	}
+	
+	mixin(uuid!(IDWritePixelSnapping, "eaf3a2da-ecf4-4d24-b644-b34f6842024b"));
+	public interface IDWritePixelSnapping : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetCurrentTransform(void* ClientDrawingContext, DWRITE_MATRIX* Transform);
+		HRESULT GetPixelsPerDip(void* ClientDrawingContext, float* PixelsPerDip);
+		HRESULT IsPixelSnappingEnabled(void* ClientDrawingContext, BOOL* IsDisabled);
+	}
+	
+	mixin(uuid!(IDWriteRenderingParams, "2f0da53a-2add-47cd-82ee-d9ec34688e75"));
+	public interface IDWriteRenderingParams : IUnknown
+	{
+	extern(Windows):
+		float GetClearTypeLevel();
+		float GetEnhancedContrast();
+		float GetGamma();
+		DWRITE_PIXEL_GEOMETRY GetPixelGeometry();
+		DWRITE_RENDERING_MODE GetRenderingMode();
+	}
+	
+	mixin(uuid!(IDWriteTextAnalysisSink, "5810cd44-0ca0-4701-b3fa-bec5182ae4f6"));
+	public interface IDWriteTextAnalysisSink : IUnknown
+	{
+	extern(Windows):
+		HRESULT SetBidiLevel(uint TextPosition, uint TextLength, ubyte ExplicitLevel, ubyte ResolvedLevel);
+		HRESULT SetLineBreakpoints(uint TextPosition, uint TextLength, DWRITE_LINE_BREAKPOINT *LineBreakpoints);
+		HRESULT SetNumberSubstitution(uint TextPosition, uint TextLength, IDWriteNumberSubstitution NumberSubstitution);
+		HRESULT SetScriptAnalysis(uint TextPosition, uint TextLength, const DWRITE_SCRIPT_ANALYSIS *ScriptAnalysis);
+	}
+	
+	mixin(uuid!(IDWriteTextAnalysisSource, "688e1a58-5094-47c8-adc8-fbcea60ae92b"));
+	public interface IDWriteTextAnalysisSource : IUnknown
+	{
+	extern(Windows):
+		HRESULT GetLocaleName(uint TextPosition, uint *TextLength, const wchar **LocaleName);
+		HRESULT GetNumberSubstitution(uint TextPosition, uint *TextLength, IDWriteNumberSubstitution *NumberSubstitution);
+		DWRITE_READING_DIRECTION GetParagraphReadingDirection();
+		HRESULT GetTextAtPosition(uint TextPosition, const wchar **TextString, uint *TextLength);
+		HRESULT GetTextBeforePosition(uint TextPosition, const wchar **TextString, uint *TextLength);
+	}
+	
+	mixin(uuid!(IDWriteTextAnalyzer, "b7e6163e-7f46-43b4-84b3-e4e6249c365d"));
+	public interface IDWriteTextAnalyzer : IUnknown
+	{
+	extern(Windows):
+		HRESULT AnalyzeBidi(IDWriteTextAnalysisSource AnalysisSource, uint TextPosition, uint TextLength, IDWriteTextAnalysisSink AnalysisSink);
+		HRESULT AnalyzeLineBreakpoints(IDWriteTextAnalysisSource AnalysisSource, uint TextPosition, uint TextLength, IDWriteTextAnalysisSink AnalysisSink);
+		HRESULT AnalyzeNumberSubstitution(IDWriteTextAnalysisSource AnalysisSource, uint TextPosition, uint TextLength, IDWriteTextAnalysisSink AnalysisSink);
+		HRESULT AnalyzeScript(IDWriteTextAnalysisSource AnalysisSource, uint TextPosition, uint TextLength, IDWriteTextAnalysisSink AnalysisSink);
+		HRESULT GetGdiCompatibleGlyphPlacements(const wchar* TextString, const ushort* ClusterMap, DWRITE_SHAPING_TEXT_PROPERTIES *TextProps, uint TextLength, const ushort * GlyphIndices, const DWRITE_SHAPING_GLYPH_PROPERTIES * GlyphProps, uint GlyphCount, IDWriteFontFace FontFace, float FontEmSize, float PixelsPerDip, const DWRITE_MATRIX *Transform, BOOL UseGdiNatural, BOOL IsSideways, BOOL IsRightToLeft, const DWRITE_SCRIPT_ANALYSIS *ScriptAnalysis, const wchar *LocaleName, const DWRITE_TYPOGRAPHIC_FEATURES **Features, const uint *FeatureRangeLengths, uint FeatureRanges, float * GlyphAdvances, DWRITE_GLYPH_OFFSET * GlyphOffsets);
+		HRESULT GetGlyphPlacements(const wchar* TextString, const ushort* ClusterMap, DWRITE_SHAPING_TEXT_PROPERTIES *TextProps, uint TextLength, const ushort * GlyphIndices, const DWRITE_SHAPING_GLYPH_PROPERTIES * GlyphProps, uint GlyphCount, IDWriteFontFace FontFace, float FontEmSize, BOOL IsSideways, BOOL IsRightToLeft, const DWRITE_SCRIPT_ANALYSIS *ScriptAnalysis, const wchar *LocaleName, const DWRITE_TYPOGRAPHIC_FEATURES **Features, const uint *FeatureRangeLengths, uint FeatureRanges, float *GlyphAdvances, DWRITE_GLYPH_OFFSET * GlyphOffsets);
+		HRESULT GetGlyphs(const wchar * TextString, uint TextLength, IDWriteFontFace FontFace, BOOL IsSideways, BOOL IsRightToLeft, const DWRITE_SCRIPT_ANALYSIS * ScriptAnalysis, const wchar * LocaleName, IDWriteNumberSubstitution NumberSubstitution, const DWRITE_TYPOGRAPHIC_FEATURES **Features, const uint *FeatureRangeLengths, uint FeatureRanges, uint MaxGlyphCount, ushort *ClusterMap, DWRITE_SHAPING_TEXT_PROPERTIES *TextProps, ushort *GlyphIndices, DWRITE_SHAPING_GLYPH_PROPERTIES *GlyphProps, uint *ActualGlyphCount);
+	}
+	
+	mixin(uuid!(IDWriteTextFormat, "53737037-6d14-410b-9bfe-0b182bb70961"));
+	public interface IDWriteTextFormat : IUnknown
+	{
+	extern(Windows):
+		DWRITE_FLOW_DIRECTION GetFlowDirection();
+		HRESULT GetFontCollection(IDWriteFontCollection *FontCollection);
+		HRESULT GetFontFamilyName(wchar *FontFamilyName, uint NameSize);
+		uint GetFontFamilyNameLength();
+		float GetFontSize();
+		DWRITE_FONT_STRETCH GetFontStretch();
+		DWRITE_FONT_STYLE GetFontStyle();
+		DWRITE_FONT_WEIGHT GetFontWeight();
+		float GetIncrementalTabStop();
+		HRESULT GetLineSpacing(DWRITE_LINE_SPACING_METHOD *LineSpacingMethod, float *LineSpacing, float *Baseline);
+		HRESULT GetLocaleName(wchar *LocaleName, uint NameSize);
+		uint GetLocaleNameLength();
+		DWRITE_PARAGRAPH_ALIGNMENT GetParagraphAlignment();
+		DWRITE_READING_DIRECTION GetReadingDirection();
+		DWRITE_TEXT_ALIGNMENT GetTextAlignment();
+		HRESULT GetTrimming(DWRITE_TRIMMING *TrimmingOptions, IDWriteInlineObject *TrimmingSign);
+		DWRITE_WORD_WRAPPING GetWordWrapping();
+		HRESULT SetFlowDirection(DWRITE_FLOW_DIRECTION FlowDirection);
+		HRESULT SetIncrementalTabStop(float IncrementalTabStop);
+		HRESULT SetLineSpacing(DWRITE_LINE_SPACING_METHOD LineSpacingMethod, float LineSpacing, float Baseline);
+		HRESULT SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT ParagraphAlignment);
+		HRESULT SetReadingDirection(DWRITE_READING_DIRECTION ReadingDirection);
+		HRESULT SetTextAlignment(DWRITE_TEXT_ALIGNMENT TextAlignment);
+		HRESULT SetTrimming(const DWRITE_TRIMMING *TrimmingOptions, IDWriteInlineObject TrimmingSign);
+		HRESULT SetWordWrapping(DWRITE_WORD_WRAPPING WordWrapping);
+	}
+	
+	mixin(uuid!(IDWriteTextLayout, "53737037-6d14-410b-9bfe-0b182bb70961"));
+	public interface IDWriteTextLayout : IUnknown
+	{
+	extern(Windows):
+		HRESULT DetermineMinWidth(float *MinWidth);
+		HRESULT Draw(void *ClientDrawingContext, IDWriteTextRenderer Renderer, float OriginX, float OriginY);
+		HRESULT GetClusterMetrics(DWRITE_CLUSTER_METRICS * ClusterMetrics, uint MaxClusterCount, uint *ActualClusterCount);
+		HRESULT GetDrawingEffect(uint CurrentPosition, IUnknown *DrawingEffect, DWRITE_TEXT_RANGE * TextRange);
+		HRESULT GetFontCollection(uint CurrentPosition, IDWriteFontCollection *FontCollection, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontFamilyName(uint CurrentPosition, wchar *FontFamilyName, uint NameSize, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontFamilyNameLength(uint CurrentPosition, uint *NameLength, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontSize(uint CurrentPosition, float *FontSize, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontStretch(uint CurrentPosition, DWRITE_FONT_STRETCH *FontStretch, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontStyle(uint CurrentPosition, DWRITE_FONT_STYLE *FontStyle, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetFontWeight(uint CurrentPosition, DWRITE_FONT_WEIGHT *FontWeight, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetInlineObject(uint CurrentPosition, IDWriteInlineObject *InlineObject, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetLineMetrics(DWRITE_LINE_METRICS *LineMetrics, uint MaxLineCount, uint *ActualLineCount);
+		HRESULT GetLocaleName(uint CurrentPosition, wchar *LocaleName, uint NameSize, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetLocaleNameLength(uint CurrentPosition,uint *NameLength, DWRITE_TEXT_RANGE *TextRange);
+		float GetMaxHeight();
+		float GetMaxWidth();
+		HRESULT GetMetrics(DWRITE_TEXT_METRICS *TextMetrics);
+		HRESULT GetOverhangMetrics(DWRITE_OVERHANG_METRICS *Overhangs);
+		HRESULT GetStrikethrough(uint CurrentPosition, BOOL *HasStrikethrough, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetTypography(uint CurrentPosition, IDWriteTypography *Typography, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT GetUnderline(uint CurrentPosition, BOOL *HasUnderline, DWRITE_TEXT_RANGE *TextRange);
+		HRESULT HitTestPoint(float PointX, float PointY, BOOL *IsTrailingHit, BOOL *IsInside, DWRITE_HIT_TEST_METRICS *HitTestMetrics);
+		HRESULT HitTestTextPosition(uint TextPosition, BOOL IsTrailingHit, float *PointX, float *PointY, DWRITE_HIT_TEST_METRICS *HitTestMetrics);
+		HRESULT HitTestTextRange(uint TextPosition, uint TextLength, float OriginX, float OriginY, DWRITE_HIT_TEST_METRICS *HitTestMetrics, uint MaxHitTestMetricsCount, uint *ActualHitTestMetricsCount);
+		HRESULT SetDrawingEffect(IUnknown DrawingEffect, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontCollection(IDWriteFontCollection FontCollection, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontFamilyName(const wchar *FontFamilyName, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontSize(float FontSize, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontStretch(DWRITE_FONT_STRETCH FontStretch, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontStyle(DWRITE_FONT_STYLE FontStyle, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetFontWeight(DWRITE_FONT_WEIGHT FontWeight, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetInlineObject(IDWriteInlineObject InlineObject, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetLocaleName(const wchar *LocaleName, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetMaxHeight(float MaxHeight);
+		HRESULT SetMaxWidth(float MaxWidth);
+		HRESULT SetStrikethrough(BOOL HasStrikethrough, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetTypography(IDWriteTypography Typography, DWRITE_TEXT_RANGE TextRange);
+		HRESULT SetUnderline(BOOL HasUnderline, DWRITE_TEXT_RANGE TextRange);
+	}
+	
+	mixin(uuid!(IDWriteTextRenderer, "ef8a8135-5cc6-45fe-8825-c5a0724eb819"));
+	public interface IDWriteTextRenderer : IDWritePixelSnapping
+	{
+	extern(Windows):
+		HRESULT DrawGlyphRun(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY,DWRITE_MEASURING_MODE MeasuringMode, const DWRITE_GLYPH_RUN *GlyphRun, const DWRITE_GLYPH_RUN_DESCRIPTION *GlyphRunDescription, IUnknown ClientDrawingEffect);
+		HRESULT DrawInlineObject(void *ClientDrawingContext, float OriginX, float OriginY, IDWriteInlineObject *InlineObject, BOOL IsSideways, BOOL IsRightToLeft, IUnknown *ClientDrawingEffect);
+		HRESULT DrawStrikethrough(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY, const DWRITE_STRIKETHROUGH *Strikethrough, IUnknown *ClientDrawingEffect);
+		HRESULT DrawUnderline(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY, const DWRITE_UNDERLINE *Underline, IUnknown *ClientDrawingEffect);
+	}
+	
+	mixin(uuid!(IDWriteTypography, "55f1112b-1dc2-4b3c-9541-f46894ed85b6"));
+	public interface IDWriteTypography : IUnknown
+	{
+	extern(Windows):
+		HRESULT AddFontFeature(DWRITE_FONT_FEATURE FontFeature);
+		HRESULT GetFontFeature(uint FontFeatureIndex, DWRITE_FONT_FEATURE *FontFeature);
+		uint GetFontFeatureCount();
+	}
+	
+	mixin(uuid!(IDWriteFactory, "b859ee5a-d838-4b5b-a2e8-1adc7d93db48"));
+	public interface IDWriteFactory : IUnknown
+	{
+	extern(Windows):
+		HRESULT CreateCustomFontCollection(IDWriteFontCollectionLoader CollectionLoader, const void *CollectionKey, uint CollectionKeySize, IDWriteFontCollection *FontCollection);
+		HRESULT CreateCustomFontFileReference(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, IDWriteFontFileLoader *FontFileLoader, IDWriteFontFile *FontFile);
+		HRESULT CreateCustomRenderingParams(float Gamma, float EnhancedContrast, float ClearTypeLevel, DWRITE_PIXEL_GEOMETRY PixelGeometry, DWRITE_RENDERING_MODE RenderingMode, IDWriteRenderingParams *RenderingParams);
+		HRESULT CreateEllipsisTrimmingSign(IDWriteTextFormat *TextFormat, IDWriteInlineObject *TrimmingSign);
+		HRESULT CreateFontFace(DWRITE_FONT_FACE_TYPE FontFaceType, uint NumberOfFiles, const IDWriteFontFile FontFiles, uint FaceIndex, DWRITE_FONT_SIMULATIONS FontFaceSimulationFlags, IDWriteFontFace *FontFace);
+		HRESULT CreateFontFileReference(const wchar *FilePath, const FILETIME *LastWriteTime, IDWriteFontFile *FontFile);
+		HRESULT CreateGdiCompatibleTextLayout(const wchar *String, uint StringLength, IDWriteTextFormat *TextFormat, float LayoutWidth, float LayoutHeight, float PixelsPerDip, const DWRITE_MATRIX *Transform, BOOL UseGdiNatural, IDWriteTextLayout *TextLayout);
+		HRESULT CreateGlyphRunAnalysis(const DWRITE_GLYPH_RUN *GlyphRun, float PixelsPerDip, const DWRITE_MATRIX * Transform, DWRITE_RENDERING_MODE RenderingMode, DWRITE_MEASURING_MODE MeasuringMode, float BaselineOriginX, float BaselineOriginY, IDWriteGlyphRunAnalysis *GlyphRunAnalysis);
+		HRESULT CreateMonitorRenderingParams(long Monitor, IDWriteRenderingParams *RenderingParams);
+		HRESULT CreateNumberSubstitution(DWRITE_NUMBER_SUBSTITUTION_METHOD SubstitutionMethod, const wchar *LocaleName, BOOL IgnoreUserOverride, IDWriteNumberSubstitution *NumberSubstitution);
+		HRESULT CreateRenderingParams(IDWriteRenderingParams *RenderingParams);
+		HRESULT CreateTextAnalyzer(IDWriteTextAnalyzer *TextAnalyzer);
+		HRESULT CreateTextFormat(const wchar *FontFamilyName, IDWriteFontCollection FontCollection, DWRITE_FONT_WEIGHT FontWeight, DWRITE_FONT_STYLE FontStyle, DWRITE_FONT_STRETCH FontStretch, float FontSize, const wchar *LocaleName, IDWriteTextFormat *TextFormat);
+		HRESULT CreateTextLayout(const wchar *String, uint StringLength, IDWriteTextFormat TextFormat, float MaxWidth, float MaxHeight, IDWriteTextLayout *TextLayout);
+		HRESULT CreateTypography(IDWriteTypography *Typography);
+		HRESULT GetGdiInterop(IDWriteGdiInterop *GDIInterop);
+		HRESULT GetSystemFontCollection(IDWriteFontCollection *FontCollection, BOOL CheckForUpdates);
+		HRESULT RegisterFontCollectionLoader(IDWriteFontCollectionLoader FontCollectionLoader);
+		HRESULT RegisterFontFileLoader(IDWriteFontFileLoader FontFileLoader);
+		HRESULT UnregisterFontCollectionLoader(IDWriteFontCollectionLoader FontCollectionLoader);
+		HRESULT UnregisterFontFileLoader(IDWriteFontFileLoader FontFileLoader);
+	}
+	
+//}
+
+//static if(DX111)
+//{
 
 	public enum DWRITE_BASELINE : int {  
 		DEFAULT, 
@@ -658,20 +1236,6 @@ static if(DX111)
 		ANGLE_270_DEGREES,		
 	}
 
-	public enum DWRITE_RENDERING_MODE : int {  
-		DEFAULT, 
-		ALIASED, 
-		GDI_CLASSIC, 
-		GDI_NATURAL, 
-		NATURAL, 
-		NATURAL_SYMMETRIC, 
-		CLEARTYPE_GDI_CLASSIC = GDI_CLASSIC, 
-		CLEARTYPE_GDI_NATURAL = GDI_NATURAL, 
-		CLEARTYPE_NATURAL = NATURAL, 
-		CLEARTYPE_NATURAL_SYMMETRIC = NATURAL_SYMMETRIC, 
-		OUTLINE,	
-	}
-
 	public enum DWRITE_OUTLINE_THRESHOLD : int {  
 		ANTIALIASED, 
 		ALIASED,	
@@ -687,238 +1251,12 @@ static if(DX111)
 		STACKED,	
 	}
 
-}
-static if(DX112)
-{
-
-	public enum DWRITE_OPTICAL_ALIGNMENT : int { 
-		NONE,
-		NO_SIDE_BEARINGS,
-	}
-
-}
-
-
-//
-//	Structures
-//
-
-static if(DX110)
-{
-
-	public struct LOGFONTW {
-		long lfHeight;
-		long lfWidth;
-		long lfEscapement;
-		long lfOrientation;
-		long lfWeight;
-		ubyte lfItalic;
-		ubyte lfUnderline;
-		ubyte lfStrikeOut;
-		ubyte lfCharSet;
-		ubyte lfOutPrecision;
-		ubyte lfClipPrecision;
-		ubyte lfQuality;
-		ubyte lfPitchAndFamily;
-		wchar lfFaceName[32];
-	}
-
-	public struct DWRITE_CLUSTER_METRICS {
-		float  width;
-		ushort length;
-		mixin(bitfields!(
-			ushort, "canWrapLineAfter", 1,
-			ushort, "isWhitespace", 1,
-			ushort, "isNewline", 1,
-			ushort, "isSoftHyphen", 1,
-			ushort, "isRightToLeft", 1,
-			ushort, "padding", 11));
-	}
-
-	public struct DWRITE_FONT_FEATURE {
-		DWRITE_FONT_FEATURE_TAG nameTag;
-		uint                  parameter;
-	}
-
-	public struct DWRITE_FONT_METRICS {
-		ushort designUnitsPerEm;
-		ushort ascent;
-		ushort descent;
-		short  lineGap;
-		ushort capHeight;
-		ushort xHeight;
-		short  underlinePosition;
-		ushort underlineThickness;
-		short  strikethroughPosition;
-		ushort strikethroughThickness;
-	}
-
-	public struct DWRITE_GLYPH_METRICS {
-		int  leftSideBearing;
-		uint advanceWidth;
-		int  rightSideBearing;
-		int  topSideBearing;
-		uint advanceHeight;
-		int  bottomSideBearing;
-		int  verticalOriginY;
-	}
-
-	public struct DWRITE_GLYPH_OFFSET {
-		float advanceOffset;
-		float ascenderOffset;
-	}
-
-	public struct DWRITE_GLYPH_RUN {
-		IDWriteFontFace fontFace;
-		float fontEmSize;
-		uint glyphCount;
-		const ushort *glyphIndices;
-		const float *glyphAdvances;
-		const DWRITE_GLYPH_OFFSET *glyphOffsets;
-		BOOL isSideways;
-		uint bidiLevel;
-	}
-
-	public struct DWRITE_GLYPH_RUN_DESCRIPTION {
-		const wchar  *localeName;
-		const wchar  *string;
-		uint       stringLength;
-		const short *clusterMap;
-		uint       textPosition;
-	}
-
-	public struct DWRITE_HIT_TEST_METRICS {
-		uint textPosition;
-		uint length;
-		float  left;
-		float  top;
-		float  width;
-		float  height;
-		uint bidiLevel;
-		BOOL   isText;
-		BOOL   isTrimmed;
-	}
-
-	public struct DWRITE_INLINE_OBJECT_METRICS {
-		float width;
-		float height;
-		float baseline;
-		BOOL  supportsSideways;
-	}
-
-	public struct DWRITE_LINE_BREAKPOINT {
-		mixin(bitfields!(
-			ubyte, "breakConditionBefore", 2,
-			ubyte, "breakConditionAfter", 2,
-			ubyte, "isWhitespace", 1,
-			ubyte, "isSoftHyphen", 1,
-			ubyte, "padding", 2));
-	}
-
-	public struct DWRITE_LINE_METRICS {
-		uint length;
-		uint trailingWhitespaceLength;
-		uint newlineLength;
-		float height;
-		float baseline;
-		BOOL   isTrimmed;
-	}
-
-	public struct DWRITE_MATRIX {
-		float m11;
-		float m12;
-		float m21;
-		float m22;
-		float dx;
-		float dy;
-	}
-
-	public struct DWRITE_OVERHANG_METRICS {
-		float left;
-		float top;
-		float right;
-		float bottom;
-	}
-
-	public struct DWRITE_SCRIPT_ANALYSIS {
-		ushort               script;
-		DWRITE_SCRIPT_SHAPES shapes;
-	}
-
-	public struct DWRITE_SHAPING_GLYPH_PROPERTIES {
-		mixin(bitfields!(
-			ushort, "justification", 4,
-			ushort, "isClusterStart", 1,
-			ushort, "isDiacritic", 1,
-			ushort, "isZeroWidthSpace", 1,
-			ushort, "reserved", 9));
-	}
-
-	public struct DWRITE_SHAPING_TEXT_PROPERTIES {
-		mixin(bitfields!(
-			ushort, "isShapedAlone", 1,
-			ushort, "reserved", 15));
-	}
-
-	public struct DWRITE_STRIKETHROUGH {
-		float                    width;
-		float                    thickness;
-		float                    offset;
-		DWRITE_READING_DIRECTION readingDirection;
-		DWRITE_FLOW_DIRECTION    flowDirection;
-		const wchar              *localeName;
-		DWRITE_MEASURING_MODE    measuringMode;
-	}
-
-	public struct DWRITE_TEXT_METRICS {
-		float left;
-		float top;
-		float width;
-		float widthIncludingTrailingWhitespace;
-		float height;
-		float layoutWidth;
-		float layoutHeight;
-		uint maxBidiReorderingDepth;
-		uint lineCount;
-	}
-
-	public struct DWRITE_TEXT_RANGE {
-		uint startPosition;
-		uint length;
-	}
-
-	public struct DWRITE_TRIMMING {
-		DWRITE_TRIMMING_GRANULARITY granularity;
-		uint                      delimiter;
-		uint                      delimiterCount;
-	}
-
-	public struct DWRITE_TYPOGRAPHIC_FEATURES {
-		DWRITE_FONT_FEATURE *features;
-		uint              featureCount;
-	}
-
-	public struct DWRITE_UNDERLINE {
-		float                    width;
-		float                    thickness;
-		float                    offset;
-		float                    runHeight;
-		DWRITE_READING_DIRECTION readingDirection;
-		DWRITE_FLOW_DIRECTION    flowDirection;
-		const wchar              *localeName;
-		DWRITE_MEASURING_MODE    measuringMode;
-	}
-
-}
-static if(DX111)
-{
-
 	public struct DWRITE_CARET_METRICS {
 		short slopeRise;
 		short slopeRun;
 		short offset;
 	}
-
+	
 	public union DWRITE_PANOSE {
 		ubyte values[10];
 		DWRITE_PANOSE_FAMILY familyKind;
@@ -973,7 +1311,7 @@ static if(DX111)
 			}
 		}
 	}
-
+	
 	public struct DWRITE_FONT_METRICS1 {
 		int glyphBoxLeft;
 		int glyphBoxTop;
@@ -989,7 +1327,7 @@ static if(DX111)
 		int superscriptSizeY;
 		BOOL hasTypographicMetrics;
 	}
-
+	
 	public struct DWRITE_JUSTIFICATION_OPPORTUNITY {
 		float expansionMinimum;
 		float expansionMaximum;
@@ -1003,7 +1341,7 @@ static if(DX111)
 			uint, "applyToTrailingEdge", 1,
 			uint, "reserved", 12));
 	}
-
+	
 	public struct DWRITE_SCRIPT_PROPERTIES {
 		uint isoScriptCode;
 		uint isoScriptNumber;
@@ -1019,399 +1357,12 @@ static if(DX111)
 			uint, "isCursiveWriting", 1,
 			uint, "reserved", 25));
 	}
-
+	
 	public struct DWRITE_UNICODE_RANGE {
 		uint first;
 		uint last;
 	}
-
-}
-static if(DX112)
-{
-
-	alias D3DCOLORVALUE DWRITE_COLOR_F;
-
-	public struct DWRITE_COLOR_GLYPH_RUN {
-		DWRITE_GLYPH_RUN             glyphRun;
-		DWRITE_GLYPH_RUN_DESCRIPTION *glyphRunDescription;
-		float                        baselineOriginX;
-		float                        baselineOriginY;
-		DWRITE_COLOR_F               runColor;
-		uint                       paletteIndex;
-	}
-
-	public struct DWRITE_TEXT_METRICS1  {
-		DWRITE_TEXT_METRICS base;
-		alias base this;
-		float heightIncludingTrailingWhitespace;
-	}
-
-}
-
-public extern(C) HRESULT DWriteCreateFactory(DWRITE_FACTORY_TYPE FactoryType, GUID IID, IUnknown* Factory);
-
-static if(DX110)
-{
-
-	alias ID2D1SimplifiedGeometrySink IDWriteGeometrySink;
-
-	mixin(uuid!(IDWriteBitmapRenderTarget, "5e5a32a3-8dff-4773-9ff6-0696eab77267"));
-	public interface IDWriteBitmapRenderTarget : IUnknown
-	{
-	extern(Windows):
-		HRESULT DrawGlyphRun(float BaselineOriginX, float BaselineOriginY, DWRITE_MEASURING_MODE MeasuringMode, const DWRITE_GLYPH_RUN* GlyphRun, IDWriteRenderingParams RenderingParams, COLORREF TextColor, RECT* BlackBoxRect);
-		HRESULT GetCurrentTransform(DWRITE_MATRIX* Transform);
-		HDC GetMemoryDC();
-		float GetPixelsPerDIP();
-		HRESULT GetSize(SIZE* Size);
-		HRESULT Resize(uint Width, uint Height);
-		HRESULT SetCurrentTransform(const DWRITE_MATRIX* Transform);
-		HRESULT SetPixelsPerDIP(float PixelsPerDIP);
-	}
-
-	mixin(uuid!(IDWriteFont, "acd16696-8c14-4f5d-877e-fe3fc1d32737"));
-	public interface IDWriteFont : IUnknown
-	{
-	extern(Windows):
-		HRESULT CreateFontFace(IDWriteFontFace* FontFace);
-		HRESULT GetFaceNames(IDWriteLocalizedStrings* Names);
-		HRESULT GetFontFamily(IDWriteFontFamily* FontFamily);
-		HRESULT GetInformationalStrings(DWRITE_INFORMATIONAL_STRING_ID InformationalStringID, IDWriteLocalizedStrings* InformationalStrings, BOOL* Exists);
-		HRESULT GetMetrics(DWRITE_FONT_METRICS* FontMetrics);
-		DWRITE_FONT_SIMULATIONS GetSimulations();
-		DWRITE_FONT_STRETCH GetStretch();
-		DWRITE_FONT_STYLE GetStyle();
-		DWRITE_FONT_WEIGHT GetWeight();
-		HRESULT HasCharacter(uint UnicodeValue, BOOL* Exists);
-		BOOL IsSymbolFont();
-	}
-
-	mixin(uuid!(IDWriteFontCollection, "a84cee02-3eea-4eee-a827-87c1a02a0fcc"));
-	public interface IDWriteFontCollection : IUnknown
-	{
-	extern(Windows):
-		HRESULT FindFamilyName(const wchar* FamilyName, uint* Index, BOOL* Exists);
-		HRESULT GetFontFamily(uint Index, IDWriteFontFamily* FontFamily);
-		uint GetFontFamilyCount();
-		HRESULT GetFontFromFontFace(IDWriteFontFace* FontFace, IDWriteFont* Font);
-	}
-
-	mixin(uuid!(IDWriteFontCollectionLoader, "cca920e4-52f0-492b-bfa8-29c72ee0a468"));
-	public interface IDWriteFontCollectionLoader : IUnknown
-	{
-	extern(Windows):
-		HRESULT CreateEnumeratorFromKey(IDWriteFactory Factory, const void* CollectionKey, uint CollectionKeySize, IDWriteFontFileEnumerator* FontFileEnumerator);
-	}
-
-	mixin(uuid!(IDWriteFontFace, "5f49804d-7024-4d43-bfa9-d25984f53849"));
-	public interface IDWriteFontFace : IUnknown
-	{
-	extern(Windows):
-		HRESULT GetDesignGlyphMetrics(const(uint*) Indices, uint Count, DWRITE_GLYPH_METRICS* Metrics, BOOL IsSideways);
-		HRESULT GetFiles(uint* NumberOfFiles, IDWriteFontFile* Files = null);
-		HRESULT GetGdiCompatibleGlyphMetrics(float EMSize, float PixelsPerDIP, const(DWRITE_MATRIX*) Transform, BOOL UseGDINatural, const(ushort*) Indices, uint Count, DWRITE_GLYPH_METRICS* Metrics, BOOL IsSideways);	
-		HRESULT GetGdiCompatibleMetrics(float EMSize, float PixelsPerDIP, const(DWRITE_MATRIX*) Transform, DWRITE_FONT_METRICS* FontFaceMetrics);
-		ushort GetGlyphCount();
-		HRESULT GetGlyphRunOutline(float EMSize, ushort* Indices, float* Advances, DWRITE_GLYPH_OFFSET* Offsets, uint Count, BOOL IsSideways, BOOL RightToLeft, IDWriteGeometrySink GeometrySink);
-		uint GetIndex();
-		void GetMetrics(DWRITE_FONT_METRICS* FontFaceMetrics);
-		HRESULT GetRecommendedRenderingMode(float EMSize, float PixelsPerDIP, DWRITE_MEASURING_MODE MeasuringMode, IDWriteRenderingParams RenderingParams, DWRITE_RENDERING_MODE* RenderingMode);
-		DWRITE_FONT_SIMULATIONS GetSimulations();
-		DWRITE_FONT_FACE_TYPE GetType();
-		BOOL IsSymbolFont();
-		void ReleaseFontTable(void* TableContext);
-	}
-
-	mixin(uuid!(IDWriteFontFamily, "da20d8ef-812a-4c43-9802-62ec4abd7add"));
-	public interface IDWriteFontFamily : IUnknown
-	{
-	extern(Windows):
-		HRESULT GetFamilyNames(IDWriteLocalizedStrings* Names);
-		HRESULT GetFirstMatchingFont(DWRITE_FONT_WEIGHT Weight, DWRITE_FONT_STRETCH Stretch, DWRITE_FONT_STYLE Style, IDWriteFont* MatchingFont);
-		HRESULT GetMatchingFonts(DWRITE_FONT_WEIGHT Weight, DWRITE_FONT_STRETCH Stretch, DWRITE_FONT_STYLE Style, IDWriteFontList* MatchingFont);
-	}
-
-	mixin(uuid!(IDWriteFontFile, "739d886a-cef5-47dc-8769-1a8b41bebbb0"));
-	public interface IDWriteFontFile : IUnknown
-	{
-	extern(Windows):
-		HRESULT Analyse(BOOL* IsSupportedFontType, DWRITE_FONT_FILE_TYPE FileType, DWRITE_FONT_FACE_TYPE FaceType, uint NumberOfFaces);
-		HRESULT GetLoader(IDWriteFontFileLoader* Loader);
-		HRESULT GetReferenceKey(const(void**) Key, uint KeySize);
-	}
-
-	mixin(uuid!(IDWriteFontFileEnumerator, "72755049-5ff7-435d-8348-4be97cfa6c7c"));
-	public interface IDWriteFontFileEnumerator : IUnknown
-	{
-	extern(Windows):
-		HRESULT GetCurrentFontFile(IDWriteFontFile* FontFile);
-		HRESULT MoveNext(BOOL* HasCurrentFile);
-	}
-
-	mixin(uuid!(IDWriteFontFileLoader, "727cad4e-d6af-4c9e-8a08-d695b11caa49"));
-	public interface IDWriteFontFileLoader : IUnknown
-	{
-	extern(Windows):
-		HRESULT CreateStreamFromKey(const(void*) Key, uint KeySize, IDWriteFontFileStream* Stream);
-	}
-
-	mixin(uuid!(IDWriteFontFileStream, "6d4865fe-0ab8-4d91-8f62-5dd6be34a3e0"));
-	public interface IDWriteFontFileStream : IUnknown
-	{
-	extern(Windows):
-		HRESULT GetFileSize(ulong* Size);
-		HRESULT GetLastWriteTime(ulong* WriteTime);
-		HRESULT ReadFileFragment(const(void**) Start, ulong Offset, ulong Size, void** Context);
-		HRESULT ReleaseFileFragment(void* Context);
-	}
-
-	mixin(uuid!(IDWriteFontList, "1a0d8438-1d97-4ec1-aef9-a2fb86ed6acb"));
-	public interface IDWriteFontList : IUnknown
-	{
-	extern(Windows):
-		HRESULT GetFont(uint Index, IDWriteFont* Font);
-		HRESULT GetFontCollection(IDWriteFontCollection* FontCollection);
-		uint GetFontCount();
-	}
-
-	mixin(uuid!(IDWriteGdiInterop, "1edd9491-9853-4299-898f-6432983b6f3a"));
-	public interface IDWriteGdiInterop : IUnknown
-	{
-	extern(Windows):
-		HRESULT ConvertFontToLOGFONT(IDWriteFont Font, LOGFONTW* LogFont, BOOL* IsSystemFont);
-		HRESULT ConvertFontFaceToLOGFONT(IDWriteFontFace Font, LOGFONTW* LogFont);
-		HRESULT CreateBitmapRenderTarget(HDC HDC, uint Width, uint Height, IDWriteBitmapRenderTarget* RenderTarget);
-		HRESULT CreateFontFaceFromHdc(HDC HDC, IDWriteFontFace * FontFace);
-		HRESULT CreateFontFromLOGFONT(const LOGFONTW* LogFont, IDWriteFont* Font);
-	}
-
-	mixin(uuid!(IDWriteGlyphRunAnalysis, "7d97dbf7-e085-42d4-81e3-6a883bded118"));
-	public interface IDWriteGlyphRunAnalysis : IUnknown
-	{
-	extern(Windows):
-		HRESULT CreateAlphaTexture(DWRITE_TEXTURE_TYPE TextureType, const RECT * TextureBounds, ubyte* AlphaValues, uint BufferSize);
-		HRESULT GetAlphaBlendParams(IDWriteRenderingParams RenderingParams, float* BlendGamma, float* BlendEnhancedContrast, float* BlendClearTypeLevel);
-		HRESULT GetAlphaTextureBounds(DWRITE_TEXTURE_TYPE TextureType, RECT* TextureBounds);
-	}
-
-	mixin(uuid!(IDWriteInlineObject, "8339FDE3-106F-47ab-8373-1C6295EB10B3"));
-	public interface IDWriteInlineObject : IUnknown
-	{
-	extern(Windows):
-		HRESULT Draw(void* ClientDrawingContext, IDWriteTextRenderer* Renderer, float OriginX, float OriginY, BOOL IsSideways, BOOL IsRightToLeft, IUnknown ClientDrawingEffect);
-		HRESULT GetBreakConditions(DWRITE_BREAK_CONDITION* BreakConditionBefore, DWRITE_BREAK_CONDITION* BreakConditionAfter);
-		HRESULT GetMetrics(DWRITE_INLINE_OBJECT_METRICS* Metrics);
-		HRESULT GetOverhangMetrics(DWRITE_OVERHANG_METRICS* Overhangs);
-	}
-
-	mixin(uuid!(IDWriteLocalFontFileLoader, "b2d9f3ec-c9fe-4a11-a2ec-d86208f7c0a2"));
-	public interface IDWriteLocalFontFileLoader : IUnknown
-	{
-	extern(Windows):
-		HRESULT GetFilePathFromKey(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, wchar *FilePath,uint FilePathSize);
-		HRESULT GetFilePathLengthFromKey(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, uint *FilePathLength);
-		HRESULT GetLastWriteTimeFromKey(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, FILETIME *LastWriteTime);
-	}
-
-	mixin(uuid!(IDWriteLocalizedStrings, "08256209-099a-4b34-b86d-c22b110e7771"));
-	public interface IDWriteLocalizedStrings : IUnknown
-	{
-	extern(Windows):
-		HRESULT FindLocaleName(const wchar* LocaleName, uint* Index, BOOL* Exists);
-		uint GetCount();
-		HRESULT GetLocaleName(uint Index, wchar* LocaleName, uint Size);
-		HRESULT GetLocaleNameSize(uint Index, uint* Length);
-		HRESULT GetString(uint Index, wchar* StringBuffer, uint Size);
-		HRESULT GetStringLength(uint Index, uint* Length);
-	}
 	
-	mixin(uuid!(IDWriteNumberSubstitution, "14885CC9-BAB0-4f90-B6ED-5C366A2CD03D"));
-	public interface IDWriteNumberSubstitution : IUnknown
-	{
-	extern(Windows):
-		
-	}
-	
-	mixin(uuid!(IDWritePixelSnapping, "eaf3a2da-ecf4-4d24-b644-b34f6842024b"));
-	public interface IDWritePixelSnapping : IUnknown
-	{
-	extern(Windows):
-		HRESULT GetCurrentTransform(void* ClientDrawingContext, DWRITE_MATRIX* Transform);
-		HRESULT GetPixelsPerDip(void* ClientDrawingContext, float* PixelsPerDip);
-		HRESULT IsPixelSnappingEnabled(void* ClientDrawingContext, BOOL* IsDisabled);
-	}
-
-	mixin(uuid!(IDWriteRenderingParams, "2f0da53a-2add-47cd-82ee-d9ec34688e75"));
-	public interface IDWriteRenderingParams : IUnknown
-	{
-	extern(Windows):
-		float GetClearTypeLevel();
-		float GetEnhancedContrast();
-		float GetGamma();
-		DWRITE_PIXEL_GEOMETRY GetPixelGeometry();
-		DWRITE_RENDERING_MODE GetRenderingMode();
-	}
-
-	mixin(uuid!(IDWriteTextAnalysisSink, "5810cd44-0ca0-4701-b3fa-bec5182ae4f6"));
-	public interface IDWriteTextAnalysisSink : IUnknown
-	{
-	extern(Windows):
-		HRESULT SetBidiLevel(uint TextPosition, uint TextLength, ubyte ExplicitLevel, ubyte ResolvedLevel);
-		HRESULT SetLineBreakpoints(uint TextPosition, uint TextLength, DWRITE_LINE_BREAKPOINT *LineBreakpoints);
-		HRESULT SetNumberSubstitution(uint TextPosition, uint TextLength, IDWriteNumberSubstitution NumberSubstitution);
-		HRESULT SetScriptAnalysis(uint TextPosition, uint TextLength, const DWRITE_SCRIPT_ANALYSIS *ScriptAnalysis);
-	}
-
-	mixin(uuid!(IDWriteTextAnalysisSource, "688e1a58-5094-47c8-adc8-fbcea60ae92b"));
-	public interface IDWriteTextAnalysisSource : IUnknown
-	{
-	extern(Windows):
-		HRESULT GetLocaleName(uint TextPosition, uint *TextLength, const wchar **LocaleName);
-		HRESULT GetNumberSubstitution(uint TextPosition, uint *TextLength, IDWriteNumberSubstitution *NumberSubstitution);
-		DWRITE_READING_DIRECTION GetParagraphReadingDirection();
-		HRESULT GetTextAtPosition(uint TextPosition, const wchar **TextString, uint *TextLength);
-		HRESULT GetTextBeforePosition(uint TextPosition, const wchar **TextString, uint *TextLength);
-	}
-
-	mixin(uuid!(IDWriteTextAnalyzer, "b7e6163e-7f46-43b4-84b3-e4e6249c365d"));
-	public interface IDWriteTextAnalyzer : IUnknown
-	{
-	extern(Windows):
-		HRESULT AnalyzeBidi(IDWriteTextAnalysisSource AnalysisSource, uint TextPosition, uint TextLength, IDWriteTextAnalysisSink AnalysisSink);
-		HRESULT AnalyzeLineBreakpoints(IDWriteTextAnalysisSource AnalysisSource, uint TextPosition, uint TextLength, IDWriteTextAnalysisSink AnalysisSink);
-		HRESULT AnalyzeNumberSubstitution(IDWriteTextAnalysisSource AnalysisSource, uint TextPosition, uint TextLength, IDWriteTextAnalysisSink AnalysisSink);
-		HRESULT AnalyzeScript(IDWriteTextAnalysisSource AnalysisSource, uint TextPosition, uint TextLength, IDWriteTextAnalysisSink AnalysisSink);
-		HRESULT GetGdiCompatibleGlyphPlacements(const wchar* TextString, const ushort* ClusterMap, DWRITE_SHAPING_TEXT_PROPERTIES *TextProps, uint TextLength, const ushort * GlyphIndices, const DWRITE_SHAPING_GLYPH_PROPERTIES * GlyphProps, uint GlyphCount, IDWriteFontFace FontFace, float FontEmSize, float PixelsPerDip, const DWRITE_MATRIX *Transform, BOOL UseGdiNatural, BOOL IsSideways, BOOL IsRightToLeft, const DWRITE_SCRIPT_ANALYSIS *ScriptAnalysis, const wchar *LocaleName, const DWRITE_TYPOGRAPHIC_FEATURES **Features, const uint *FeatureRangeLengths, uint FeatureRanges, float * GlyphAdvances, DWRITE_GLYPH_OFFSET * GlyphOffsets);
-		HRESULT GetGlyphPlacements(const wchar* TextString, const ushort* ClusterMap, DWRITE_SHAPING_TEXT_PROPERTIES *TextProps, uint TextLength, const ushort * GlyphIndices, const DWRITE_SHAPING_GLYPH_PROPERTIES * GlyphProps, uint GlyphCount, IDWriteFontFace FontFace, float FontEmSize, BOOL IsSideways, BOOL IsRightToLeft, const DWRITE_SCRIPT_ANALYSIS *ScriptAnalysis, const wchar *LocaleName, const DWRITE_TYPOGRAPHIC_FEATURES **Features, const uint *FeatureRangeLengths, uint FeatureRanges, float *GlyphAdvances, DWRITE_GLYPH_OFFSET * GlyphOffsets);
-		HRESULT GetGlyphs(const wchar * TextString, uint TextLength, IDWriteFontFace FontFace, BOOL IsSideways, BOOL IsRightToLeft, const DWRITE_SCRIPT_ANALYSIS * ScriptAnalysis, const wchar * LocaleName, IDWriteNumberSubstitution NumberSubstitution, const DWRITE_TYPOGRAPHIC_FEATURES **Features, const uint *FeatureRangeLengths, uint FeatureRanges, uint MaxGlyphCount, ushort *ClusterMap, DWRITE_SHAPING_TEXT_PROPERTIES *TextProps, ushort *GlyphIndices, DWRITE_SHAPING_GLYPH_PROPERTIES *GlyphProps, uint *ActualGlyphCount);
-	}
-
-	mixin(uuid!(IDWriteTextFormat, "53737037-6d14-410b-9bfe-0b182bb70961"));
-	public interface IDWriteTextFormat : IUnknown
-	{
-	extern(Windows):
-		DWRITE_FLOW_DIRECTION GetFlowDirection();
-		HRESULT GetFontCollection(IDWriteFontCollection *FontCollection);
-		HRESULT GetFontFamilyName(wchar *FontFamilyName, uint NameSize);
-		uint GetFontFamilyNameLength();
-		float GetFontSize();
-		DWRITE_FONT_STRETCH GetFontStretch();
-		DWRITE_FONT_STYLE GetFontStyle();
-		DWRITE_FONT_WEIGHT GetFontWeight();
-		float GetIncrementalTabStop();
-		HRESULT GetLineSpacing(DWRITE_LINE_SPACING_METHOD *LineSpacingMethod, float *LineSpacing, float *Baseline);
-		HRESULT GetLocaleName(wchar *LocaleName, uint NameSize);
-		uint GetLocaleNameLength();
-		DWRITE_PARAGRAPH_ALIGNMENT GetParagraphAlignment();
-		DWRITE_READING_DIRECTION GetReadingDirection();
-		DWRITE_TEXT_ALIGNMENT GetTextAlignment();
-		HRESULT GetTrimming(DWRITE_TRIMMING *TrimmingOptions, IDWriteInlineObject *TrimmingSign);
-		DWRITE_WORD_WRAPPING GetWordWrapping();
-		HRESULT SetFlowDirection(DWRITE_FLOW_DIRECTION FlowDirection);
-		HRESULT SetIncrementalTabStop(float IncrementalTabStop);
-		HRESULT SetLineSpacing(DWRITE_LINE_SPACING_METHOD LineSpacingMethod, float LineSpacing, float Baseline);
-		HRESULT SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT ParagraphAlignment);
-		HRESULT SetReadingDirection(DWRITE_READING_DIRECTION ReadingDirection);
-		HRESULT SetTextAlignment(DWRITE_TEXT_ALIGNMENT TextAlignment);
-		HRESULT SetTrimming(const DWRITE_TRIMMING *TrimmingOptions, IDWriteInlineObject TrimmingSign);
-		HRESULT SetWordWrapping(DWRITE_WORD_WRAPPING WordWrapping);
-	}
-
-	mixin(uuid!(IDWriteTextLayout, "53737037-6d14-410b-9bfe-0b182bb70961"));
-	public interface IDWriteTextLayout : IUnknown
-	{
-	extern(Windows):
-		HRESULT DetermineMinWidth(float *MinWidth);
-		HRESULT Draw(void *ClientDrawingContext, IDWriteTextRenderer Renderer, float OriginX, float OriginY);
-		HRESULT GetClusterMetrics(DWRITE_CLUSTER_METRICS * ClusterMetrics, uint MaxClusterCount, uint *ActualClusterCount);
-		HRESULT GetDrawingEffect(uint CurrentPosition, IUnknown *DrawingEffect, DWRITE_TEXT_RANGE * TextRange);
-		HRESULT GetFontCollection(uint CurrentPosition, IDWriteFontCollection *FontCollection, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetFontFamilyName(uint CurrentPosition, wchar *FontFamilyName, uint NameSize, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetFontFamilyNameLength(uint CurrentPosition, uint *NameLength, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetFontSize(uint CurrentPosition, float *FontSize, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetFontStretch(uint CurrentPosition, DWRITE_FONT_STRETCH *FontStretch, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetFontStyle(uint CurrentPosition, DWRITE_FONT_STYLE *FontStyle, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetFontWeight(uint CurrentPosition, DWRITE_FONT_WEIGHT *FontWeight, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetInlineObject(uint CurrentPosition, IDWriteInlineObject *InlineObject, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetLineMetrics(DWRITE_LINE_METRICS *LineMetrics, uint MaxLineCount, uint *ActualLineCount);
-		HRESULT GetLocaleName(uint CurrentPosition, wchar *LocaleName, uint NameSize, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetLocaleNameLength(uint CurrentPosition,uint *NameLength, DWRITE_TEXT_RANGE *TextRange);
-		float GetMaxHeight();
-		float GetMaxWidth();
-		HRESULT GetMetrics(DWRITE_TEXT_METRICS *TextMetrics);
-		HRESULT GetOverhangMetrics(DWRITE_OVERHANG_METRICS *Overhangs);
-		HRESULT GetStrikethrough(uint CurrentPosition, BOOL *HasStrikethrough, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetTypography(uint CurrentPosition, IDWriteTypography *Typography, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT GetUnderline(uint CurrentPosition, BOOL *HasUnderline, DWRITE_TEXT_RANGE *TextRange);
-		HRESULT HitTestPoint(float PointX, float PointY, BOOL *IsTrailingHit, BOOL *IsInside, DWRITE_HIT_TEST_METRICS *HitTestMetrics);
-		HRESULT HitTestTextPosition(uint TextPosition, BOOL IsTrailingHit, float *PointX, float *PointY, DWRITE_HIT_TEST_METRICS *HitTestMetrics);
-		HRESULT HitTestTextRange(uint TextPosition, uint TextLength, float OriginX, float OriginY, DWRITE_HIT_TEST_METRICS *HitTestMetrics, uint MaxHitTestMetricsCount, uint *ActualHitTestMetricsCount);
-		HRESULT SetDrawingEffect(IUnknown DrawingEffect, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetFontCollection(IDWriteFontCollection FontCollection, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetFontFamilyName(const wchar *FontFamilyName, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetFontSize(float FontSize, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetFontStretch(DWRITE_FONT_STRETCH FontStretch, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetFontStyle(DWRITE_FONT_STYLE FontStyle, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetFontWeight(DWRITE_FONT_WEIGHT FontWeight, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetInlineObject(IDWriteInlineObject InlineObject, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetLocaleName(const wchar *LocaleName, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetMaxHeight(float MaxHeight);
-		HRESULT SetMaxWidth(float MaxWidth);
-		HRESULT SetStrikethrough(BOOL HasStrikethrough, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetTypography(IDWriteTypography Typography, DWRITE_TEXT_RANGE TextRange);
-		HRESULT SetUnderline(BOOL HasUnderline, DWRITE_TEXT_RANGE TextRange);
-	}
-
-	mixin(uuid!(IDWriteTextRenderer, "ef8a8135-5cc6-45fe-8825-c5a0724eb819"));
-	public interface IDWriteTextRenderer : IDWritePixelSnapping
-	{
-	extern(Windows):
-		HRESULT DrawGlyphRun(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY,DWRITE_MEASURING_MODE MeasuringMode, const DWRITE_GLYPH_RUN *GlyphRun, const DWRITE_GLYPH_RUN_DESCRIPTION *GlyphRunDescription, IUnknown ClientDrawingEffect);
-		HRESULT DrawInlineObject(void *ClientDrawingContext, float OriginX, float OriginY, IDWriteInlineObject *InlineObject, BOOL IsSideways, BOOL IsRightToLeft, IUnknown *ClientDrawingEffect);
-		HRESULT DrawStrikethrough(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY, const DWRITE_STRIKETHROUGH *Strikethrough, IUnknown *ClientDrawingEffect);
-		HRESULT DrawUnderline(void *ClientDrawingContext, float BaselineOriginX, float BaselineOriginY, const DWRITE_UNDERLINE *Underline, IUnknown *ClientDrawingEffect);
-	}
-
-	mixin(uuid!(IDWriteTypography, "55f1112b-1dc2-4b3c-9541-f46894ed85b6"));
-	public interface IDWriteTypography : IUnknown
-	{
-	extern(Windows):
-		HRESULT AddFontFeature(DWRITE_FONT_FEATURE FontFeature);
-		HRESULT GetFontFeature(uint FontFeatureIndex, DWRITE_FONT_FEATURE *FontFeature);
-		uint GetFontFeatureCount();
-	}
-
-	mixin(uuid!(IDWriteFactory, "b859ee5a-d838-4b5b-a2e8-1adc7d93db48"));
-	public interface IDWriteFactory : IUnknown
-	{
-	extern(Windows):
-		HRESULT CreateCustomFontCollection(IDWriteFontCollectionLoader CollectionLoader, const void *CollectionKey, uint CollectionKeySize, IDWriteFontCollection *FontCollection);
-		HRESULT CreateCustomFontFileReference(const void *FontFileReferenceKey, uint FontFileReferenceKeySize, IDWriteFontFileLoader *FontFileLoader, IDWriteFontFile *FontFile);
-		HRESULT CreateCustomRenderingParams(float Gamma, float EnhancedContrast, float ClearTypeLevel, DWRITE_PIXEL_GEOMETRY PixelGeometry, DWRITE_RENDERING_MODE RenderingMode, IDWriteRenderingParams *RenderingParams);
-		HRESULT CreateEllipsisTrimmingSign(IDWriteTextFormat *TextFormat, IDWriteInlineObject *TrimmingSign);
-		HRESULT CreateFontFace(DWRITE_FONT_FACE_TYPE FontFaceType, uint NumberOfFiles, const IDWriteFontFile FontFiles, uint FaceIndex, DWRITE_FONT_SIMULATIONS FontFaceSimulationFlags, IDWriteFontFace *FontFace);
-		HRESULT CreateFontFileReference(const wchar *FilePath, const FILETIME *LastWriteTime, IDWriteFontFile *FontFile);
-		HRESULT CreateGdiCompatibleTextLayout(const wchar *String, uint StringLength, IDWriteTextFormat *TextFormat, float LayoutWidth, float LayoutHeight, float PixelsPerDip, const DWRITE_MATRIX *Transform, BOOL UseGdiNatural, IDWriteTextLayout *TextLayout);
-		HRESULT CreateGlyphRunAnalysis(const DWRITE_GLYPH_RUN *GlyphRun, float PixelsPerDip, const DWRITE_MATRIX * Transform, DWRITE_RENDERING_MODE RenderingMode, DWRITE_MEASURING_MODE MeasuringMode, float BaselineOriginX, float BaselineOriginY, IDWriteGlyphRunAnalysis *GlyphRunAnalysis);
-		HRESULT CreateMonitorRenderingParams(long Monitor, IDWriteRenderingParams *RenderingParams);
-		HRESULT CreateNumberSubstitution(DWRITE_NUMBER_SUBSTITUTION_METHOD SubstitutionMethod, const wchar *LocaleName, BOOL IgnoreUserOverride, IDWriteNumberSubstitution *NumberSubstitution);
-		HRESULT CreateRenderingParams(IDWriteRenderingParams *RenderingParams);
-		HRESULT CreateTextAnalyzer(IDWriteTextAnalyzer *TextAnalyzer);
-		HRESULT CreateTextFormat(const wchar *FontFamilyName, IDWriteFontCollection FontCollection, DWRITE_FONT_WEIGHT FontWeight, DWRITE_FONT_STYLE FontStyle, DWRITE_FONT_STRETCH FontStretch, float FontSize, const wchar *LocaleName, IDWriteTextFormat *TextFormat);
-		HRESULT CreateTextLayout(const wchar *String, uint StringLength, IDWriteTextFormat TextFormat, float MaxWidth, float MaxHeight, IDWriteTextLayout *TextLayout);
-		HRESULT CreateTypography(IDWriteTypography *Typography);
-		HRESULT GetGdiInterop(IDWriteGdiInterop *GDIInterop);
-		HRESULT GetSystemFontCollection(IDWriteFontCollection *FontCollection, BOOL CheckForUpdates);
-		HRESULT RegisterFontCollectionLoader(IDWriteFontCollectionLoader FontCollectionLoader);
-		HRESULT RegisterFontFileLoader(IDWriteFontFileLoader FontFileLoader);
-		HRESULT UnregisterFontCollectionLoader(IDWriteFontCollectionLoader FontCollectionLoader);
-		HRESULT UnregisterFontFileLoader(IDWriteFontFileLoader FontFileLoader);
-	}
-
-}
-static if(DX111)
-{
-
 	mixin(uuid!(IDWriteBitmapRenderTarget1, "791e8298-3ef3-4230-9880-c9bdecc42064"));
 	public interface IDWriteBitmapRenderTarget1 : IDWriteBitmapRenderTarget
 	{
@@ -1419,7 +1370,7 @@ static if(DX111)
 		DWRITE_TEXT_ANTIALIAS_MODE GetTextAntialiasMode();
 		HRESULT SetTextAntialiasMode(DWRITE_TEXT_ANTIALIAS_MODE AntialiasMode);
 	}
-
+	
 	mixin(uuid!(IDWriteFont1, "acd16696-8c14-4f5d-877e-fe3fc1d32738"));
 	public interface IDWriteFont1 : IDWriteFont
 	{
@@ -1429,7 +1380,7 @@ static if(DX111)
 		HRESULT GetUnicodeRanges(uint MaxRangeCount, DWRITE_UNICODE_RANGE* UnicodeRanges, uint* RangeCount);
 		BOOL IsMonospacedFont();
 	}
-
+	
 	mixin(uuid!(IDWriteFontFace1, "a71efdb4-9fdb-4838-ad90-cfc3be8c3daf"));
 	public interface IDWriteFontFace1 : IDWriteFontFace
 	{
@@ -1447,28 +1398,28 @@ static if(DX111)
 		BOOL HasVerticalGlyphVariants();
 		BOOL IsMonospacedFont();
 	}
-
+	
 	mixin(uuid!(IDWriteRenderingParams1, "94413cf4-a6fc-4248-8b50-6674348fcad3"));
 	public interface IDWriteRenderingParams1 : IDWriteRenderingParams
 	{
 	extern(Windows):
 		float GetGrayscaleEnhancedContrast();
 	}
-
+	
 	mixin(uuid!(IDWriteTextAnalysisSink1, "B0D941A0-85E7-4D8B-9FD3-5CED9934482A"));
 	public interface IDWriteTextAnalysisSink1 : IDWriteTextAnalysisSink
 	{
 	extern(Windows):
 		HRESULT SetGlyphOrientation(uint TextPosition, uint TextLength, DWRITE_GLYPH_ORIENTATION_ANGLE GlyphOrientationAngle, ubyte AdjustedBidiLevel, BOOL IsSideways, BOOL IsRightToLeft);
 	}
-
+	
 	mixin(uuid!(IDWriteTextAnalysisSource1, "639CFAD8-0FB4-4B21-A58A-067920120009"));
 	public interface IDWriteTextAnalysisSource1 : IDWriteTextAnalysisSource
 	{
 	extern(Windows):
 		HRESULT GetVerticalGlyphOrientation(uint TextPosition, uint *TextLength, DWRITE_VERTICAL_GLYPH_ORIENTATION *GlyphOrientation, ubyte *BidiLevel);
 	}
-
+	
 	mixin(uuid!(IDWriteTextAnalyzer1, "80DAD800-E21F-4E83-96CE-BFCCE500DB7C"));
 	public interface IDWriteTextAnalyzer1 : IDWriteTextAnalyzer
 	{
@@ -1483,7 +1434,7 @@ static if(DX111)
 		HRESULT GetTextComplexity(const wchar *TextString, uint TextLength, IDWriteFontFace FontFace, BOOL *IsTextSimple, uint *TextLengthRead, ushort *GlyphIndices);
 		HRESULT JustifyGlyphAdvances(float LineWidth, uint GlyphCount, const DWRITE_JUSTIFICATION_OPPORTUNITY *JustificationOpportunities, const float *GlyphAdvances, const DWRITE_GLYPH_OFFSET *GlyphOffsets, float *JustifiedGlyphAdvances, DWRITE_GLYPH_OFFSET *JustifiedGlyphOffsets);
 	}
-
+	
 	mixin(uuid!(IDWriteTextLayout1, "9064D822-80A7-465C-A986-DF65F78B8FEB"));
 	public interface IDWriteTextLayout1 : IDWriteTextLayout
 	{
@@ -1493,7 +1444,7 @@ static if(DX111)
 		HRESULT SetCharacterSpacing(float LeadingSpacing, float TrailingSpacing, float MinimumAdvanceWidth, DWRITE_TEXT_RANGE TextRange);
 		HRESULT SetPairKerning(BOOL IsPairKerningEnabled, DWRITE_TEXT_RANGE TextRange);
 	}
-
+	
 	mixin(uuid!(IDWriteFactory1, "30572f99-dac6-41db-a16e-0486307e606a"));
 	public interface IDWriteFactory1 : IDWriteFactory
 	{
@@ -1501,10 +1452,33 @@ static if(DX111)
 		HRESULT CreateCustomRenderingParams(float Gamma, float EnhancedContrast, float EnhancedContrastGrayscale, float ClearTypeLevel, DWRITE_PIXEL_GEOMETRY PixelGeometry, DWRITE_RENDERING_MODE RenderingMode, IDWriteRenderingParams1 *RenderingParams);
 		HRESULT GetEudcFontCollection(IDWriteFontCollection *FontCollection, BOOL CheckForUpdates = FALSE);
 	}
+	
+//}
 
-}
-static if(DX112)
-{
+//static if(DX112)
+//{
+
+	public enum DWRITE_OPTICAL_ALIGNMENT : int { 
+		NONE,
+		NO_SIDE_BEARINGS,
+	}
+
+	alias D3DCOLORVALUE DWRITE_COLOR_F;
+
+	public struct DWRITE_COLOR_GLYPH_RUN {
+		DWRITE_GLYPH_RUN             glyphRun;
+		DWRITE_GLYPH_RUN_DESCRIPTION *glyphRunDescription;
+		float                        baselineOriginX;
+		float                        baselineOriginY;
+		DWRITE_COLOR_F               runColor;
+		uint                       paletteIndex;
+	}
+
+	public struct DWRITE_TEXT_METRICS1  {
+		DWRITE_TEXT_METRICS base;
+		alias base this;
+		float heightIncludingTrailingWhitespace;
+	}
 
 	mixin(uuid!(IDWriteFont2, "29748ed6-8c9c-4a6a-be0b-d912e8538944"));
 	public interface IDWriteFont2 : IDWriteFont1
@@ -1598,4 +1572,6 @@ static if(DX112)
 		HRESULT TranslateColorGlyphRun(float BaselineOriginX, float BaselineOriginY, const DWRITE_GLYPH_RUN *GlyphRun, const DWRITE_GLYPH_RUN_DESCRIPTION *GlyphRunDescription, DWRITE_MEASURING_MODE MeasuringMode, const DWRITE_MATRIX *WorldToDeviceTransform, uint ColorPaletteIndex, IDWriteColorGlyphRunEnumerator *ColorLayers);
 	}
 
-}
+//}
+
+public extern(C) HRESULT DWriteCreateFactory(DWRITE_FACTORY_TYPE FactoryType, GUID IID, IUnknown* Factory);

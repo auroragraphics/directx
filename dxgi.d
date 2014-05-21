@@ -5,8 +5,8 @@ import aurora.directx.config;
 
 public:
 
-static if(DX110)
-{
+//static if(DX110)
+//{
 
 	//
 	//	Constants
@@ -564,10 +564,10 @@ static if(DX110)
 	extern(Windows) public HRESULT CreateDXGIFactory1(const(GUID)* RIID, void **Factory);
 	extern(Windows) public HRESULT DXGIGetDebugInterface(const(GUID)* RIID, void **Debug);
 
-}
+//}
 
-static if(DX111)
-{
+//static if(DX111)
+//{
 	//
 	//	Constants
 	//
@@ -918,10 +918,10 @@ static if(DX111)
 		HRESULT SetRotation(const DXGI_MODE_ROTATION Rotation);
 	}
 	
-}
+//}
 
-static if(DX112)
-{
+//static if(DX112)
+//{
 	//
 	//	Constants
 	//
@@ -1048,4 +1048,4 @@ static if(DX112)
 
 	extern(Windows) public HRESULT CreateDXGIFactory2(uint Flags, const(GUID)* RIID, void **Factory);
 	extern(Windows) public HRESULT DXGIGetDebugInterface1(uint Flags, const(GUID)* RIID, void **Debug);
-}
+//}
