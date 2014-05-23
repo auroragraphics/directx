@@ -81,5 +81,6 @@
     <Compile Include="..\package.d" />
     <Compile Include="..\wic.d" />
     <Compile Include="..\d3d11.d" />
+    <Compile Include="..\d3dx11.d" />
   </ItemGroup>
 </Project>

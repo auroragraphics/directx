@@ -624,8 +624,8 @@ extern(Windows):
 // Core D3D11
 //
 
-//HRESULT D3D11CreateDevice(IDXGIAdapter *pAdapter, D3D_DRIVER_TYPE DriverType, HMODULE Software, UINT Flags, const D3D_FEATURE_LEVEL *pFeatureLevels, UINT FeatureLevels, UINT SDKVersion, ID3D11Device **ppDevice, D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11DeviceContext **ppImmediateContext);
-//HRESULT D3D11CreateDeviceAndSwapChain(IDXGIAdapter *pAdapter, D3D_DRIVER_TYPE DriverType, HMODULE Software, UINT Flags, const D3D_FEATURE_LEVEL *pFeatureLevels, UINT FeatureLevels, UINT SDKVersion, const DXGI_SWAP_CHAIN_DESC *pSwapChainDesc, IDXGISwapChain **ppSwapChain, ID3D11Device **ppDevice, D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11DeviceContext **ppImmediateContext);
+HRESULT D3D11CreateDevice(IDXGIAdapter *pAdapter, D3D_DRIVER_TYPE DriverType, HMODULE Software, UINT Flags, const D3D_FEATURE_LEVEL *pFeatureLevels, UINT FeatureLevels, UINT SDKVersion, ID3D11Device **ppDevice, D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11DeviceContext **ppImmediateContext);
+HRESULT D3D11CreateDeviceAndSwapChain(IDXGIAdapter *pAdapter, D3D_DRIVER_TYPE DriverType, HMODULE Software, UINT Flags, const D3D_FEATURE_LEVEL *pFeatureLevels, UINT FeatureLevels, UINT SDKVersion, const DXGI_SWAP_CHAIN_DESC *pSwapChainDesc, IDXGISwapChain **ppSwapChain, ID3D11Device **ppDevice, D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11DeviceContext **ppImmediateContext);
 
 //
 // Enumerations
@@ -4053,7 +4053,7 @@ public enum D3D11_SHADER_TRACKING_RESOURCE_TYPE : int {
 }
 
 //}
-//static if(DX111)
+//static if(DX112)
 //{
 
 
@@ -4064,7 +4064,7 @@ public enum D3D11_SHADER_TRACKING_RESOURCE_TYPE : int {
 // Structures
 //
 
-//static if(DX111)
+//static if(DX110)
 //{
 
 public struct D3D11_INFO_QUEUE_FILTER {
@@ -4096,7 +4096,7 @@ public struct D3D11_MESSAGE {
 
 
 //}
-//static if(DX111)
+//static if(DX112)
 //{
 
 
@@ -4107,7 +4107,7 @@ public struct D3D11_MESSAGE {
 // Interfaces
 //
 
-//static if(DX111)
+//static if(DX110)
 //{
 
 mixin(uuid!(ID3D11Debug, "79cf2233-7536-4948-9d36-1e4692dc5760"));
@@ -4202,7 +4202,7 @@ extern(Windows):
 
 
 //}
-//static if(DX111)
+//static if(DX112)
 //{
 
 
