@@ -48,6 +48,7 @@
         <String>DX11_1</String>
       </VersionIds>
     </VersionIds>
+    <ExtraLinkerArguments>-v</ExtraLinkerArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Unittest|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,6 +60,7 @@
     <Externalconsole>true</Externalconsole>
     <Target>Executable</Target>
     <OutputName>libdxi</OutputName>
+    <ExtraLinkerArguments>-v</ExtraLinkerArguments>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\com.d">
@@ -76,10 +78,8 @@
     <Compile Include="..\config.d">
       <Link>config.d</Link>
     </Compile>
-    <Compile Include="..\d3d.d">
-      <Link>d3d.d</Link>
-    </Compile>
     <Compile Include="..\package.d" />
     <Compile Include="..\wic.d" />
+    <Compile Include="..\d3d11.d" />
   </ItemGroup>
 </Project>

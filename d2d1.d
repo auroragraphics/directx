@@ -2,7 +2,7 @@ module aurora.directx.d2d1;
 
 import aurora.directx.com;
 import aurora.directx.config;
-import aurora.directx.d3d;
+import aurora.directx.d3d11;
 import aurora.directx.dwrite;
 import aurora.directx.dxgi;
 import aurora.directx.wic;
@@ -255,9 +255,15 @@ import aurora.directx.wic;
 	//	Structures
 	//
 	
+	struct D3DCOLORVALUE {
+		float r;
+		float g;
+		float b;
+		float a;
+	}	
 	alias D3DCOLORVALUE D2D_COLOR_F;
 	alias D2D_COLOR_F D2D1_COLOR_F;
-	
+
 	public struct D2D_MATRIX_3X2_F {
 		float _11;
 		float _12;
