@@ -3,6 +3,8 @@ module aurora.directx.com;
 public import std.c.windows.windows;
 public import std.c.windows.com;
 
+import core.atomic;
+
 mixin(uuid!(IUnknown, "00000000-0000-0000-C000-000000000046"));
 mixin(uuid!(IClassFactory,"00000001-0000-0000-C000-000000000046"));
 
@@ -36,6 +38,36 @@ public struct STATSTG {
 	CLSID          clsid;
 	DWORD          grfStateBits;
 	DWORD          reserved;
+}
+
+public struct DXPtr(T : IUnknown)
+{
+	private T _value = null;
+
+	public @property T value() { return _value; }
+	alias value this;
+
+	@disable this(this);
+
+	public this(T value) {
+		_value = value;
+	}
+
+	public void opAssign(T value) {
+		if(_value !is null) {
+			_value.Release();
+			_value = value;
+		} else {
+			_value = value;
+		}
+	}
+
+	public ~this() {
+		if(_value !is null) {
+			_value.Release();
+			_value = null;
+		}
+	}
 }
 
 mixin(uuid!(ISequentialStream, "0C733A30-2A1C-11CE-ADE5-00AA0044773D"));
