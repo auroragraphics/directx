@@ -40,14 +40,12 @@ public struct STATSTG {
 	DWORD          reserved;
 }
 
-public struct DXPtr(T : IUnknown)
+public class DXPtr(T : IUnknown)
 {
 	private T _value = null;
 
 	public @property T value() { return _value; }
 	alias value this;
-
-	@disable this(this);
 
 	public this(T value) {
 		_value = value;
