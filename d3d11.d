@@ -1029,8 +1029,6 @@ public enum D3D11_TILED_RESOURCES_TIER {
 // Structures
 //
 
-//static if(DX110)
-//{
 alias RECT D3D11_RECT;
 
 public struct D3D11_BLEND_DESC {
@@ -1194,10 +1192,6 @@ public struct D3D11_VIEWPORT {
 	float MaxDepth;
 }
 
-//}
-//static if(DX111)
-//{
-
 public struct D3D11_BLEND_DESC1 {
 	bool AlphaToCoverageEnable;
 	bool IndependentBlendEnable;
@@ -1265,10 +1259,6 @@ public struct D3D11_RENDER_TARGET_BLEND_DESC1 {
 	ubyte          RenderTargetWriteMask;
 }
 
-//}
-//static if(DX112)
-//{
-
 public struct D3D11_FEATURE_DATA_D3D9_SIMPLE_INSTANCING_SUPPORT {
 	bool SimpleInstancingSupported;
 }
@@ -1284,14 +1274,9 @@ public struct D3D11_FEATURE_DATA_MARKER_SUPPORT {
 	bool Profile;
 }
 
-//}
-
 //
 // Interfaces
 //
-
-//static if(DX110)
-//{
 
 mixin(uuid!(ID3D11Asynchronous, "4b35d0cd-1e15-4258-9c98-1b1333f6dd3b"));
 public interface ID3D11Asynchronous : ID3D11DeviceChild
@@ -1532,10 +1517,6 @@ extern(Windows):
 	void GetDesc(D3D11_SAMPLER_DESC *pDesc);
 }
 
-//}
-//static if(DX111)
-//{
-
 mixin(uuid!(ID3D11BlendState1, "cc86fabe-da55-401d-85e7-e3c9de2877e9"));
 public interface ID3D11BlendState1 : ID3D11BlendState
 {
@@ -1594,10 +1575,6 @@ extern(Windows):
 	void GetDesc1(D3D11_RASTERIZER_DESC1 *pDesc);
 }
 
-//}
-//static if(DX112)
-//{
-
 mixin(uuid!(ID3D11Device2, "9d06dffa-d1e5-4d07-83a8-1bb123f2f841"));
 public interface ID3D11Device2 : ID3D11Device1
 {
@@ -1620,8 +1597,6 @@ extern(Windows):
 	HRESULT UpdateTileMappings(ID3D11Resource pTiledResource, uint NumTiledResourceRegions, const(D3D11_TILED_RESOURCE_COORDINATE) *pTiledResourceRegionStartCoordinates, const(D3D11_TILE_REGION_SIZE) *pTiledResourceRegionSizes, ID3D11Buffer pTilePool, uint NumRanges, const(uint) *pRangeFlags, const(uint) *pTilePoolStartOffsets, const(uint) *pRangeTileCounts, uint Flags);
 }
 
-//}
-
 //
 // Resources D3D11
 //
@@ -1631,9 +1606,6 @@ uint D3D11CalcSubresource(uint MipSlice, uint ArraySlice, uint MipLevels ) { ret
 //
 // Enumerations
 //
-
-//static if(DX110)
-//{
 
 public enum D3D11_BIND_FLAG : int { 
 	VERTEX_BUFFER     = 0x1L,
@@ -1766,16 +1738,6 @@ public enum D3D11_USAGE : int {
 	STAGING    = 3
 }
 
-//}
-//static if(DX111)
-//{
-
-
-
-//}
-//static if(DX112)
-//{
-
 public enum D3D11_CHECK_MULTISAMPLE_QUALITY_LEVELS_FLAG : int{ 
 	TILED_RESOURCE  = 0x1
 }
@@ -1796,14 +1758,9 @@ public enum D3D11_TILE_RANGE_FLAG : int {
 	REUSE_SINGLE_TILE  = 0x4
 }
 
-//}
-
 //
 // Structures
 //
-
-//static if(DX110)
-//{
 
 public struct D3D11_BUFFER_DESC {
 	uint ByteWidth;
@@ -2083,16 +2040,6 @@ public struct D3D11_TEXTURE3D_DESC {
 	uint MiscFlags;
 }
 
-//}
-//static if(DX111)
-//{
-
-
-
-//}
-//static if(DX112)
-//{
-
 public struct D3D11_PACKED_MIP_DESC {
 	ubyte NumStandardMips;
 	ubyte NumPackedMips;
@@ -2141,14 +2088,9 @@ public struct D3D11_UNORDERED_ACCESS_VIEW_DESC {
 	};
 }
 
-//}	
-
 //
 // Interfaces
 //
-
-//static if(DX110)
-//{
 
 mixin(uuid!(ID3D11Buffer, "48570b85-d1ee-4fcd-a250-eb350722b037"));
 public interface ID3D11Buffer : ID3D11Resource
@@ -2222,21 +2164,6 @@ extern(Windows):
 	void GetResource(ID3D11Resource **ppResource);
 }
 
-
-//}
-//static if(DX111)
-//{
-
-
-
-//}
-//static if(DX112)
-//{
-
-
-
-//}
-
 //
 // Shaders D3D11
 //
@@ -2244,9 +2171,6 @@ extern(Windows):
 //
 // Enumerations
 //
-
-//static if(DX110)
-//{
 
 public enum D3D11_CBUFFER_TYPE : int { 
 	CBUFFER,
@@ -2305,10 +2229,6 @@ public enum D3D11_TESSELLATOR_OUTPUT_PRIMITIVE : int {
 	TRIANGLE_CCW  = 4
 }
 
-//}
-//static if(DX111)
-//{
-
 public enum D3D11_SHADER_TYPE : int { 
 	VERTEX_SHADER    = 1,
 	HULL_SHADER      = 2,
@@ -2366,20 +2286,9 @@ public enum D3D11_TRACE_REGISTER_TYPE {
 	INTERFACE_POINTER                            = ( INPUT_CYCLE_COUNTER_REGISTER + 1 )
 }
 
-//}
-//static if(DX112)
-//{
-
-
-
-//}
-
 //
 // Structures
 //
-
-//static if(DX110)
-//{
 
 public struct D3D11_CLASS_INSTANCE_DESC {
 	uint InstanceId;
@@ -2540,10 +2449,6 @@ public struct D3D11_SIGNATURE_PARAMETER_DESC {
 	D3D_MIN_PRECISION MinPrecision;
 }
 
-//}
-//static if(DX111)
-//{
-
 alias ubyte D3D11_TRACE_COMPONENT_MASK;
 alias ushort D3D11_TRACE_MISC_OPERATIONS_MASK;
 
@@ -2640,20 +2545,9 @@ public struct D3D11_VERTEX_SHADER_TRACE_DESC {
 	ulong Invocation;
 }
 
-//}
-//static if(DX112)
-//{
-
-
-
-//}
-
 //
 // Interfaces
 //
-
-//static if(DX110)
-//{
 
 mixin(uuid!(ID3D11ClassInstance, "a6cd7faa-b0b7-4a2f-9436-8662a65797cb"));
 public interface ID3D11ClassInstance : ID3D11DeviceChild
@@ -2847,11 +2741,6 @@ public interface ID3D11VertexShader : ID3D11DeviceChild
 extern(Windows):
 }
 
-
-//}
-//static if(DX111)
-//{
-
 mixin(uuid!(ID3D11ShaderTrace, "36b013e6-2811-4845-baa7-d623fe0df104"));
 public interface ID3D11ShaderTrace : IUnknown
 {
@@ -2873,14 +2762,6 @@ extern(Windows):
 	HRESULT CreateShaderTrace(IUnknown *pShader, D3D11_SHADER_TRACE_DESC *pTraceDesc, ID3D11ShaderTrace *ppShaderTrace);
 }
 
-//}
-//static if(DX112)
-//{
-
-
-
-//}
-
 //
 // Layer D3D11
 //
@@ -2888,9 +2769,6 @@ extern(Windows):
 //
 // Enumerations
 //
-
-//static if(DX111)
-//{
 
 public enum D3D11_MESSAGE_CATEGORY : int { 
 	APPLICATION_DEFINED    = 0,
@@ -4019,10 +3897,6 @@ public enum D3D11_RLDO_FLAGS : int {
 	DETAIL   = 0x2
 }
 
-//}
-//static if(DX111)
-//{
-
 public enum D3D11_SHADER_TRACKING_OPTION : int { 
 	IGNORE                                        = 0,
 	TRACK_UNINITIALIZED                           = 0x1,
@@ -4052,20 +3926,9 @@ public enum D3D11_SHADER_TRACKING_RESOURCE_TYPE : int {
 	ALL                   = 7
 }
 
-//}
-//static if(DX112)
-//{
-
-
-
-//}
-
 //
 // Structures
 //
-
-//static if(DX110)
-//{
 
 public struct D3D11_INFO_QUEUE_FILTER {
 	D3D11_INFO_QUEUE_FILTER_DESC AllowList;
@@ -4089,26 +3952,9 @@ public struct D3D11_MESSAGE {
 	SIZE_T                 DescriptionByteLength;
 }
 
-//}
-//static if(DX111)
-//{
-
-
-
-//}
-//static if(DX112)
-//{
-
-
-
-//}
-
 //
 // Interfaces
 //
-
-//static if(DX110)
-//{
 
 mixin(uuid!(ID3D11Debug, "79cf2233-7536-4948-9d36-1e4692dc5760"));
 public interface ID3D11Debug : IUnknown
@@ -4174,10 +4020,6 @@ extern(Windows):
 	bool SetUseRef(bool UseRef);
 }
 
-//}
-//static if(DX111)
-//{
-
 mixin(uuid!(ID3D11RefDefaultTrackingOptions, "03916615-c644-418c-9bf4-75db5be63ca0"));
 public interface ID3D11RefDefaultTrackingOptions : IUnknown
 {
@@ -4199,12 +4041,3 @@ extern(Windows):
 	HRESULT SetShaderTrackingOptions(IUnknown *pShader, uint Options);
 	HRESULT SetShaderTrackingOptionsByType(uint ResourceTypeFlags, uint Options);
 }
-
-
-//}
-//static if(DX112)
-//{
-
-
-
-//}
