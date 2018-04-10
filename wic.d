@@ -1,7 +1,6 @@
 ﻿module aurora.directx.wic;
 
 import aurora.directx.com;
-import aurora.directx.config;
 
 alias uint WICColor;
 
