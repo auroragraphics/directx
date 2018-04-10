@@ -1,7 +1,6 @@
 module aurora.directx.d2d1;
 
 import aurora.directx.com;
-import aurora.directx.config;
 import aurora.directx.d3d11;
 import aurora.directx.dwrite;
 import aurora.directx.dxgi;

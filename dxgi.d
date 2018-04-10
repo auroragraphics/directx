@@ -1,7 +1,6 @@
 module aurora.directx.dxgi;
 
 import aurora.directx.com;
-import aurora.directx.config;
 
 public:
 

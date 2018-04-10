@@ -2,7 +2,6 @@
 
 import std.bitmanip;
 import aurora.directx.com;
-import aurora.directx.config;
 import aurora.directx.dxgi;
 import aurora.directx.d3d11;
 
