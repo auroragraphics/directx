@@ -294,7 +294,7 @@ public:
 	//
 
 	public struct DXGI_ADAPTER_DESC {
-		wchar Description[128];
+		wchar[128] Description;
 		uint VendorId;
 		uint DeviceId;
 		uint SubSysId;
@@ -306,7 +306,7 @@ public:
 	}
 	
 	public struct DXGI_ADAPTER_DESC1 {
-		wchar Description[128];
+		wchar[128] Description;
 		uint VendorId;
 		uint DeviceId;
 		uint SubSysId;
@@ -327,17 +327,17 @@ public:
 	}
 	
 	public struct DXGI_GAMMA_CONTROL {
-		DXGI_RGB Scale;
-		DXGI_RGB Offset;
-		DXGI_RGB GammaCurve[1025];
+		DXGI_RGB               Scale;
+		DXGI_RGB               Offset;
+		DXGI_RGB[1025]         GammaCurve;
 	}
 	
 	public struct DXGI_GAMMA_CONTROL_CAPABILITIES {
-		BOOL ScaleAndOffsetSupported;
-		float MaxConvertedValue;
-		float MinConvertedValue;
-		uint NumGammaControlPoints;
-		float ControlPointPositions[1025];
+		BOOL                   ScaleAndOffsetSupported;
+		float                  MaxConvertedValue;
+		float                  MinConvertedValue;
+		uint                   NumGammaControlPoints;
+		float[1025]           ControlPointPosition;
 	}
 	
 	public struct DXGI_MAPPED_RECT {
@@ -355,7 +355,7 @@ public:
 	}
 	
 	public struct DXGI_OUTPUT_DESC {
-		wchar              DeviceName[32];
+		wchar[32]          DeviceName;
 		RECT               DesktopCoordinates;
 		BOOL               AttachedToDesktop;
 		DXGI_MODE_ROTATION Rotation;
@@ -661,7 +661,7 @@ public:
 	//
 
 	public struct DXGI_ADAPTER_DESC2 {
-		wchar Description[128];
+		wchar[128] Description;
 		uint VendorId;
 		uint DeviceId;
 		uint SubSysId;

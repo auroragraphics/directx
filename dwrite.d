@@ -309,7 +309,7 @@ alias ID2D1SimplifiedGeometrySink IDWriteGeometrySink;
 		ubyte lfClipPrecision;
 		ubyte lfQuality;
 		ubyte lfPitchAndFamily;
-		wchar lfFaceName[32];
+		wchar[32] lfFaceName;
 	}
 	
 	public struct DWRITE_CLUSTER_METRICS {
@@ -1258,7 +1258,7 @@ alias ID2D1SimplifiedGeometrySink IDWriteGeometrySink;
 	}
 	
 	public union DWRITE_PANOSE {
-		ubyte values[10];
+		ubyte[10] values;
 		DWRITE_PANOSE_FAMILY familyKind;
 		union {
 			struct text {

@@ -1036,7 +1036,7 @@ alias RECT D3D11_RECT;
 public struct D3D11_BLEND_DESC {
 	bool AlphaToCoverageEnable;
 	bool IndependentBlendEnable;
-	D3D11_RENDER_TARGET_BLEND_DESC RenderTarget[8];
+	D3D11_RENDER_TARGET_BLEND_DESC[8] RenderTarget;
 }
 
 public struct D3D11_BOX {
@@ -1171,7 +1171,7 @@ public struct D3D11_SAMPLER_DESC {
 	float                      MipLODBias;
 	uint                       MaxAnisotropy;
 	D3D11_COMPARISON_FUNC      ComparisonFunc;
-	float                      BorderColor[4];
+	float[4]                   BorderColor;
 	float                      MinLOD;
 	float                      MaxLOD;
 }
@@ -1201,7 +1201,7 @@ public struct D3D11_VIEWPORT {
 public struct D3D11_BLEND_DESC1 {
 	bool AlphaToCoverageEnable;
 	bool IndependentBlendEnable;
-	D3D11_RENDER_TARGET_BLEND_DESC1 RenderTarget[8];
+	D3D11_RENDER_TARGET_BLEND_DESC1[8] RenderTarget;
 }
 
 public struct D3D11_FEATURE_DATA_ARCHITECTURE_INFO {
@@ -1391,10 +1391,10 @@ public interface ID3D11DeviceContext : ID3D11DeviceChild
 extern(Windows):
 	void Begin(ID3D11Asynchronous *pAsync);
 	void ClearDepthStencilView(ID3D11DepthStencilView pDepthStencilView, uint ClearFlags, float Depth, ubyte Stencil);
-	void ClearRenderTargetView(ID3D11RenderTargetView pRenderTargetView, const float ColorRGBA[4]);
+	void ClearRenderTargetView(ID3D11RenderTargetView pRenderTargetView, const float[4] ColorRGBA);
 	void ClearState();
-	void ClearUnorderedAccessViewFloat(ID3D11UnorderedAccessView pUnorderedAccessView, const float Values[4]);
-	void ClearUnorderedAccessViewUint(ID3D11UnorderedAccessView pUnorderedAccessView, const uint Values[4]);
+	void ClearUnorderedAccessViewFloat(ID3D11UnorderedAccessView pUnorderedAccessView, const float[4] Values);
+	void ClearUnorderedAccessViewUint(ID3D11UnorderedAccessView pUnorderedAccessView, const uint[4] Values);
 	void CopyResource(ID3D11Resource pDstResource, ID3D11Resource pSrcResource);
 	void CopyStructureCount(ID3D11Buffer pDstBuffer, uint DstAlignedByteOffset, ID3D11UnorderedAccessView pSrcView);
 	void CopySubresourceRegion(ID3D11Resource pDstResource, uint DstSubresource, uint DstX, uint DstY, uint DstZ, ID3D11Resource pSrcResource, uint SrcSubresource, const D3D11_BOX *pSrcBox);
@@ -1460,11 +1460,11 @@ extern(Windows):
 	void IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY Topology);
 	void IASetVertexBuffers(uint StartSlot, uint NumBuffers, const(ID3D11Buffer) *ppVertexBuffers, const(uint) *pStrides, const(uint) *pOffsets);
 	HRESULT Map(ID3D11Resource pResource, uint Subresource, D3D11_MAP MapType, uint MapFlags, D3D11_MAPPED_SUBRESOURCE *pMappedResource);
-	void OMGetBlendState(ID3D11BlendState *ppBlendState, float BlendFactor[4], uint* pSampleMask);
+	void OMGetBlendState(ID3D11BlendState *ppBlendState, float[4] BlendFactor, uint* pSampleMask);
 	void OMGetDepthStencilState(ID3D11DepthStencilState *ppDepthStencilState, uint* pStencilRef);
 	void OMGetRenderTargets(uint NumViews, ID3D11RenderTargetView *ppRenderTargetViews, ID3D11DepthStencilView *ppDepthStencilView);
 	void OMGetRenderTargetsAndUnorderedAccessViews(uint NumViews, ID3D11RenderTargetView *ppRenderTargetViews, ID3D11DepthStencilView *ppDepthStencilView, uint UAVStartSlot, uint NumUAVs, ID3D11UnorderedAccessView *ppUnorderedAccessViews);
-	void OMSetBlendState(ID3D11BlendState pBlendState, const float BlendFactor[4], uint SampleMask);
+	void OMSetBlendState(ID3D11BlendState pBlendState, const float[4] BlendFactor, uint SampleMask);
 	void OMSetDepthStencilState(ID3D11DepthStencilState pDepthStencilState, uint StencilRef);
 	void OMSetRenderTargets(uint NumViews, const(ID3D11RenderTargetView) *ppRenderTargetViews, ID3D11DepthStencilView pDepthStencilView);
 	void OMSetRenderTargetsAndUnorderedAccessViews(uint NumViews, const(ID3D11RenderTargetView) *ppRenderTargetViews, ID3D11DepthStencilView pDepthStencilView, uint UAVStartSlot, uint NumUAVs, const(ID3D11UnorderedAccessView) *ppUnorderedAccessView, const(uint) *pUAVInitialCounts);
@@ -1560,7 +1560,7 @@ mixin(uuid!(ID3D11DeviceContext1, "bb2c6faa-b5fb-4082-8e6b-388b8cfa90e1"));
 public interface ID3D11DeviceContext1 : ID3D11DeviceContext
 {
 extern(Windows):
-	void ClearView(ID3D11View pView, const(float) Color[4], const(D3D11_RECT) *pRect, uint NumRects);
+	void ClearView(ID3D11View pView, const(float[4]) Color, const(D3D11_RECT) *pRect, uint NumRects);
 	void CopySubresourceRegion1(ID3D11Resource pDstResource, uint DstSubresource, uint DstX, uint DstY, uint DstZ, ID3D11Resource pSrcResource, uint SrcSubresource, const(D3D11_BOX) *pSrcBox, uint CopyFlags);
 	void CSGetConstantBuffers1(uint StartSlot, uint NumBuffers, ID3D11Buffer *ppConstantBuffers, uint* pFirstConstant, uint* pNumConstants);
 	void CSSetConstantBuffers1(uint StartSlot, uint NumBuffers, const(ID3D11Buffer) *ppConstantBuffers, const(uint)*pFirstConstant, const(uint)*pNumConstants);
@@ -2549,8 +2549,8 @@ alias ushort D3D11_TRACE_MISC_OPERATIONS_MASK;
 
 public struct D3D11_COMPUTE_SHADER_TRACE_DESC {
 	ulong Invocation;
-	uint ThreadIDInGroup[ 3 ];
-	uint ThreadGroupID[ 3 ];
+	uint[3] ThreadIDInGroup;
+	uint[3] ThreadGroupID;
 }
 
 public struct D3D11_DOMAIN_SHADER_TRACE_DESC {
@@ -2589,7 +2589,7 @@ public struct D3D11_TRACE_REGISTER {
 	D3D11_TRACE_REGISTER_TYPE RegType;
 	union {		
 		ushort Index1D;		
-		ushort Index2D[2];
+		ushort[2] Index2D;
 	};
 	ubyte OperandIndex;
 	ubyte Flags;
@@ -2600,25 +2600,25 @@ public struct D3D11_TRACE_STATS {
 	ubyte NumInvocationsInStamp;
 	ubyte TargetStampIndex;
 	uint NumTraceSteps;
-	D3D11_TRACE_COMPONENT_MASK InputMask[ 32 ];
-	D3D11_TRACE_COMPONENT_MASK OutputMask[ 32 ];
+	D3D11_TRACE_COMPONENT_MASK[32] InputMask;
+	D3D11_TRACE_COMPONENT_MASK[32] OutputMask;
 	ushort NumTemps;
 	ushort MaxIndexableTempIndex;
-	ushort IndexableTempSize[ 4096 ];
+	ushort[4096] IndexableTempSize;
 	ushort ImmediateConstantBufferSize;
-	uint PixelPosition[ 4 ][ 2 ];
-	ulong PixelCoverageMask[ 4 ];
-	ulong PixelDiscardedMask[ 4 ];
-	ulong PixelCoverageMaskAfterShader[ 4 ];
-	ulong PixelCoverageMaskAfterA2CSampleMask[ 4 ];
-	ulong PixelCoverageMaskAfterA2CSampleMaskDepth[ 4 ];
-	ulong PixelCoverageMaskAfterA2CSampleMaskDepthStencil[ 4 ];
+	uint[4][2] PixelPosition;
+	ulong[4] PixelCoverageMask;
+	ulong[4] PixelDiscardedMask;
+	ulong[4] PixelCoverageMaskAfterShader;
+	ulong[4] PixelCoverageMaskAfterA2CSampleMask;
+	ulong[4] PixelCoverageMaskAfterA2CSampleMaskDepth;
+	ulong[4] PixelCoverageMaskAfterA2CSampleMaskDepthStencil;
 	bool PSOutputsDepth;
 	bool PSOutputsMask;
 	D3D11_TRACE_GS_INPUT_PRIMITIVE GSInputPrimitive;
 	bool GSInputsPrimitiveID;
-	D3D11_TRACE_COMPONENT_MASK HSOutputPatchConstantMask[ 32 ];
-	D3D11_TRACE_COMPONENT_MASK DSInputPatchConstantMask[ 32 ];
+	D3D11_TRACE_COMPONENT_MASK[32] HSOutputPatchConstantMask;
+	D3D11_TRACE_COMPONENT_MASK[32] DSInputPatchConstantMask;
 }
 
 public struct D3D11_TRACE_STEP {
@@ -2632,7 +2632,7 @@ public struct D3D11_TRACE_STEP {
 }
 
 public struct D3D11_TRACE_VALUE {
-	uint Bits[ 4 ];
+	uint[4] Bits;
 	D3D11_TRACE_COMPONENT_MASK ValidMask;
 }
 

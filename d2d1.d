@@ -282,7 +282,7 @@ import aurora.directx.wic;
 				float _31, _32, _33;
 				float _41, _42, _43;
 			}
-			float m[4][3];
+			float[4][3] m;
 		}
 	}
 	alias D2D_MATRIX_4X3_F D2D1_MATRIX_4X3_F;
@@ -295,7 +295,7 @@ import aurora.directx.wic;
 				float _31, _32, _33, _34;
 				float _41, _42, _43, _44;
 			}
-			float m[4][4];
+			float[4][4] m;
 		}
 	}
 	alias D2D_MATRIX_4X4_F D2D1_MATRIX_4X4_F;
@@ -309,7 +309,7 @@ import aurora.directx.wic;
 				float _41, _42, _43, _44;
 				float _51, _52, _53, _54;
 			}
-			float m[5][4];
+			float[5][4] m;
 		}
 	}
 	alias D2D_MATRIX_5X4_F D2D1_MATRIX_5X4_F;
@@ -1154,7 +1154,7 @@ import aurora.directx.wic;
 		D2D1_BLEND           sourceBlendAlpha;
 		D2D1_BLEND           destinationBlendAlpha;
 		D2D1_BLEND_OPERATION blendOperationAlpha;
-		float                blendFactor[4];
+		float[4]             blendFactor;
 	}
 	
 	public struct D2D1_CREATION_PROPERTIES {
@@ -1505,8 +1505,8 @@ import aurora.directx.wic;
 		HRESULT GetEffectInvalidRectangles(ID2D1Effect effect, D2D1_RECT_F *, uint rectanglesCount);
 		HRESULT GetEffectRequiredInputRectangles(ID2D1Effect renderEffect, const D2D1_RECT_F *renderImageRectangle, const D2D1_EFFECT_INPUT_DESCRIPTION *inputDescriptions, D2D1_RECT_F *requiredInputRects, uint inputCount);
 		HRESULT GetGlyphRunWorldBounds(D2D1_POINT_2F baselineOrigin, const DWRITE_GLYPH_RUN *glyphRun, DWRITE_MEASURING_MODE measuringMode, D2D1_RECT_F **bounds);
-		void GetImageLocalBounds(ID2D1Image image, D2D1_RECT_F localBounds[1]);
-		HRESULT GetImageWorldBounds(ID2D1Image image, D2D1_RECT_F worldBounds[1]);
+		void GetImageLocalBounds(ID2D1Image image, D2D1_RECT_F[1] localBounds);
+		HRESULT GetImageWorldBounds(ID2D1Image image, D2D1_RECT_F[1] worldBounds);
 		D2D1_PRIMITIVE_BLEND GetPrimitiveBlend();
 		void GetRenderingControls(D2D1_RENDERING_CONTROLS *renderingControls);
 		void GetTarget(ID2D1Image *target);

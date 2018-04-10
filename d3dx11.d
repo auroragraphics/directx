@@ -64,14 +64,14 @@ public enum D3DX11_SCAN_OPCODE : int {
 
 public struct D3DX11_FFT_BUFFER_INFO {
 	uint NumTempBufferSizes;
-	uint TempBufferFloatSizes[D3DX11_FFT_MAX_TEMP_BUFFERS];
+	uint[D3DX11_FFT_MAX_TEMP_BUFFERS] TempBufferFloatSizes;
 	uint NumPrecomputeBufferSizes;
-	uint PrecomputeBufferFloatSizes[D3DX11_FFT_MAX_PRECOMPUTE_BUFFERS];
+	uint[D3DX11_FFT_MAX_PRECOMPUTE_BUFFERS] PrecomputeBufferFloatSizes;
 }
 
 public struct D3DX11_FFT_DESC {
 	uint NumDimensions;
-	uint ElementLengths[D3DX11_FFT_MAX_DIMENSIONS];
+	uint[D3DX11_FFT_MAX_DIMENSIONS] ElementLengths;
 	uint DimensionMask;
 	D3DX11_FFT_DATA_TYPE Type;
 }
