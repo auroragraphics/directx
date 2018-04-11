@@ -1,4 +1,4 @@
-module aurora.directx.d3d11;
+module aurora.directx.d3d11.d3d11_0;
 
 import std.bitmanip;
 import aurora.directx.com;

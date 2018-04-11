@@ -2,7 +2,7 @@ DEBUGOPTS64="-lib -m64 -debug -g -gs -gx -c -lib -I../.. -of./lib/libaurora_dire
 RELOPTS64="-lib -m64 -O -release -inline -c -lib -I../.. -of./lib/libaurora_directx64.lib"
 DEBUGOPTS32="-lib -m32mscoff -debug -g -gs -gx -c -lib -I../.. -of./lib/libaurora_directx32d.lib"
 RELOPTS32="-lib -m32mscoff -O -release -inline -c -lib -I../.. -of./lib/libaurora_directx32.lib"
-SRCFILES="com.d dxgi.d d2d1.d dwrite.d d3d11.d d3dx11.d package.d wic.d"
+SRCFILES="./**/*.d"
 
 printf "Building the Aurora DirectX x64 (Release) library ... "
 dmd $SRCFILES $RELOPTS64
