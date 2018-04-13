@@ -1,4 +1,4 @@
-module aurora.directx.d2d.d2d1_0;
+module aurora.directx.d2d1.d2d1_0;
 
 import aurora.directx.com;
 import aurora.directx.d3d11;
@@ -6,6 +6,8 @@ import aurora.directx.dwrite;
 import aurora.directx.dxgi;
 import aurora.directx.wic;
 
+
+public: 
 //
 //	Constants
 //
@@ -65,6 +67,15 @@ enum D2DERR_WRONG_RESOURCE_DOMAIN = 0x88990015;
 enum D2DERR_WRONG_STATE = 0x88990001;
 enum D2DERR_ZERO_VECTOR = 0x88990007;
 
+enum int D2D1_INTERPOLATION_MODE_DEFINITION_NEAREST_NEIGHBOR = 0;
+enum int D2D1_INTERPOLATION_MODE_DEFINITION_LINEAR = 1;
+enum int D2D1_INTERPOLATION_MODE_DEFINITION_CUBIC = 2;
+enum int D2D1_INTERPOLATION_MODE_DEFINITION_MULTI_SAMPLE_LINEAR = 3;
+enum int D2D1_INTERPOLATION_MODE_DEFINITION_ANISOTROPIC = 4;
+enum int D2D1_INTERPOLATION_MODE_DEFINITION_HIGH_QUALITY_CUBIC = 5;
+enum int D2D1_INTERPOLATION_MODE_DEFINITION_FANT = 6;
+enum int D2D1_INTERPOLATION_MODE_DEFINITION_MIPMAP_LINEAR = 7;
+
 //
 //	Enumerations
 //
@@ -84,11 +95,6 @@ public enum D2D1_ANTIALIAS_MODE : int {
 public enum D2D1_ARC_SIZE { 
 	SMALL  = 0,
 	LARGE  = 1
-} 
-
-public enum D2D1_BITMAP_INTERPOLATION_MODE : int { 
-	NEAREST_NEIGHBOR  = 0,
-	LINEAR            = 1
 } 
 
 public enum D2D1_CAP_STYLE : int { 
@@ -130,6 +136,13 @@ public enum D2D1_DEBUG_LEVEL : int {
 	WARNING      = 2,
 	INFORMATION  = 3
 } 
+
+enum D2D1_BITMAP_INTERPOLATION_MODE
+{
+    NEAREST_NEIGHBOR = D2D1_INTERPOLATION_MODE_DEFINITION_NEAREST_NEIGHBOR,
+    LINEAR = D2D1_INTERPOLATION_MODE_DEFINITION_LINEAR,
+    FORCE_DWORD = 0xffffffff
+}
 
 public enum D2D1_DRAW_TEXT_OPTIONS : int { 
 	NO_SNAP            = 0x00000001,

@@ -1,11 +1,19 @@
-module aurora.directx.dwrite.dwrite1_2;
+module aurora.directx.dwrite.dwrite_2;
 
 import std.bitmanip;
 import aurora.directx.com;
-import aurora.directx.d2d;
+import aurora.directx.d2d1;
 import aurora.directx.d3d11;
 
-public import aurora.directx.dwrite.dwrite1_1;
+public import aurora.directx.dwrite.dwrite_1;
+
+public:
+
+enum DWRITE_GRID_FIT_MODE {
+	DEFAULT, 
+	DISABLED, 
+	ENABLED
+}
 
 public enum DWRITE_OPTICAL_ALIGNMENT : int { 
 	NONE,
@@ -120,3 +128,10 @@ extern(Windows):
 	HRESULT GetSystemFontFallback(IDWriteFontFallback *FontFallback);
 	HRESULT TranslateColorGlyphRun(float BaselineOriginX, float BaselineOriginY, const DWRITE_GLYPH_RUN *GlyphRun, const DWRITE_GLYPH_RUN_DESCRIPTION *GlyphRunDescription, DWRITE_MEASURING_MODE MeasuringMode, const DWRITE_MATRIX *WorldToDeviceTransform, uint ColorPaletteIndex, IDWriteColorGlyphRunEnumerator *ColorLayers);
 }
+
+mixin(uuid!(IDWriteRenderingParams2, "F9D711C3-9777-40AE-87E8-3E5AF9BF0948"));
+interface IDWriteRenderingParams2 : IDWriteRenderingParams1
+{
+    DWRITE_GRID_FIT_MODE GetGridFitMode();
+};
+

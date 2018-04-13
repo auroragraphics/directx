@@ -1,11 +1,11 @@
-module aurora.directx.dwrite.dwrite1_1;
+module aurora.directx.dwrite.dwrite_1;
 
 import std.bitmanip;
 import aurora.directx.com;
-import aurora.directx.d2d;
+import aurora.directx.d2d1;
 import aurora.directx.d3d11;
 
-public import aurora.directx.dwrite.dwrite1_0;
+public import aurora.directx.dwrite.dwrite_0;
 
 public enum DWRITE_BASELINE : int {  
 	DEFAULT, 

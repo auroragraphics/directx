@@ -1,4 +1,4 @@
-module aurora.directx.d2d.d2d1_1;
+module aurora.directx.d2d1.d2d1_1;
 
 import aurora.directx.com;
 import aurora.directx.d3d11;
@@ -6,7 +6,7 @@ import aurora.directx.dwrite;
 import aurora.directx.dxgi;
 import aurora.directx.wic;
 
-public import aurora.directx.d2d.d2d1_0;
+public import aurora.directx.d2d1.d2d1_0;
 
 //
 //	Enumerations

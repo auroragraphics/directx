@@ -1,0 +1,199 @@
+module aurora.directx.d2d1.d2d1effects_2;
+
+import aurora.directx.com;
+
+public import aurora.directx.d2d1.d2d1effects_1;
+
+public:
+
+const IID CLSID_D2D1Contrast = {0xb648a78a, 0x0ed5, 0x4f80, [0xa9, 0x4a, 0x8e, 0x82, 0x5a, 0xca, 0x6b, 0x77]};
+const IID CLSID_D2D1RgbToHue = {0x23f3e5ec, 0x91e8, 0x4d3d, [0xad, 0x0a, 0xaf, 0xad, 0xc1, 0x00, 0x4a, 0xa1]};
+const IID CLSID_D2D1HueToRgb = {0x7b78a6bd, 0x0141, 0x4def, [0x8a, 0x52, 0x63, 0x56, 0xee, 0x0c, 0xbd, 0xd5]};
+const IID CLSID_D2D1ChromaKey = {0x74C01F5B, 0x2A0D, 0x408C, [0x88, 0xE2, 0xC7, 0xA3, 0xC7, 0x19, 0x77, 0x42]};
+const IID CLSID_D2D1Emboss = {0xb1c5eb2b, 0x0348, 0x43f0, [0x81, 0x07, 0x49, 0x57, 0xca, 0xcb, 0xa2, 0xae]};
+const IID CLSID_D2D1Exposure = {0xb56c8cfa, 0xf634, 0x41ee, [0xbe, 0xe0, 0xff, 0xa6, 0x17, 0x10, 0x60, 0x04]};
+const IID CLSID_D2D1Grayscale = {0x36DDE0EB, 0x3725, 0x42E0, [0x83, 0x6D, 0x52, 0xFB, 0x20, 0xAE, 0xE6, 0x44]};
+const IID CLSID_D2D1Invert = {0xe0c3784d, 0xcb39, 0x4e84, [0xb6, 0xfd, 0x6b, 0x72, 0xf0, 0x81, 0x02, 0x63]};
+const IID CLSID_D2D1Posterize = {0x2188945e, 0x33a3, 0x4366, [0xb7, 0xbc, 0x08, 0x6b, 0xd0, 0x2d, 0x08, 0x84]};
+const IID CLSID_D2D1Sepia = {0x3a1af410, 0x5f1d, 0x4dbe, [0x84, 0xdf, 0x91, 0x5d, 0xa7, 0x9b, 0x71, 0x53]};
+const IID CLSID_D2D1Sharpen = {0xC9B887CB, 0xC5FF, 0x4DC5, [0x97, 0x79, 0x27, 0x3D, 0xCF, 0x41, 0x7C, 0x7D]};
+const IID CLSID_D2D1Straighten = {0x4da47b12, 0x79a3, 0x4fb0, [0x82, 0x37, 0xbb, 0xc3, 0xb2, 0xa4, 0xde, 0x08]};
+const IID CLSID_D2D1TemperatureTint = {0x89176087, 0x8AF9, 0x4A08, [0xAE, 0xB1, 0x89, 0x5F, 0x38, 0xDB, 0x17, 0x66]};
+const IID CLSID_D2D1Vignette = {0xc00c40be, 0x5e67, 0x4ca3, [0x95, 0xb4, 0xf4, 0xb0, 0x2c, 0x11, 0x51, 0x35]};
+const IID CLSID_D2D1EdgeDetection = {0xEFF583CA, 0xCB07, 0x4AA9, [0xAC, 0x5D, 0x2C, 0xC4, 0x4C, 0x76, 0x46, 0x0F]};
+const IID CLSID_D2D1HighlightsShadows = {0xCADC8384, 0x323F, 0x4C7E, [0xA3, 0x61, 0x2E, 0x2B, 0x24, 0xDF, 0x6E, 0xE4]};
+const IID CLSID_D2D1LookupTable3D = {0x349E0EDA, 0x0088, 0x4A79, [0x9C, 0xA3, 0xC7, 0xE3, 0x00, 0x20, 0x20, 0x20]};
+const IID CLSID_D2D1Opacity = {0x811d79a4, 0xde28, 0x4454, [0x80, 0x94, 0xc6, 0x46, 0x85, 0xf8, 0xbd, 0x4c]};
+const IID CLSID_D2D1AlphaMask = {0xc80ecff0, 0x3fd5, 0x4f05, [0x83, 0x28, 0xc5, 0xd1, 0x72, 0x4b, 0x4f, 0x0a]};
+const IID CLSID_D2D1CrossFade = {0x12f575e8, 0x4db1, 0x485f, [0x9a, 0x84, 0x03, 0xa0, 0x7d, 0xd3, 0x82, 0x9f]};
+const IID CLSID_D2D1Tint = {0x36312b17, 0xf7dd, 0x4014, [0x91, 0x5d, 0xff, 0xca, 0x76, 0x8c, 0xf2, 0x11]};
+
+enum D2D1_CONTRAST_PROP
+{
+    CONTRAST = 0,
+    CLAMP_INPUT = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_RGBTOHUE_PROP
+{
+    OUTPUT_COLOR_SPACE = 0,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_RGBTOHUE_OUTPUT_COLOR_SPACE
+{
+    HUE_SATURATION_VALUE = 0,
+    HUE_SATURATION_LIGHTNESS = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_HUETORGB_PROP
+{
+    INPUT_COLOR_SPACE = 0,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_HUETORGB_INPUT_COLOR_SPACE
+{
+    HUE_SATURATION_VALUE = 0,
+    HUE_SATURATION_LIGHTNESS = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_CHROMAKEY_PROP
+{
+    COLOR = 0,
+    TOLERANCE = 1,
+    INVERT_ALPHA = 2,
+    FEATHER = 3,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_EMBOSS_PROP
+{
+    HEIGHT = 0,
+    DIRECTION = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_EXPOSURE_PROP
+{
+    EXPOSURE_VALUE = 0,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_POSTERIZE_PROP
+{
+    RED_VALUE_COUNT = 0,
+    GREEN_VALUE_COUNT = 1,
+    BLUE_VALUE_COUNT = 2,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_SEPIA_PROP
+{
+    INTENSITY = 0,
+    ALPHA_MODE = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_SHARPEN_PROP
+{
+    SHARPNESS = 0,
+    THRESHOLD = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_STRAIGHTEN_PROP
+{
+    ANGLE = 0,
+    MAINTAIN_SIZE = 1,
+    SCALE_MODE = 2,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_STRAIGHTEN_SCALE_MODE
+{
+    NEAREST_NEIGHBOR = 0,
+    LINEAR = 1,
+    CUBIC = 2,
+    MULTI_SAMPLE_LINEAR = 3,
+    ANISOTROPIC = 4,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_TEMPERATUREANDTINT_PROP
+{
+    TEMPERATURE = 0,
+    TINT = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_VIGNETTE_PROP
+{
+    COLOR = 0,
+    TRANSITION_SIZE = 1,
+    STRENGTH = 2,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_EDGEDETECTION_PROP
+{
+    STRENGTH = 0,
+    BLUR_RADIUS = 1,
+    MODE = 2,
+    OVERLAY_EDGES = 3,
+    ALPHA_MODE = 4,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_EDGEDETECTION_MODE
+{
+    SOBEL = 0,
+    PREWITT = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_HIGHLIGHTSANDSHADOWS_PROP
+{
+    HIGHLIGHTS = 0,
+    SHADOWS = 1,
+    CLARITY = 2,
+    INPUT_GAMMA = 3,
+    MASK_BLUR_RADIUS = 4,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_HIGHLIGHTSANDSHADOWS_INPUT_GAMMA
+{
+    LINEAR = 0,
+    SRGB = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_LOOKUPTABLE3D_PROP
+{
+    LUT = 0,
+    ALPHA_MODE = 1,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_OPACITY_PROP
+{
+    OPACITY = 0,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_CROSSFADE_PROP
+{
+    WEIGHT = 0,
+    FORCE_DWORD = 0xffffffff
+}
+
+enum D2D1_TINT_PROP
+{
+    COLOR = 0,
+    CLAMP_OUTPUT = 1,
+    FORCE_DWORD = 0xffffffff
+}

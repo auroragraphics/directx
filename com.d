@@ -5,6 +5,8 @@ public import core.sys.windows.com;
 
 import core.atomic;
 
+public:
+
 mixin(uuid!(IUnknown, "00000000-0000-0000-C000-000000000046"));
 mixin(uuid!(IClassFactory,"00000001-0000-0000-C000-000000000046"));
 
@@ -13,9 +15,28 @@ public struct LUID {
 	int HighPart;
 }
 
+struct GUID {
+  ulong  Data1;
+  ushort Data2;
+  ushort Data3;
+  ubyte[8] Data4;
+}
+alias GUID UUID;
+
 public struct SIZE {
 	long X;
 	long Y;
+}
+
+struct FILETIME {
+  uint dwLowDateTime;
+  uint dwHighDateTime;
+}
+
+struct FONTSIGNATURE
+{
+    int[4] fsUsb;
+    int[2] fsCsb;
 }
 
 public template uuid(T, const char[] g) {
