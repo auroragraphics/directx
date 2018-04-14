@@ -4,7 +4,7 @@ import aurora.directx.com;
 public import aurora.directx.dxgi.dxgitype;
 public import aurora.directx.dxgi.dxgicommon;
 public import aurora.directx.dxgi.dxgiformat;
-public import aurora.directx.dxgi.dxgi1_0;
+public import aurora.directx.dxgi.dxgi;
 
 public:
 

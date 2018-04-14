@@ -5,3 +5,23 @@ import aurora.directx.com;
 import aurora.directx.dxgi;
 
 public:
+
+///
+/// Constants
+///
+
+///
+/// Functions
+///
+
+///
+/// Enumerations
+///
+
+///
+/// Structures
+///
+
+///
+/// Interfaces
+///

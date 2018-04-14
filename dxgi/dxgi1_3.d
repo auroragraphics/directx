@@ -4,7 +4,7 @@ import aurora.directx.com;
 public import aurora.directx.dxgi.dxgitype;
 public import aurora.directx.dxgi.dxgicommon;
 public import aurora.directx.dxgi.dxgiformat;
-public import aurora.directx.dxgi.dxgi1_1;
+public import aurora.directx.dxgi.dxgi1_2;
 
 public:
 
@@ -49,6 +49,12 @@ public struct DXGI_MATRIX_3X2_F {
 	float _32;
 }
 
+enum DXGI_OVERLAY_SUPPORT_FLAG
+{
+	DIRECT	= 0x1,
+	SCALING	= 0x2
+}
+
 //
 //	Interfaces
 //
@@ -59,7 +65,7 @@ public interface IDXGIDebug1 : IDXGIDebug
 extern(Windows):
 	void DisableLeakTrackingForThread();
 	void EnableLeakTrackingForThread();
-	BOOL IsLeakTrackingEnabledForThread();
+	bool IsLeakTrackingEnabledForThread();
 }
 
 mixin(uuid!(IDXGIDecodeSwapChain, "2633066b-4514-4c7a-8fd8-12ea98059d18"));
@@ -88,7 +94,7 @@ mixin(uuid!(IDXGIFactory3, "25483823-cd46-4c7d-86ca-47aa95b837bd"));
 interface IDXGIFactory3 : IDXGIFactory2
 {
 extern(Windows):
-	UINT GetCreationFlags();	
+	uint GetCreationFlags();	
 }
 
 mixin(uuid!(IDXGIFactoryMedia, "41e7d1f2-a591-4f7b-a2e5-fa9c843e1c12"));
@@ -103,7 +109,7 @@ mixin(uuid!(IDXGIOutput2, "595e39d1-2724-4663-99b1-da969de28364"));
 public interface IDXGIOutput2 : IDXGIOutput1
 {
 extern(Windows):
-	BOOL SupportsOverlays();
+	bool SupportsOverlays();
 }
 
 mixin(uuid!(IDXGISwapChain2, "a8be2ac4-199f-4946-b331-79599fb98de7"));
@@ -126,6 +132,13 @@ extern(Windows):
 	HRESULT CheckPresentDurationSupport(uint DesiredPresentDuration, uint *ClosestSmallerPresentDuration, uint *ClosestLargerPresentDuration);
 	HRESULT GetFrameStatisticsMedia(DXGI_FRAME_STATISTICS_MEDIA *Stats);
 	HRESULT SetPresentDuration(uint Duration);
+}
+
+mixin(uuid!(IDXGIOutput3, "8a6bb301-7e7e-41F4-a8e0-5b32f7f99b18"));
+public interface IDXGIOutput3 : IDXGIOutput2
+{
+extern(Windows):
+	HRESULT CheckOverlaySupport(DXGI_FORMAT EnumFormat, IUnknown pConcernedDevice, uint *pFlags);
 }
 
 //

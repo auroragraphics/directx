@@ -28,12 +28,12 @@ enum DXGI_HDR_METADATA_TYPE
     HDR10 = 1
 }
 
-enum _DXGI_OFFER_RESOURCE_FLAGS
+enum DXGI_OFFER_RESOURCE_FLAGS
 {
     ALLOW_DECOMMIT= 0x1
 }
 
-enum _DXGI_RECLAIM_RESOURCE_RESULTS
+enum DXGI_RECLAIM_RESOURCE_RESULTS
 {
     OK	= 0,
     DISCARDED	= 1,
@@ -64,6 +64,13 @@ struct DXGI_HDR_METADATA_HDR10
 ///
 /// Interfaces
 ///
+
+mixin(uuid!(IDXGIOutput5, "80A07424-AB52-42EB-833C-0C42FD282D98"));
+public interface IDXGIOutput5 : IDXGISwapChain3
+{
+extern(Windows):
+    HRESULT DuplicateOutput1(IUnknown pDevice, uint Flags, uint SupportedFormatsCount, const DXGI_FORMAT *pSupportedFormats, IDXGIOutputDuplication *ppOutputDuplication);
+}
 
 mixin(uuid!(IDXGISwapChain4, "3D585D5A-BD4A-489E-B1F4-3DBCB6452FFB"));
 public interface IDXGISwapChain4 : IDXGISwapChain3
