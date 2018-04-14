@@ -1,4 +1,4 @@
-module aurora.directx.dxgi.dxgi1_0;
+module aurora.directx.dxgi.dxgi;
 
 import aurora.directx.com;
 public import aurora.directx.dxgi.dxgitype;
