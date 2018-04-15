@@ -1,6 +1,6 @@
 module aurora.directx.d2d1.d2d1effects_0;
 
-import aurora.directx.com;
+public import aurora.directx.com;
 
 public:
 

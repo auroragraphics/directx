@@ -1,8 +1,6 @@
 module aurora.directx.d3d11.d3d11shadertracing;
 
-import std.bitmanip;
-import aurora.directx.com;
-import aurora.directx.d3d11.d3dcommon;
+public import aurora.directx.d3d.d3dcommon;
 
 public:
 

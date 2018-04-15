@@ -1,11 +1,6 @@
 module aurora.directx.d2d1.d2d1_1;
 
-import aurora.directx.com;
-import aurora.directx.d3d11;
-import aurora.directx.dwrite;
-import aurora.directx.dxgi;
-import aurora.directx.wic;
-
+public import aurora.directx.d3d.d3dcommon;
 public import aurora.directx.d2d1.d2d1_0;
 
 //

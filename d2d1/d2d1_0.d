@@ -1,13 +1,12 @@
 module aurora.directx.d2d1.d2d1_0;
 
-import aurora.directx.com;
-import aurora.directx.d3d11;
-import aurora.directx.dwrite;
-import aurora.directx.dxgi;
-import aurora.directx.wic;
-
+public import aurora.directx.com;
+public import aurora.directx.dwrite;
+public import aurora.directx.dxgi;
+public import aurora.directx.wic;
 
 public: 
+
 //
 //	Constants
 //
@@ -263,13 +262,6 @@ public enum D2D1_WINDOW_STATE : int {
 //
 //	Structures
 //
-
-struct D3DCOLORVALUE {
-	float r;
-	float g;
-	float b;
-	float a;
-}	
 alias D3DCOLORVALUE D2D_COLOR_F;
 alias D2D_COLOR_F D2D1_COLOR_F;
 

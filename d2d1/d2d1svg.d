@@ -1,9 +1,5 @@
 module aurora.directx.d2d1.d2d1svg;
 
-import aurora.directx.com;
-import aurora.directx.dwrite;
-import aurora.directx.dxgi;
-
 public import aurora.directx.d2d1.d2d1_2;
 
 public:

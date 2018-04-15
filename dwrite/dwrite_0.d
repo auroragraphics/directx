@@ -1,15 +1,16 @@
 module aurora.directx.dwrite.dwrite_0;
 
-import std.bitmanip;
-import aurora.directx.com;
-import aurora.directx.d2d1;
-import aurora.directx.d3d11;
+public import std.bitmanip;
+public import aurora.directx.com;
+public import aurora.directx.d2d1;
 
-alias ID2D1SimplifiedGeometrySink IDWriteGeometrySink;
+///
+/// Constants
+///
 
-//
-//  Functions
-//
+///
+/// Functions
+///
 
 public extern(C) HRESULT DWriteCreateFactory(DWRITE_FACTORY_TYPE FactoryType, GUID IID, IUnknown* Factory);
 
@@ -18,13 +19,9 @@ uint DWRITE_MAKE_OPENTYPE_TAG(char a, char b, char c, char d) {
 }
 alias DWRITE_MAKE_OPENTYPE_TAG DWRITE_MAKE_FONT_FEATURE_TAG;
 
-//
-//	Enumerations
-//
-
-//
-//	Structures
-//
+///
+/// Enumerations
+///
 
 public enum DWRITE_BREAK_CONDITION : int {  
 	NEUTRAL        = 0, 
@@ -303,6 +300,10 @@ public enum DWRITE_WORD_WRAPPING : int {
 	CHARACTER,	
 }
 
+///
+/// Structures
+///
+
 public struct DWRITE_CLUSTER_METRICS {
 	float  width;
 	ushort length;
@@ -488,6 +489,12 @@ public struct DWRITE_UNDERLINE {
 	const wchar              *localeName;
 	DWRITE_MEASURING_MODE    measuringMode;
 }
+
+///
+/// Interfaces
+///
+
+alias ID2D1SimplifiedGeometrySink IDWriteGeometrySink;
 
 mixin(uuid!(IDWriteBitmapRenderTarget, "5e5a32a3-8dff-4773-9ff6-0696eab77267"));
 public interface IDWriteBitmapRenderTarget : IUnknown

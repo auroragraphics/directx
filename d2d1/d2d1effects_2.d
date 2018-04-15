@@ -1,7 +1,5 @@
 module aurora.directx.d2d1.d2d1effects_2;
 
-import aurora.directx.com;
-
 public import aurora.directx.d2d1.d2d1effects_1;
 
 public:

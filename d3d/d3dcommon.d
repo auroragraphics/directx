@@ -1,7 +1,6 @@
-module aurora.directx.d3d11.d3dcommon;
+module aurora.directx.d3d.d3dcommon;
 
-import std.bitmanip;
-import aurora.directx.com;
+public import aurora.directx.com;
 
 public:
 

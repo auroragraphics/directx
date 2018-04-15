@@ -1,9 +1,9 @@
 module aurora.directx.d3d11.d3d11_0;
 
-import std.bitmanip;
-import aurora.directx.com;
-import aurora.directx.dxgi;
-public import aurora.directx.d3d11.d3dcommon;
+public import std.bitmanip;
+public import aurora.directx.com;
+public import aurora.directx.dxgi;
+public import aurora.directx.d3d.d3dcommon;
 public import aurora.directx.d3d11.d3d11shader;
 public import aurora.directx.d3d11.d3d11sdklayers;
 public import aurora.directx.d3d11.d3d11shadertracing;
@@ -12,8 +12,10 @@ public import aurora.directx.d3d11.d3d11shadertracing;
 // Core D3D11
 //
 
-HRESULT D3D11CreateDevice(IDXGIAdapter *pAdapter, D3D_DRIVER_TYPE DriverType, HMODULE Software, UINT Flags, const D3D_FEATURE_LEVEL *pFeatureLevels, UINT FeatureLevels, UINT SDKVersion, ID3D11Device **ppDevice, D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11DeviceContext **ppImmediateContext);
-HRESULT D3D11CreateDeviceAndSwapChain(IDXGIAdapter *pAdapter, D3D_DRIVER_TYPE DriverType, HMODULE Software, UINT Flags, const D3D_FEATURE_LEVEL *pFeatureLevels, UINT FeatureLevels, UINT SDKVersion, const DXGI_SWAP_CHAIN_DESC *pSwapChainDesc, IDXGISwapChain **ppSwapChain, ID3D11Device **ppDevice, D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11DeviceContext **ppImmediateContext);
+extern (Windows) {
+	HRESULT D3D11CreateDevice(IDXGIAdapter pAdapter, D3D_DRIVER_TYPE DriverType, HMODULE Software, UINT Flags, const D3D_FEATURE_LEVEL *pFeatureLevels, UINT FeatureLevels, UINT SDKVersion, ID3D11Device *ppDevice, D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11DeviceContext *ppImmediateContext);
+	HRESULT D3D11CreateDeviceAndSwapChain(IDXGIAdapter pAdapter, D3D_DRIVER_TYPE DriverType, HMODULE Software, UINT Flags, const D3D_FEATURE_LEVEL *pFeatureLevels, UINT FeatureLevels, UINT SDKVersion, const DXGI_SWAP_CHAIN_DESC *pSwapChainDesc, IDXGISwapChain *ppSwapChain, ID3D11Device *ppDevice, D3D_FEATURE_LEVEL *pFeatureLevel, ID3D11DeviceContext *ppImmediateContext);
+}
 
 //
 // Enumerations

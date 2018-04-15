@@ -1,13 +1,13 @@
 module aurora.directx.dwrite.dwrite_3;
 
-import std.bitmanip;
-import aurora.directx.com;
-import aurora.directx.d2d1;
-import aurora.directx.d3d11;
-
+public import aurora.directx.com;
 public import aurora.directx.dwrite.dwrite_2;
 
 public:
+
+///
+/// Constants
+///
 
 alias DWRITE_MAKE_OPENTYPE_TAG DWRITE_MAKE_FONT_AXIS_TAG;
 
@@ -15,6 +15,10 @@ enum DWRITE_E_REMOTEFONT = 0x8898500DL;
 enum DWRITE_E_DOWNLOADCANCELLED = 0x8898500EL;
 enum DWRITE_E_DOWNLOADFAILED = 0x8898500FL;
 enum DWRITE_E_TOOMANYDOWNLOADS = 0x88985010L;
+
+///
+/// Functions
+///
 
 ///
 /// Enumerations

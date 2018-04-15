@@ -1,13 +1,21 @@
 module aurora.directx.dwrite.dwrite_2;
 
-import std.bitmanip;
-import aurora.directx.com;
-import aurora.directx.d2d1;
-import aurora.directx.d3d11;
-
+public import aurora.directx.com;
 public import aurora.directx.dwrite.dwrite_1;
 
 public:
+
+///
+/// Constants
+///
+
+///
+/// Functions
+///
+
+///
+///	Enumerations
+///
 
 enum DWRITE_GRID_FIT_MODE {
 	DEFAULT, 
@@ -19,6 +27,10 @@ public enum DWRITE_OPTICAL_ALIGNMENT : int {
 	NONE,
 	NO_SIDE_BEARINGS,
 }
+
+///
+/// Structures
+///
 
 alias D3DCOLORVALUE DWRITE_COLOR_F;
 
@@ -36,6 +48,10 @@ public struct DWRITE_TEXT_METRICS1  {
 	alias base this;
 	float heightIncludingTrailingWhitespace;
 }
+
+///
+/// Interfaces
+///
 
 mixin(uuid!(IDWriteFont2, "29748ed6-8c9c-4a6a-be0b-d912e8538944"));
 public interface IDWriteFont2 : IDWriteFont1
