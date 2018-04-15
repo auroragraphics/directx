@@ -50,7 +50,7 @@ enum D3D11_SHADER_TYPE
     D3D11_COMPUTE_SHADER = 6
 }
 
-enum GS_INPUT_PRIMITIVE
+enum D3D11_TRACE_GS_INPUT_PRIMITIVE
 {
     UNDEFINED	= 0,
     POINT	= 1,
@@ -187,7 +187,7 @@ struct D3D11_TRACE_STATS
     ulong[4] PixelCoverageMaskAfterA2CSampleMaskDepthStencil;
     bool PSOutputsDepth;
     bool PSOutputsMask;
-    GS_INPUT_PRIMITIVE GSInputPrimitive;
+    D3D11_TRACE_GS_INPUT_PRIMITIVE GSInputPrimitive;
     bool GSInputsPrimitiveID;
     COMPONENT_MASK[32] HSOutputPatchConstantMask;
     COMPONENT_MASK[32] DSInputPatchConstantMask;
