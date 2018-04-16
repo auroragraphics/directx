@@ -1,0 +1,10 @@
+{
+	"name": "aurora-directx",
+	"description": "DirectX Interfaces for Aurora",
+	"license": "BSL-1.0",
+	"authors": [
+		"Adam Wilson"
+    ],
+    "copyright": "Adam Wilson (c) 2014-2018",
+    "targetType": "library"
+}
