@@ -8,3 +8,5 @@ public import aurora.directx.d2d1.d2d1svg;
 public import aurora.directx.d2d1.d2d1effects_0;
 public import aurora.directx.d2d1.d2d1effects_1;
 public import aurora.directx.d2d1.d2d1effects_2;
+public import aurora.directx.d2d1.d2d1effectauthor_0;
+public import aurora.directx.d2d1.d2d1effectauthor_1;
