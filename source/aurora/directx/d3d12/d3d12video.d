@@ -617,3 +617,53 @@ extern(Windows):
     void ProcessFrames(ID3D12VideoProcessor pVideoProcessor, const D3D12_VIDEO_PROCESS_OUTPUT_STREAM_ARGUMENTS *pOutputArguments, uint NumInputStreams, const D3D12_VIDEO_PROCESS_INPUT_STREAM_ARGUMENTS *pInputArguments);
     void WriteBufferImmediate(uint Count, const D3D12_WRITEBUFFERIMMEDIATE_PARAMETER *pParams, const D3D12_WRITEBUFFERIMMEDIATE_MODE *pModes);
 }
+
+struct D3D12_VIDEO_DECODE_OUTPUT_HISTOGRAM
+{
+    ulong Offset;
+    ID3D12Resource pBuffer;
+}
+
+struct D3D12_VIDEO_DECODE_CONVERSION_ARGUMENTS1
+{
+    bool Enable;
+    ID3D12Resource pReferenceTexture2D;
+    uint ReferenceSubresource;
+    DXGI_COLOR_SPACE_TYPE OutputColorSpace;
+    DXGI_COLOR_SPACE_TYPE DecodeColorSpace;
+    uint OutputWidth;
+    uint OutputHeight;
+}
+
+struct D3D12_VIDEO_DECODE_OUTPUT_STREAM_ARGUMENTS1
+{
+    ID3D12Resource pOutputTexture2D;
+    uint OutputSubresource;
+    D3D12_VIDEO_DECODE_CONVERSION_ARGUMENTS1 ConversionArguments;
+    D3D12_VIDEO_DECODE_OUTPUT_HISTOGRAM[4] Histograms;
+}
+
+mixin(uuid!(ID3D12VideoDecodeCommandList1, "D52F011B-B56E-453C-A05A-A7F311C8F472"));
+public interface ID3D12VideoDecodeCommandList1 : ID3D12VideoDecodeCommandList
+{
+extern(Windows):
+    void DecodeFrame1(ID3D12VideoDecoder pDecoder, const D3D12_VIDEO_DECODE_OUTPUT_STREAM_ARGUMENTS1 *pOutputArguments, const D3D12_VIDEO_DECODE_INPUT_STREAM_ARGUMENTS *pInputArguments);
+}
+
+struct D3D12_VIDEO_PROCESS_INPUT_STREAM_ARGUMENTS1
+{
+    D3D12_VIDEO_PROCESS_INPUT_STREAM[2] InputStream;
+    D3D12_VIDEO_PROCESS_TRANSFORM Transform;
+    D3D12_VIDEO_PROCESS_INPUT_STREAM_FLAGS Flags;
+    D3D12_VIDEO_PROCESS_INPUT_STREAM_RATE RateInfo;
+    int[32] FilterLevels;
+    D3D12_VIDEO_PROCESS_ALPHA_BLENDING AlphaBlending;
+    D3D12_VIDEO_FIELD_TYPE FieldType;
+}
+
+mixin(uuid!(ID3D12VideoProcessCommandList1, "542C5C4D-7596-434F-8C93-4EFA6766F267"));
+public interface ID3D12VideoProcessCommandList1 : ID3D12VideoProcessCommandList
+{
+extern(Windows):
+    void ProcessFrames1(ID3D12VideoProcessor pVideoProcessor, const D3D12_VIDEO_PROCESS_OUTPUT_STREAM_ARGUMENTS *pOutputArguments, uint NumInputStreams, const D3D12_VIDEO_PROCESS_INPUT_STREAM_ARGUMENTS1 *pInputArguments);
+}

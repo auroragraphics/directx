@@ -465,6 +465,7 @@ extern(Windows):
 mixin(uuid!(IDWriteFactory6, "F3744D80-21F7-42EB-B35D-995BC72FC223"));
 interface IDWriteFactory6 : IDWriteFactory5
 {
+extern(Windows):
     HRESULT CreateFontFaceReference(IDWriteFontFile fontFile, uint faceIndex, DWRITE_FONT_SIMULATIONS fontSimulations, const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, IDWriteFontFaceReference1* fontFaceReference);
     HRESULT CreateFontResource(IDWriteFontFile fontFile, uint faceIndex, IDWriteFontResource* fontResource);
     HRESULT GetSystemFontSet(bool includeDownloadableFonts, IDWriteFontSet1* fontSet);
@@ -474,10 +475,10 @@ interface IDWriteFactory6 : IDWriteFactory5
     HRESULT CreateTextFormat(const wchar* fontFamilyName, IDWriteFontCollection fontCollection, const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, float fontSize, const wchar* localeName, IDWriteTextFormat3* textFormat);
 }
 
-
 mixin(uuid!(IDWriteFontFace5, "98EFF3A5-B667-479A-B145-E2FA5B9FDC29"));
 interface IDWriteFontFace5 : IDWriteFontFace4
 {
+extern(Windows):
     uint GetFontAxisValueCount();
     HRESULT GetFontAxisValues(DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount);
     bool HasVariations();
@@ -488,6 +489,7 @@ interface IDWriteFontFace5 : IDWriteFontFace4
 mixin(uuid!(IDWriteFontResource, "1F803A76-6871-48E8-987F-B975551C50F2"));
 interface IDWriteFontResource : IUnknown
 {
+extern(Windows):
     HRESULT GetFontFile(IDWriteFontFile* fontFile);
     uint GetFontFaceIndex();
     uint GetFontAxisCount();
@@ -505,6 +507,7 @@ interface IDWriteFontResource : IUnknown
 mixin(uuid!(IDWriteFontFaceReference1, "C081FE77-2FD1-41AC-A5A3-34983C4BA61A"));
 interface IDWriteFontFaceReference1 : IDWriteFontFaceReference
 {
+extern(Windows):
     HRESULT CreateFontFace(IDWriteFontFace5* fontFace);
     uint GetFontAxisValueCount();
     HRESULT GetFontAxisValues(DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount);
@@ -513,6 +516,7 @@ interface IDWriteFontFaceReference1 : IDWriteFontFaceReference
 mixin(uuid!(IDWriteFontSetBuilder2, "EE5BA612-B131-463C-8F4F-3189B9401E45"));
 interface IDWriteFontSetBuilder2 : IDWriteFontSetBuilder1
 {
+extern(Windows):
     HRESULT AddFont(IDWriteFontFile fontFile, uint fontFaceIndex, DWRITE_FONT_SIMULATIONS fontSimulations, const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, const DWRITE_FONT_AXIS_RANGE* fontAxisRanges, uint fontAxisRangeCount, const DWRITE_FONT_PROPERTY* properties, uint propertyCount);
     HRESULT AddFontFile(const wchar* filePath);
 }
@@ -521,6 +525,7 @@ interface IDWriteFontSetBuilder2 : IDWriteFontSetBuilder1
 mixin(uuid!(IDWriteFontSet1, "7E9FDA85-6C92-4053-BC47-7AE3530DB4D3"));
 interface IDWriteFontSet1 : IDWriteFontSet
 {
+extern(Windows):
     HRESULT GetMatchingFonts(const DWRITE_FONT_PROPERTY* fontProperty, const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, IDWriteFontSet1* matchingFonts);
     HRESULT GetFirstFontResources(IDWriteFontSet1* filteredFontSet);
     HRESULT GetFilteredFonts(const DWRITE_FONT_PROPERTY* properties, uint propertyCount, bool selectAnyProperty, IDWriteFontSet1* filteredFontSet);
@@ -539,12 +544,14 @@ interface IDWriteFontSet1 : IDWriteFontSet
 mixin(uuid!(IDWriteFontList2, "C0763A34-77AF-445A-B735-08C37B0A5BF5"));
 interface IDWriteFontList2 : IDWriteFontList1
 {
+extern(Windows):
     HRESULT GetFontSet(IDWriteFontSet1* fontSet);
 }
 
 mixin(uuid!(IDWriteFontFamily2, "3ED49E77-A398-4261-B9CF-C126C2131EF3"));
 interface IDWriteFontFamily2 : IDWriteFontFamily1
 {
+extern(Windows):
     HRESULT GetMatchingFonts(const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, IDWriteFontList2* matchingFonts);
     HRESULT GetFontSet(IDWriteFontSet1* fontSet);
 }
@@ -552,6 +559,7 @@ interface IDWriteFontFamily2 : IDWriteFontFamily1
 mixin(uuid!(IDWriteFontCollection2, "514039C6-4617-4064-BF8B-92EA83E506E0"));
 interface IDWriteFontCollection2 : IDWriteFontCollection1
 {
+extern(Windows):
     HRESULT GetFontFamily(uint index, IDWriteFontFamily2* fontFamily);
     HRESULT GetMatchingFonts(const wchar* familyName, const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, IDWriteFontList2* fontList);
     DWRITE_FONT_FAMILY_MODEL GetFontFamilyModel();
@@ -561,6 +569,7 @@ interface IDWriteFontCollection2 : IDWriteFontCollection1
 mixin(uuid!(IDWriteTextLayout4, "05A9BF42-223F-4441-B5FB-8263685F55E9"));
 interface IDWriteTextLayout4 : IDWriteTextLayout3
 {
+extern(Windows):
     HRESULT SetFontAxisValues(const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, DWRITE_TEXT_RANGE textRange);
     uint GetFontAxisValueCount(uint currentPosition);
     HRESULT GetFontAxisValues(uint currentPosition, DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, DWRITE_TEXT_RANGE* textRange = null);
@@ -570,6 +579,7 @@ interface IDWriteTextLayout4 : IDWriteTextLayout3
 mixin(uuid!(IDWriteTextFormat3, "6D3B5641-E550-430D-A85B-B7BF48A93427"));
 interface IDWriteTextFormat3 : IDWriteTextFormat2
 {
+extern(Windows):
     HRESULT SetFontAxisValues(const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount);
     uint GetFontAxisValueCount();
     HRESULT GetFontAxisValues(DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount);
@@ -580,5 +590,50 @@ interface IDWriteTextFormat3 : IDWriteTextFormat2
 mixin(uuid!(IDWriteFontFallback1, "2397599D-DD0D-4681-BD6A-F4F31EAADE77"));
 interface IDWriteFontFallback1 : IDWriteFontFallback
 {
+extern(Windows):
     HRESULT MapCharacters(IDWriteTextAnalysisSource analysisSource, uint textPosition, uint textLength, IDWriteFontCollection baseFontCollection, const wchar* baseFamilyName, const DWRITE_FONT_AXIS_VALUE* fontAxisValues, uint fontAxisValueCount, uint* mappedLength, float* scale, IDWriteFontFace5* mappedFontFace);
+}
+
+//Windows 1803
+
+mixin(uuid!(IDWriteFontSet2, "DC7EAD19-E54C-43AF-B2DA-4E2B79BA3F7F"));
+interface IDWriteFontSet2 : IDWriteFontSet1
+{
+extern(Windows):
+    HANDLE GetExpirationEvent();
+}
+
+mixin(uuid!(IDWriteFontCollection3, "A4D055A6-F9E3-4E25-93B7-9E309F3AF8E9"));
+interface IDWriteFontCollection3 : IDWriteFontCollection2
+{
+extern(Windows):
+    HANDLE GetExpirationEvent();
+}
+
+mixin(uuid!(IDWriteFactory7, "35D0E0B3-9076-4D2E-A016-A91B568A06B4"));
+interface IDWriteFactory7 : IDWriteFactory6
+{
+extern(Windows):
+    HRESULT GetSystemFontSet(bool includeDownloadableFonts, IDWriteFontSet2* fontSet);
+    HRESULT GetSystemFontCollection(bool includeDownloadableFonts, DWRITE_FONT_FAMILY_MODEL fontFamilyModel, IDWriteFontCollection3* fontCollection);
+}
+
+//Windows 1809
+
+enum DWRITE_FONT_SOURCE_TYPE
+{
+    DWRITE_FONT_SOURCE_TYPE_UNKNOWN,
+    DWRITE_FONT_SOURCE_TYPE_PER_MACHINE,
+    DWRITE_FONT_SOURCE_TYPE_PER_USER,
+    DWRITE_FONT_SOURCE_TYPE_APPX_PACKAGE,
+    DWRITE_FONT_SOURCE_TYPE_REMOTE_FONT_PROVIDER
+};
+
+mixin(uuid!(IDWriteFontSet3, "7C073EF2-A7F4-4045-8C32-8AB8AE640F90"));
+interface IDWriteFontSet3 : IDWriteFontSet2
+{
+extern(Windows):
+    DWRITE_FONT_SOURCE_TYPE GetFontSourceType(uint fontIndex);
+    uint GetFontSourceNameLength(uint listIndex);
+    HRESULT GetFontSourceName(uint listIndex, wchar* stringBuffer, uint stringBufferSize);
 }

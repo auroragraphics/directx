@@ -91,3 +91,25 @@ public interface IDXGIOutput6 : IDXGIOutput5
 extern(Windows):
     HRESULT GetDesc1(DXGI_OUTPUT_DESC1 *pDesc);
 }
+
+enum DXGI_GPU_PREFERENCE
+{
+    DXGI_GPU_PREFERENCE_UNSPECIFIED = 0,
+    DXGI_GPU_PREFERENCE_MINIMUM_POWER = ( DXGI_GPU_PREFERENCE_UNSPECIFIED + 1 ),
+    DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE = ( DXGI_GPU_PREFERENCE_MINIMUM_POWER + 1 )
+}
+
+mixin(uuid!(IDXGIFactory6, "c1b6694f-ff09-44a9-b03c-77900a0a1d17"));
+public interface IDXGIFactory6 : IDXGIFactory5
+{
+extern(Windows):
+    HRESULT EnumAdapterByGpuPreference(uint Adapter, DXGI_GPU_PREFERENCE GpuPreference, REFIID riid, void **ppvAdapter);
+}
+
+mixin(uuid!(IDXGIFactory7, "a4966eed-76db-44da-84c1-ee9a7afb20a8"));
+public interface IDXGIFactory7 : IDXGIFactory6
+{
+extern(Windows):
+    HRESULT RegisterAdaptersChangedEvent(HANDLE hEvent, uint *pdwCookie);
+    HRESULT UnregisterAdaptersChangedEvent(uint dwCookie);
+}

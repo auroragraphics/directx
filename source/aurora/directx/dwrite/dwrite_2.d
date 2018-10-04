@@ -148,6 +148,7 @@ extern(Windows):
 mixin(uuid!(IDWriteRenderingParams2, "F9D711C3-9777-40AE-87E8-3E5AF9BF0948"));
 interface IDWriteRenderingParams2 : IDWriteRenderingParams1
 {
+extern(Windows):
     DWRITE_GRID_FIT_MODE GetGridFitMode();
 };
 

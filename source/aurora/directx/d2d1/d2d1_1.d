@@ -666,42 +666,6 @@ extern(Windows):
 	void SetInputEffect(uint index, ID2D1Effect input, BOOL invalidate = TRUE);
 }
 
-mixin(uuid!(ID2D1EffectContext, "3d9f916b-27dc-4ad7-b4f1-64945340f563"));
-public interface ID2D1EffectContext : IUnknown
-{
-extern(Windows):
-	HRESULT CheckFeatureSupport(D2D1_FEATURE feature, void *featureSupportData, uint featureSupportDataSize);
-	HRESULT CreateBlendTransform(uint numInputs, const D2D1_BLEND_DESCRIPTION  *blendDescription, ID2D1BlendTransform *blendTransform);
-	HRESULT CreateBorderTransform(D2D1_EXTEND_MODE extendModeX, D2D1_EXTEND_MODE extendModeY, ID2D1BorderTransform *transform);
-	HRESULT CreateBoundsAdjustmentTransform(const D2D1_RECT_L *outputRectangle, ID2D1BoundsAdjustmentTransform *transform);
-	HRESULT CreateColorContext(D2D1_COLOR_SPACE space, const(ubyte) *profile, uint profileSize, ID2D1ColorContext *colorContext);
-	HRESULT CreateColorContextFromFilename(PCWSTR filename, ID2D1ColorContext *colorContext);
-	HRESULT CreateColorContextFromWicColorContext(IWICColorContext *wicColorContext, ID2D1ColorContext *colorContext);
-	HRESULT CreateEffect(CLSID* effectId, ID2D1Effect *effect);
-	HRESULT CreateOffsetTransform(D2D1_POINT_2L offset, ID2D1OffsetTransform *transform);
-	HRESULT CreateResourceTexture(const (GUID*) resourceId, const D2D1_RESOURCE_TEXTURE_PROPERTIES *resourceTextureProperties, const (ubyte) *data, const (uint) *strides, uint dataSize, ID2D1ResourceTexture **resourceTexture);
-	HRESULT CreateTransformNodeFromEffect(ID2D1Effect effect, ID2D1TransformNode *transformNode);
-	HRESULT CreateVertexBuffer(const D2D1_VERTEX_BUFFER_PROPERTIES *vertexBufferProperties, const GUID *resourceId, const D2D1_CUSTOM_VERTEX_BUFFER_PROPERTIES *customVertexBufferProperties, ID2D1VertexBuffer *buffer);
-	HRESULT FindResourceTexture(const GUID *resourceId, ID2D1ResourceTexture *resourceTexture);
-	HRESULT FindVertexBuffer(const GUID *resourceId, ID2D1VertexBuffer *vertexBuffer);
-	void GetDpi(float *dpiX, float *dpiY);
-	HRESULT GetMaximumSupportedFeatureLevel(const D3D_FEATURE_LEVEL *featureLevels, uint featureLevelsCount, D3D_FEATURE_LEVEL *maximumSupportedFeatureLevel);
-	BOOL IsBufferPrecisionSupported(D2D1_BUFFER_PRECISION bufferPrecision);
-	BOOL IsShaderLoaded(GUID* shaderId);
-	HRESULT LoadComputeShader(GUID* resourceId, ubyte *shaderBuffer, uint shaderBufferCount);
-	HRESULT LoadPixelShader(GUID* shaderId, const(ubyte) *shaderBuffer, uint shaderBufferCount);
-	HRESULT LoadVertexShader(GUID* resourceId, ubyte *shaderBuffer, uint shaderBufferCount);
-}
-
-mixin(uuid!(ID2D1EffectImpl, "a248fd3f-3e6c-4e63-9f03-7f68ecc91db9"));
-public interface ID2D1EffectImpl : IUnknown
-{
-extern(Windows):
-	HRESULT Initialize(ID2D1EffectContext effectContext, ID2D1TransformGraph transformGraph);
-	HRESULT PrepareForRender(D2D1_CHANGE_TYPE changeType);
-	HRESULT SetGraph(ID2D1TransformGraph transformGraph);
-}
-
 mixin(uuid!(ID2D1Factory1, "bb12d362-daee-4b9a-aa1d-14ba401cfa1f"));
 public interface ID2D1Factory1 : ID2D1Factory
 {

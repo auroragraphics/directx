@@ -1,7 +1,7 @@
 Aurora DirectX Interface
 ========================
 
-This is the interface for DirectX used by the Aurora Graphics Library. These interfaces where derived from the Windows SDK version 10.0.16299.0 (Build 1709 - Redstone 3).
+This is the interface for DirectX used by the Aurora Graphics Library. These interfaces where derived from the Windows SDK version 10.0.17763.0 (Build 1809 - Redstone 5).
 
 The following components of DirectX are supported:
 
@@ -19,6 +19,7 @@ The following components of DirectX are supported:
 
 ### Direct2D 1.3
 * Effects 1.2
+* Effect Authoring 1.1
 * SVG
 
 ### DirectWrite 1.3
@@ -31,6 +32,6 @@ Notes
 -----
 This port is a combination of mechanical and hand conversion. There may be inconsistent or incorrect types in the interfaces.
 
-Some macros are not be supported. 
+Most macros are not be supported. 
 
 Pull requests are welcome to correct any errors discovered.
