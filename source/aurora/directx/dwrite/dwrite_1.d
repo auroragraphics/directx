@@ -1,5 +1,7 @@
 module aurora.directx.dwrite.dwrite_1;
 
+version(Windows):
+
 public import aurora.directx.com;
 public import aurora.directx.dwrite.dwrite_0;
 

@@ -1,5 +1,7 @@
 module aurora.directx.d2d1.d2d1effects_0;
 
+version(Windows):
+
 public import aurora.directx.com;
 
 public:

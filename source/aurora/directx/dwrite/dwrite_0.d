@@ -1,5 +1,7 @@
 module aurora.directx.dwrite.dwrite_0;
 
+version(Windows):
+
 public import std.bitmanip;
 public import aurora.directx.com;
 public import aurora.directx.d2d1;
