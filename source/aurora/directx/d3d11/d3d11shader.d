@@ -1,5 +1,7 @@
 module aurora.directx.d3d11.d3d11shader;
 
+version(Windows):
+
 import std.bitmanip;
 import aurora.directx.com;
 import aurora.directx.d3d11;

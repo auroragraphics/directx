@@ -1,5 +1,7 @@
 module aurora.directx.d3d11.d3d11_0;
 
+version(Windows):
+
 public import std.bitmanip;
 public import aurora.directx.com;
 public import aurora.directx.dxgi;

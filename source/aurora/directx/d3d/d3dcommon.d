@@ -1,5 +1,7 @@
 module aurora.directx.d3d.d3dcommon;
 
+version(Windows):
+
 public import aurora.directx.com;
 
 public:

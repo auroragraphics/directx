@@ -1,5 +1,7 @@
 ﻿module aurora.directx.d3d11.d3dcsx;
 
+version(Windows):
+
 import aurora.directx.com;
 import aurora.directx.dxgi;
 import aurora.directx.d3d11;

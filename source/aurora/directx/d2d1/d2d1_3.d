@@ -1,5 +1,7 @@
 module aurora.directx.d2d1.d2d1_3;
 
+version(Windows):
+
 public import aurora.directx.d2d1.d2d1_2;
 public import aurora.directx.dwrite.dwrite_3;
 public import aurora.directx.d2d1.d2d1svg;

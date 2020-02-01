@@ -1,5 +1,7 @@
 module aurora.directx.d3d11.d3d11_4;
 
+version(Windows):
+
 public import aurora.directx.d3d11.d3d11_3;
 
 public:

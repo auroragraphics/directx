@@ -1,5 +1,7 @@
 module aurora.directx.d3d12.d3d12shader;
 
+version(Windows):
+
 public import aurora.directx.com;
 public import aurora.directx.d3d.d3dcommon;
 

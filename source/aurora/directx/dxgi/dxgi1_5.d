@@ -1,5 +1,7 @@
 module aurora.directx.dxgi.dxgi1_5;
 
+version(Windows):
+
 import aurora.directx.com;
 public import aurora.directx.dxgi.dxgi1_4;
 

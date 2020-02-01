@@ -1,5 +1,7 @@
 module aurora.directx.d2d1.d2d1_0;
 
+version(Windows):
+
 public import aurora.directx.com;
 public import aurora.directx.dwrite;
 public import aurora.directx.dxgi;
